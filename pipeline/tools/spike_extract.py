@@ -30,12 +30,14 @@ def main(eos: list[str]):
             )
             u = resp.usage_metadata
             data = json.loads(resp.text)
+            usd = u.prompt_token_count*settings.price_in_per_mtok/1e6 + u.candidates_token_count*settings.price_out_per_mtok/1e6
             rows.append(dict(eo=eo, ok=True, secs=round(time.time()-t0,1),
                              tok_in=u.prompt_token_count, tok_out=u.candidates_token_count,
                              fitment_rows=len(data.get("fitment", [])),
                              pns=len(data.get("part_numbers", [])),
                              conf=data.get("confidence"),
-                             supersedes=data.get("supersedes")))
+                             supersedes=data.get("supersedes"),
+                             cost_usd=round(usd,4)))
             Path(f"spike_{eo}.json").write_text(json.dumps(data, indent=2))
         except Exception as e:
             rows.append(dict(eo=eo, ok=False, err=str(e)[:200]))
