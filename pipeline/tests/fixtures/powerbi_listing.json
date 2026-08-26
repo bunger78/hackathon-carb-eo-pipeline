@@ -1,0 +1,38 @@
+{
+  "results": [
+    {
+      "result": {
+        "data": {
+          "dsr": {
+            "DS": [
+              {
+                "ValueDicts": {
+                  "D0": [],
+                  "D1": []
+                },
+                "PH": [
+                  {
+                    "DM0": [
+                      {
+                        "C": ["D-1", "https://ww2.arb.ca.gov/sites/default/files/aftermarket/devices/eo/d-1.pdf"],
+                        "R": 0
+                      },
+                      {
+                        "C": ["D-10", "https://ww2.arb.ca.gov/sites/default/files/aftermarket/devices/eo/d-10.pdf"],
+                        "R": 0
+                      },
+                      {
+                        "C": ["D-100", "https://ww2.arb.ca.gov/sites/default/files/aftermarket/devices/eo/d-100.pdf"],
+                        "R": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
