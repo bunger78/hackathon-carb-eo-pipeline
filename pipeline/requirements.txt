@@ -1,0 +1,9 @@
+google-genai>=1.16
+google-cloud-firestore>=2.19
+google-cloud-storage>=2.18
+fastapi>=0.115
+uvicorn>=0.30
+pydantic>=2.8
+pypdfium2>=4.30
+requests>=2.32
+python-dotenv>=1.0
