@@ -113,7 +113,8 @@ class Repo:
                 return True
 
             if _claim(tx, snap.reference):
-                item["status"] = "in_progress"
+                item.update({"status": "in_progress", "worker": worker,
+                             "lease_expires": now + settings.lease_seconds})
                 return item
         return None
 
