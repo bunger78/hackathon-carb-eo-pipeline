@@ -102,28 +102,39 @@ def _decode_rows(ds: dict) -> dict:
     prev_c = []
 
     for row in rows:
-        c = list(row.get("C", []))
-        r = row.get("R", 0)
+        if not isinstance(row, dict):
+            # A malformed row (not a dict) must not crash the parse and must not
+            # touch prev_c — the next good row still carries over from the last
+            # row that decoded successfully.
+            continue
 
-        if r and prev_c:
-            # R is a bitmask: bit N set means column N carries over from previous row
-            merged = list(prev_c)
-            new_idx = 0
-            for col in range(len(merged)):
-                if not (r >> col & 1):
-                    if new_idx < len(c):
-                        merged[col] = c[new_idx]
-                        new_idx += 1
-            c = merged
+        try:
+            c = list(row.get("C") or [])
+            r = row.get("R", 0)
 
-        prev_c = list(c)
+            if r and prev_c:
+                # R is a bitmask: bit N set means column N carries over from previous row
+                merged = list(prev_c)
+                new_idx = 0
+                for col in range(len(merged)):
+                    if not (r >> col & 1):
+                        if new_idx < len(c):
+                            merged[col] = c[new_idx]
+                            new_idx += 1
+                c = merged
 
-        if len(c) >= 2:
-            # c[i] is either an integer dict index or a raw string value
-            eo = d0[c[0]] if isinstance(c[0], int) and c[0] < len(d0) else (c[0] if isinstance(c[0], str) else None)
-            url = d1[c[1]] if isinstance(c[1], int) and c[1] < len(d1) else (c[1] if isinstance(c[1], str) else None)
-            if eo and url:
-                result[eo] = url
+            if len(c) >= 2:
+                # c[i] is either an integer dict index or a raw string value
+                eo = d0[c[0]] if isinstance(c[0], int) and c[0] < len(d0) else (c[0] if isinstance(c[0], str) else None)
+                url = d1[c[1]] if isinstance(c[1], int) and c[1] < len(d1) else (c[1] if isinstance(c[1], str) else None)
+                if eo and url:
+                    result[eo] = url
+
+            prev_c = list(c)
+        except (TypeError, AttributeError, IndexError, KeyError):
+            # Same rule as above: a row that blows up mid-decode must not update
+            # prev_c — leave the last successfully-decoded row as the carry-over source.
+            continue
 
     return result
 
