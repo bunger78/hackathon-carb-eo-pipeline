@@ -1,8 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { runWithEvents } from '../../lib/db';
+import { runWithEvents, RUN_EVENTS_READ_LIMIT } from '../../lib/db';
 import { formatCost, formatCount, formatElapsed, formatTimestamp } from '../../lib/format';
-import { groupEventsByEo } from '../../lib/timeline';
+import { groupEventsByEo, UNKNOWN_EO } from '../../lib/timeline';
 
 const { id } = Astro.params;
 const data = id ? await runWithEvents(id) : null;
@@ -13,6 +13,9 @@ if (!data) {
 
 const run = data?.run ?? null;
 const timelines = data ? groupEventsByEo(data.events) : [];
+// runWithEvents() caps its Firestore read at RUN_EVENTS_READ_LIMIT — hitting
+// that count exactly means more events may exist beyond what was fetched.
+const eventsTruncated = (data?.events.length ?? 0) === RUN_EVENTS_READ_LIMIT;
 
 const AGENT_CLASS: Record<string, string> = {
   scout: 'agent-scout',
@@ -87,15 +90,14 @@ const hasSummary =
         </div>
 
         <h2>Per-EO reasoning timelines</h2>
+        {eventsTruncated && <p>Showing first {RUN_EVENTS_READ_LIMIT} events — more may exist for this run.</p>}
         {timelines.length === 0 ? (
           <p>No events recorded for this run.</p>
         ) : (
           <div class="timelines">
             {timelines.map((t) => (
               <div class="timeline-eo">
-                <h3>
-                  <a href={`/eos/${encodeURIComponent(t.eo)}`}>{t.eo}</a>
-                </h3>
+                <h3>{t.eo === UNKNOWN_EO ? t.eo : <a href={`/eos/${encodeURIComponent(t.eo)}`}>{t.eo}</a>}</h3>
                 <ol class="timeline-steps">
                   {t.steps.map((s) => (
                     <li class="timeline-step">

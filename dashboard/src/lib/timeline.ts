@@ -20,8 +20,10 @@ export interface EoTimeline {
 
 // Events are expected to always carry an `eo` field (see events doc shape),
 // but readers here never assume it — an event missing one is grouped under
-// this bucket instead of being dropped or crashing the page.
-const UNKNOWN_EO = '(unknown)';
+// this bucket instead of being dropped or crashing the page. Exported so the
+// page layer can render this bucket as plain text instead of an /eos/ link
+// (it isn't a real EO number).
+export const UNKNOWN_EO = '(unknown)';
 
 /** `events` should already be ts-ascending (runWithEvents()'s contract); group order and each group's step order both follow input order. */
 export function groupEventsByEo(events: RunEvent[]): EoTimeline[] {

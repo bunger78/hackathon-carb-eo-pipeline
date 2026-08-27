@@ -205,10 +205,25 @@ export async function recentRuns(n: number): Promise<RunDoc[]> {
   return snap.docs.map((d) => ({ id: d.id, ...(d.data() as RunDoc) }));
 }
 
+// Cap on events read/rendered for a single run's detail page — a backfill run
+// touching many EOs (4 stage events each) can produce thousands of docs, and
+// this is the only reader in this module that was unbounded (see recentRuns/
+// latestRunFeed/openReviews/vehiclesMatching/searchEos, all capped). The page
+// layer shows a "showing first N" disclosure when the cap is hit.
+export const RUN_EVENTS_READ_LIMIT = 500;
+
 export async function runWithEvents(id: string): Promise<{ run: RunDoc; events: RunEvent[] } | null> {
   const runSnap = await db.collection('runs').doc(id).get();
   if (!runSnap.exists) return null;
-  const eventsSnap = await db.collection('runs').doc(id).collection('events').orderBy('ts', 'asc').get();
+  // orderBy('ts') silently excludes any event doc missing `ts` entirely (Firestore
+  // semantics) — accepted, since every writer here always sets it.
+  const eventsSnap = await db
+    .collection('runs')
+    .doc(id)
+    .collection('events')
+    .orderBy('ts', 'asc')
+    .limit(RUN_EVENTS_READ_LIMIT)
+    .get();
   return {
     run: { id: runSnap.id, ...(runSnap.data() as RunDoc) },
     events: eventsSnap.docs.map((d) => ({ id: d.id, ...(d.data() as RunEvent) })),
