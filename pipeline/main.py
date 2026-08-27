@@ -1,0 +1,34 @@
+from fastapi import FastAPI, Header, HTTPException
+from config import settings
+from runner import Deps, run_once
+
+app = FastAPI(title="carb-eo-pipeline")
+
+# Settings is a frozen dataclass, so tests can't monkeypatch settings.admin_token in
+# place; mirror it into a module-level name that monkeypatch can swap freely.
+ADMIN_TOKEN = settings.admin_token
+
+def build_deps() -> Deps:
+    from core.db import Repo
+    from core.llm import LLM
+    from core.gcs import GCSStore
+    from core.costs import BudgetGuard
+    from carb.powerbi import CarbClient
+    from matching.engine import VehicleIndex
+    repo = Repo()
+    return Deps(repo=repo, llm=LLM(), gcs=GCSStore(settings.bucket), carb=CarbClient(),
+                index=VehicleIndex(repo.vehicles_all()), budget=BudgetGuard(settings.run_budget_usd))
+
+@app.get("/healthz")
+def healthz():
+    return {"ok": True}
+
+@app.post("/run")
+def run_scheduled():
+    return run_once(build_deps(), "scheduled")
+
+@app.post("/admin/run-now")
+def run_now(x_admin_token: str = Header(default="")):
+    if not ADMIN_TOKEN or x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(401)
+    return run_once(build_deps(), "manual")
