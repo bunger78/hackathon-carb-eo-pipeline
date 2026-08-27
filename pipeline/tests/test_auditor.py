@@ -66,7 +66,8 @@ def test_supersession_marks_predecessor():
     repo.upsert_eo("D-5-4", {"state": "complete"})
     llm = FakeLLM([])
     audit(llm, repo, BudgetGuard(5), "D-5-5", _ex(supersedes=["D-5-4"]), MAKES, run, rand=0.9)
-    assert repo.get_eo("D-5-4")["eo_status"] == "superseded"
+    assert repo.get_eo("D-5-4")["state"] == "superseded"
+    assert repo.get_eo("D-5-4")["superseded_by"] == "D-5-5"
 
 def test_fix_verdict_applies_corrections():
     repo = FakeRepo(); run = repo.create_run("t")

@@ -53,7 +53,7 @@ def _accept(repo, eo, ex, run_id):
                         "confidence": ex.confidence, "audited_at": time.time()})
     for old in ex.supersedes:
         if repo.get_eo(old):
-            repo.upsert_eo(old, {"eo_status": "superseded", "superseded_by": eo})
+            repo.upsert_eo(old, {"state": "superseded", "superseded_by": eo})
     repo.add_event(run_id, {"agent": "auditor", "eo": eo, "action": "accepted"})
 
 def _escalate(repo, eo, ex, reason, notes, run_id):
