@@ -144,11 +144,8 @@ export interface RunEvent {
 
 // --- overview ---
 
-// The pipeline only ever writes `state` to one of these values (see
-// pipeline/core/db.py / agents/*.py). Note: pipeline/agents/auditor.py currently
-// writes a "superseded" transition to a differently-named `eo_status` field
-// instead of `state` (looks like an upstream bug) — so the `superseded` bucket
-// below will read 0 until that's fixed upstream. Not this task's file to change.
+// The pipeline writes `state` to one of these values (see pipeline/core/db.py
+// and agents/*.py, including agents/auditor.py's superseded transition).
 const EO_STATES = ['discovered', 'matching', 'needs_review', 'complete', 'failed', 'superseded'] as const;
 
 export async function overviewCounts(): Promise<{ states: Record<string, number>; total: number }> {
@@ -204,9 +201,19 @@ export interface EoSummary {
 export interface EoSearchResult {
   results: EoSummary[];
   nextCursor: string | null;
+  /** true if the part-number search hit PART_SEARCH_FETCH_CAP or PART_SEARCH_RESULT_CAP and more matches may exist. Always false for 'eo'/'manufacturer' modes (those paginate instead). */
+  truncated?: boolean;
 }
 
 const SEARCH_PAGE_SIZE = 25;
+
+// Part-number search has no natural page size (a single popular part number can
+// match hundreds of vehicles under one EO), so instead of cursor-paginating raw
+// `matches` docs (which could burn many round-trips returning ~1 new EO per page),
+// we scan a bounded number of match docs once, group by eo_number in JS, and cap
+// the number of distinct EOs returned. `truncated` tells the caller more may exist.
+const PART_SEARCH_FETCH_CAP = 200; // max raw `matches` docs scanned
+const PART_SEARCH_RESULT_CAP = 50; // max distinct EOs returned
 
 function summarizeEo(id: string, data: EoDoc): EoSummary {
   return { eo: id, state: data.state, manufacturer: data.manufacturer, device_name: data.device_name, match_count: data.match_count };
@@ -218,10 +225,14 @@ export async function searchEos(q: string, filters: EoSearchFilters = {}, cursor
   if (!query) return { results: [], nextCursor: null };
 
   if (by === 'part') {
-    let ref: Query = db.collection('matches').where('part_numbers', 'array-contains', query).orderBy('eo_number');
-    if (cursor) ref = ref.startAfter(cursor);
-    ref = ref.limit(SEARCH_PAGE_SIZE);
-    const snap = await ref.get();
+    // No orderBy here: array-contains alone needs no composite index. Grouping
+    // and the result cap are handled here in JS instead of via Firestore-side
+    // cursor pagination (see PART_SEARCH_FETCH_CAP/PART_SEARCH_RESULT_CAP above).
+    const snap = await db
+      .collection('matches')
+      .where('part_numbers', 'array-contains', query)
+      .limit(PART_SEARCH_FETCH_CAP)
+      .get();
     const seen = new Map<string, EoSummary>();
     for (const d of snap.docs) {
       const m = d.data() as MatchDoc;
@@ -229,9 +240,10 @@ export async function searchEos(q: string, filters: EoSearchFilters = {}, cursor
         seen.set(m.eo_number, { eo: m.eo_number, manufacturer: m.manufacturer ?? undefined, device_name: m.device_name ?? undefined });
       }
     }
-    const results = [...seen.values()];
-    const last = snap.docs.at(-1);
-    return { results, nextCursor: last ? (last.data() as MatchDoc).eo_number : null };
+    const grouped = [...seen.values()];
+    const results = grouped.slice(0, PART_SEARCH_RESULT_CAP);
+    const truncated = grouped.length > PART_SEARCH_RESULT_CAP || snap.docs.length >= PART_SEARCH_FETCH_CAP;
+    return { results, nextCursor: null, truncated };
   }
 
   if (by === 'manufacturer') {
@@ -384,14 +396,38 @@ export interface VehicleFacets {
   inductions: string[];
 }
 
+// The `vehicles` collection is a bounded, one-time-seeded reference table (see
+// pipeline/seed/seed_vehicles.py) rather than a continuously-growing collection,
+// so it's cheap and safe to cache the whole thing in memory for the process
+// lifetime. Module-scope memoized promise: the first caller triggers the scan,
+// concurrent callers await the same in-flight promise, and the result is reused
+// for every subsequent call (no TTL — see Base.astro/deploy notes for restarts).
+// Both vehicleFacets() and vehiclesMatching() share this cache, which also lets
+// vehiclesMatching() filter/sort entirely in JS instead of needing a composite
+// Firestore index for every make/model/induction/year combination.
+let vehiclesCache: Promise<VehicleDoc[]> | null = null;
+
+async function allVehicles(): Promise<VehicleDoc[]> {
+  if (!vehiclesCache) {
+    vehiclesCache = db
+      .collection('vehicles')
+      .get()
+      .then((snap) => snap.docs.map((d) => ({ id: d.id, ...(d.data() as VehicleDoc) })))
+      .catch((err) => {
+        vehiclesCache = null; // don't cache a failure forever; let the next call retry
+        throw err;
+      });
+  }
+  return vehiclesCache;
+}
+
 export async function vehicleFacets(): Promise<VehicleFacets> {
-  const snap = await db.collection('vehicles').select('year', 'make', 'model', 'induction').get();
+  const vehicles = await allVehicles();
   const makes = new Set<string>();
   const years = new Set<number>();
   const inductions = new Set<string>();
   const modelsByMake: Record<string, Set<string>> = {};
-  for (const d of snap.docs) {
-    const v = d.data() as VehicleDoc;
+  for (const v of vehicles) {
     if (v.make) {
       makes.add(v.make);
       (modelsByMake[v.make] ??= new Set<string>());
@@ -417,20 +453,31 @@ export interface VehicleFilter {
   induction?: string;
 }
 
+const VEHICLES_MATCH_LIMIT = 200;
+
+// Filters the cached full vehicle list in JS rather than issuing a Firestore
+// query: `facets` allows any combination of make/model/induction equality plus
+// an exact year or a year range, and a Firestore composite index would be
+// needed for each distinct combination of equality fields + the year
+// range/orderBy (make+year, make+model+year, model+induction+year, ...). Since
+// `allVehicles()` is already cached (see vehicleFacets above), filtering here
+// costs no extra Firestore reads and needs no additional indexes.
 export async function vehiclesMatching(facets: VehicleFilter = {}): Promise<VehicleDoc[]> {
-  let ref: Query = db.collection('vehicles');
-  if (facets.make) ref = ref.where('make', '==', facets.make);
-  if (facets.model) ref = ref.where('model', '==', facets.model);
-  if (facets.induction) ref = ref.where('induction', '==', facets.induction);
-  if (typeof facets.year === 'number') {
-    ref = ref.where('year', '==', facets.year);
-  } else {
-    if (typeof facets.yearMin === 'number') ref = ref.where('year', '>=', facets.yearMin);
-    if (typeof facets.yearMax === 'number') ref = ref.where('year', '<=', facets.yearMax);
-  }
-  ref = ref.orderBy('year').limit(200);
-  const snap = await ref.get();
-  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as VehicleDoc) }));
+  const vehicles = await allVehicles();
+  const filtered = vehicles.filter((v) => {
+    if (facets.make && v.make !== facets.make) return false;
+    if (facets.model && v.model !== facets.model) return false;
+    if (facets.induction && v.induction !== facets.induction) return false;
+    if (typeof facets.year === 'number') {
+      if (v.year !== facets.year) return false;
+    } else {
+      if (typeof facets.yearMin === 'number' && (v.year ?? -Infinity) < facets.yearMin) return false;
+      if (typeof facets.yearMax === 'number' && (v.year ?? Infinity) > facets.yearMax) return false;
+    }
+    return true;
+  });
+  filtered.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
+  return filtered.slice(0, VEHICLES_MATCH_LIMIT);
 }
 
 export async function partsForVehicle(vehicleId: string, category?: string): Promise<MatchDoc[]> {
