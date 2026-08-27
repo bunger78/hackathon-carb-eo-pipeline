@@ -1,0 +1,283 @@
+---
+import Base from '../../layouts/Base.astro';
+import { eoDetail, legacyFor, recentRuns, type LineageNode } from '../../lib/db';
+import { diffLegacyAgent } from '../../lib/diff';
+import { formatCount } from '../../lib/format';
+
+const { eo } = Astro.params;
+const [detail, legacy, recentRunsList] = eo ? await Promise.all([eoDetail(eo), legacyFor(eo), recentRuns(1)]) : [null, null, []];
+
+if (!detail || !detail.exists) {
+  Astro.response.status = 404;
+}
+
+const data = detail?.data ?? null;
+const payload = detail?.latestExtraction?.payload ?? null;
+const latestRun = recentRunsList[0] ?? null;
+
+// Fields to compare come from lib/diff.ts (already computed, vitest-covered) —
+// render its output, don't reimplement it. `diffLegacyAgent` tolerates a null
+// legacy doc (every field reads as "new"), which is exactly the post-legacy-EO
+// case the brief calls out.
+const extraction = payload ? { payload, diff: diffLegacyAgent(legacy, payload) } : null;
+
+const STATE_LABELS: Record<string, string> = {
+  discovered: 'Discovered',
+  matching: 'Matching',
+  needs_review: 'Needs review',
+  complete: 'Complete',
+  failed: 'Failed',
+  superseded: 'Superseded',
+};
+
+function stateLabel(s: string | undefined): string {
+  if (!s) return 'Unknown';
+  return STATE_LABELS[s] ?? s;
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  device_name: 'Device name',
+  manufacturer: 'Manufacturer',
+  category: 'Category',
+};
+
+const INDUCTION_LABELS: Record<string, string> = { NA: 'N/A', TURBO: 'Turbo', SC: 'Supercharged' };
+
+function engineLabel(row: { displacement_l?: number | null; cylinders?: number | null; induction?: string | null }): string {
+  const parts: string[] = [];
+  if (row.displacement_l) parts.push(`${row.displacement_l}L`);
+  if (row.cylinders) parts.push(`${row.cylinders}-cyl`);
+  if (row.induction) parts.push(INDUCTION_LABELS[row.induction] ?? row.induction);
+  return parts.length ? parts.join(' ') : '—';
+}
+
+function yearRange(row: { year_start?: number | null; year_end?: number | null }): string {
+  const { year_start, year_end } = row;
+  if (year_start == null && year_end == null) return '—';
+  if (year_start != null && year_end != null && year_start !== year_end) return `${year_start}–${year_end}`;
+  return String(year_start ?? year_end);
+}
+
+const manufacturer = data?.manufacturer ?? payload?.manufacturer ?? null;
+const deviceName = data?.device_name ?? payload?.device_name ?? null;
+const category = data?.category ?? payload?.category ?? null;
+const confidenceValue = data?.confidence ?? payload?.confidence;
+const confidenceLabel = typeof confidenceValue === 'number' ? `${Math.round(confidenceValue * 100)}%` : '—';
+
+// Supersession lineage chain, oldest -> current -> newest. `back` comes back
+// nearest-ancestor-first (walkLineage()'s BFS order), so it's reversed here to
+// read oldest-first; `forward` is already nearest-descendant-first, which
+// reads correctly left-to-right as-is. Capped at depth 5 by db.ts, cycle-safe.
+interface ChainNode extends LineageNode {
+  isCurrent: boolean;
+}
+const chain: ChainNode[] = detail
+  ? [
+      ...[...detail.lineage.back].reverse().map((n) => ({ ...n, isCurrent: false })),
+      { eo: detail.eo, exists: detail.exists, state: data?.state, isCurrent: true },
+      ...detail.lineage.forward.map((n) => ({ ...n, isCurrent: false })),
+    ]
+  : [];
+const hasLineage = chain.length > 1;
+---
+
+<Base title={detail?.exists ? `CarbLegal — ${detail.eo}` : 'CarbLegal — EO not found'}>
+  {
+    !detail || !detail.exists ? (
+      <>
+        <h1>EO not found</h1>
+        <p>No executive order exists with id "{eo}". It may have been deleted, or the link may be incorrect.</p>
+        <p>
+          <a href="/eos">&larr; Back to EO browser</a>
+        </p>
+      </>
+    ) : (
+      <>
+        <h1>{detail.eo}</h1>
+
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-label">Status</span>
+            <span class={`status status-${data?.state ?? 'unknown'}`}>{stateLabel(data?.state)}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Manufacturer</span>
+            <span>{manufacturer ?? '—'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Device</span>
+            <span>{deviceName ?? '—'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Category</span>
+            <span>{category ?? '—'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Confidence</span>
+            <span class="num">{confidenceLabel}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">PDF</span>
+            <span>
+              {data?.pdf_url ? (
+                <a href={data.pdf_url} target="_blank" rel="noopener noreferrer">
+                  View PDF ↗
+                </a>
+              ) : (
+                '—'
+              )}
+            </span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Supersedes</span>
+            <span>
+              {data?.supersedes && data.supersedes.length > 0
+                ? data.supersedes.map((s, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={`/eos/${encodeURIComponent(s)}`}>{s}</a>
+                    </>
+                  ))
+                : '—'}
+            </span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Superseded by</span>
+            <span>
+              {data?.superseded_by ? <a href={`/eos/${encodeURIComponent(data.superseded_by)}`}>{data.superseded_by}</a> : '—'}
+            </span>
+          </div>
+          {latestRun && (
+            <div class="meta-item">
+              <span class="meta-label">Latest pipeline run</span>
+              <span>
+                <a href={`/runs/${latestRun.id}`}>{latestRun.id}</a>
+              </span>
+            </div>
+          )}
+        </div>
+
+        <h2>Supersession lineage</h2>
+        {hasLineage ? (
+          <div class="lineage-chain">
+            {chain.map((node, i) => (
+              <>
+                {i > 0 && <span class="lineage-arrow">&rarr;</span>}
+                {node.exists ? (
+                  <a
+                    href={`/eos/${encodeURIComponent(node.eo)}`}
+                    class={`lineage-node ${node.isCurrent ? 'lineage-current' : ''} ${
+                      !node.isCurrent && node.state === 'superseded' ? 'lineage-superseded' : ''
+                    }`}
+                  >
+                    {node.eo}
+                  </a>
+                ) : (
+                  <span class="lineage-node lineage-missing" title="Referenced but not found in Firestore">
+                    {node.eo} (missing)
+                  </span>
+                )}
+              </>
+            ))}
+          </div>
+        ) : (
+          <p class="section-note">No supersession lineage recorded for this EO.</p>
+        )}
+
+        <h2>Fitment</h2>
+        {!extraction ? (
+          <p class="section-note">No extraction yet — this EO is in "{stateLabel(data?.state)}" state.</p>
+        ) : extraction.payload.fitment.length === 0 ? (
+          <p class="section-note">No fitment rows in the latest extraction.</p>
+        ) : (
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Years</th>
+                  <th>Make</th>
+                  <th>Model</th>
+                  <th>Trim</th>
+                  <th>Engine</th>
+                  <th>Part numbers</th>
+                </tr>
+              </thead>
+              <tbody>
+                {extraction.payload.fitment.map((row) => (
+                  <tr>
+                    <td>{yearRange(row)}</td>
+                    <td>{row.make ?? '—'}</td>
+                    <td>{row.model ?? '—'}</td>
+                    <td>{row.trim_note ?? '—'}</td>
+                    <td>{engineLabel(row)}</td>
+                    <td>
+                      <div class="pn-pills">
+                        {row.part_numbers.map((pn) => (
+                          <span class="pn-pill">{pn}</span>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        <h2>Legacy vs. agent extraction</h2>
+        {!extraction ? (
+          <p class="section-note">No extraction to compare — this EO is in "{stateLabel(data?.state)}" state.</p>
+        ) : (
+          <>
+            {!legacy && (
+              <p class="section-note">
+                No legacy record for this EO (likely filed after the legacy dataset snapshot) — showing the agent extraction
+                as entirely new.
+              </p>
+            )}
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Legacy</th>
+                    <th>Agent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {extraction.diff.fields.map((f) => (
+                    <tr class={f.changed ? 'diff-changed' : ''}>
+                      <td>{FIELD_LABELS[f.name] ?? f.name}</td>
+                      <td>{f.legacy != null ? String(f.legacy) : '—'}</td>
+                      <td>{f.agent != null ? String(f.agent) : '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p class="diff-headline">
+              {`legacy: ${formatCount(extraction.diff.fitmentCounts.legacy)} part-vehicle association${
+                extraction.diff.fitmentCounts.legacy === 1 ? '' : 's'
+              } → agent: ${formatCount(extraction.diff.fitmentCounts.agent)} row${
+                extraction.diff.fitmentCounts.agent === 1 ? '' : 's'
+              }`}
+            </p>
+
+            <div class="pn-pills">
+              {extraction.diff.partNumbers.added.map((pn) => (
+                <span class="pn-pill pn-pill-added">+{pn}</span>
+              ))}
+              {extraction.diff.partNumbers.removed.map((pn) => (
+                <span class="pn-pill pn-pill-removed">-{pn}</span>
+              ))}
+              {extraction.diff.partNumbers.kept.map((pn) => (
+                <span class="pn-pill pn-pill-kept">{pn}</span>
+              ))}
+            </div>
+          </>
+        )}
+      </>
+    )
+  }
+</Base>

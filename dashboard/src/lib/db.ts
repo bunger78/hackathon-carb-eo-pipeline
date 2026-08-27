@@ -250,6 +250,8 @@ export type EoSearchBy = 'eo' | 'part' | 'manufacturer';
 
 export interface EoSearchFilters {
   by?: EoSearchBy;
+  /** Exact `state` equality filter (see EO_STATES). Ignored in 'part' mode — `matches` docs don't carry the parent eo's state, and joining would cost one extra read per grouped result. */
+  status?: string;
 }
 
 export interface EoSummary {
@@ -267,7 +269,10 @@ export interface EoSearchResult {
   truncated?: boolean;
 }
 
-const SEARCH_PAGE_SIZE = 25;
+// The EO browser page (pages/eos/index.astro) pages 'eo'/'manufacturer' results
+// at this size; exported so the page can tell "last page" (a short page) apart
+// from "maybe more" (a full page) without duplicating the constant.
+export const SEARCH_PAGE_SIZE = 50;
 
 // Part-number search has no natural page size (a single popular part number can
 // match hundreds of vehicles under one EO), so instead of cursor-paginating raw
@@ -284,12 +289,15 @@ function summarizeEo(id: string, data: EoDoc): EoSummary {
 export async function searchEos(q: string, filters: EoSearchFilters = {}, cursor?: string): Promise<EoSearchResult> {
   const by = filters.by ?? 'eo';
   const query = (q ?? '').trim();
-  if (!query) return { results: [], nextCursor: null };
+  const status = filters.status;
 
   if (by === 'part') {
+    if (!query) return { results: [], nextCursor: null };
     // No orderBy here: array-contains alone needs no composite index. Grouping
     // and the result cap are handled here in JS instead of via Firestore-side
     // cursor pagination (see PART_SEARCH_FETCH_CAP/PART_SEARCH_RESULT_CAP above).
+    // `status` is not applied here — `matches` docs do not carry the parent
+    // eo's state, and joining would cost one extra read per grouped result.
     const snap = await db
       .collection('matches')
       .where('part_numbers', 'array-contains', query)
@@ -309,7 +317,13 @@ export async function searchEos(q: string, filters: EoSearchFilters = {}, cursor
   }
 
   if (by === 'manufacturer') {
-    let ref: Query = db.collection('eos').where('manufacturer', '==', query).orderBy(FieldPath.documentId());
+    if (!query) return { results: [], nextCursor: null };
+    // Equality filter(s) + orderBy(documentId()) need no composite index —
+    // Firestore always maintains an index on document name and can combine it
+    // with any number of equality clauses for free.
+    let ref: Query = db.collection('eos').where('manufacturer', '==', query);
+    if (status) ref = ref.where('state', '==', status);
+    ref = ref.orderBy(FieldPath.documentId());
     if (cursor) ref = ref.startAfter(cursor);
     ref = ref.limit(SEARCH_PAGE_SIZE);
     const snap = await ref.get();
@@ -318,13 +332,21 @@ export async function searchEos(q: string, filters: EoSearchFilters = {}, cursor
     return { results, nextCursor: last ? last.id : null };
   }
 
-  // by === 'eo': prefix range query on the document id. U+F8FF is a very high
-  // code point (end of the Unicode private-use area), so [query, query+U+F8FF]
-  // bounds "starts with query". A cursor is itself a startAfter bound, so it
+  // by === 'eo': prefix range query on the document id when `query` is given
+  // (via prefixRange() — U+F8FF, end of the Unicode private-use area, bounds
+  // "starts with query"); with an empty query this instead browses the full
+  // collection ordered by id, which backs the EO browser's default
+  // (no-search-term) listing. A cursor is itself a startAfter bound, so it
   // cannot be combined with startAt — only one start-cursor is used per call.
-  const upperBound = query + '';
-  let ref: Query = db.collection('eos').orderBy(FieldPath.documentId());
-  ref = cursor ? ref.startAfter(cursor).endAt(upperBound) : ref.startAt(query).endAt(upperBound);
+  let ref: Query = db.collection('eos');
+  if (status) ref = ref.where('state', '==', status);
+  ref = ref.orderBy(FieldPath.documentId());
+  if (query) {
+    const upperBound = prefixRange(query).lt;
+    ref = cursor ? ref.startAfter(cursor).endAt(upperBound) : ref.startAt(query).endAt(upperBound);
+  } else if (cursor) {
+    ref = ref.startAfter(cursor);
+  }
   ref = ref.limit(SEARCH_PAGE_SIZE);
   const snap = await ref.get();
   const results = snap.docs.map((d) => summarizeEo(d.id, d.data() as EoDoc));

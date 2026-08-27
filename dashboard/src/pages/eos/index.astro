@@ -1,0 +1,160 @@
+---
+import Base from '../../layouts/Base.astro';
+import { searchEos, SEARCH_PAGE_SIZE, type EoSearchBy } from '../../lib/db';
+import { formatCount } from '../../lib/format';
+
+const SEARCH_MODES: { value: EoSearchBy; label: string }[] = [
+  { value: 'eo', label: 'EO #' },
+  { value: 'part', label: 'Part #' },
+  { value: 'manufacturer', label: 'Manufacturer' },
+];
+
+// Same EO_STATES the overview page's tiles use (pipeline/core/db.py + agents/*.py
+// are the only writers of `state`; kept in sync with db.ts's private EO_STATES).
+const STATE_ORDER = ['discovered', 'matching', 'needs_review', 'complete', 'failed', 'superseded'] as const;
+const STATE_LABELS: Record<string, string> = {
+  discovered: 'Discovered',
+  matching: 'Matching',
+  needs_review: 'Needs review',
+  complete: 'Complete',
+  failed: 'Failed',
+  superseded: 'Superseded',
+};
+
+const params = Astro.url.searchParams;
+const q = params.get('q') ?? '';
+const byRaw = params.get('by');
+const by: EoSearchBy = byRaw === 'part' || byRaw === 'manufacturer' ? byRaw : 'eo';
+const statusRaw = params.get('status') ?? '';
+const status = (STATE_ORDER as readonly string[]).includes(statusRaw) ? statusRaw : '';
+// A "back-forward" cursor stack: each entry is the cursor that fetched one
+// prior page. Next appends to it; Previous drops the last entry. New
+// searches (submitting the form) naturally omit `c` and reset to page 1.
+const cursorStack = params.getAll('c').filter(Boolean);
+const cursor = cursorStack.length ? cursorStack[cursorStack.length - 1] : undefined;
+
+const result = await searchEos(q, { by, status: status || undefined }, cursor);
+
+const trimmedQuery = q.trim();
+const needsQuery = (by === 'part' || by === 'manufacturer') && !trimmedQuery;
+
+function pageUrl(cursors: string[]): string {
+  const p = new URLSearchParams();
+  if (q) p.set('q', q);
+  if (by !== 'eo') p.set('by', by);
+  if (status) p.set('status', status);
+  for (const c of cursors) p.append('c', c);
+  const qs = p.toString();
+  return qs ? `/eos?${qs}` : '/eos';
+}
+
+const canPage = by !== 'part';
+const hasNext = canPage && result.results.length === SEARCH_PAGE_SIZE && !!result.nextCursor;
+const hasPrev = canPage && cursorStack.length > 0;
+---
+
+<Base title="CarbLegal — EO Browser">
+  <h1>EO Browser</h1>
+
+  <form class="search-form" method="get" action="/eos">
+    <div class="search-input-row">
+      <input
+        class="search-input"
+        type="text"
+        name="q"
+        value={q}
+        placeholder="EO number, part number, or manufacturer — leave blank (EO # mode) to browse all"
+      />
+      <button class="search-button" type="submit">Search</button>
+    </div>
+
+    <div>
+      <span class="chip-group-label">Search by</span>
+      <div class="chip-group">
+        {
+          SEARCH_MODES.map((mode) => (
+            <label class="chip">
+              <input type="radio" name="by" value={mode.value} checked={by === mode.value} />
+              {mode.label}
+            </label>
+          ))
+        }
+      </div>
+    </div>
+
+    <div>
+      <span class="chip-group-label">Status</span>
+      <div class="chip-group">
+        <label class="chip">
+          <input type="radio" name="status" value="" checked={status === ''} />
+          All
+        </label>
+        {
+          STATE_ORDER.map((s) => (
+            <label class="chip">
+              <input type="radio" name="status" value={s} checked={status === s} />
+              {STATE_LABELS[s]}
+            </label>
+          ))
+        }
+      </div>
+    </div>
+  </form>
+
+  {
+    needsQuery ? (
+      <p class="section-note">
+        Enter {by === 'part' ? 'a part number' : 'a manufacturer name'} above to search — this mode has no "browse all".
+      </p>
+    ) : result.results.length === 0 ? (
+      <p class="section-note">No executive orders match your search.</p>
+    ) : (
+      <>
+        {result.truncated && (
+          <p class="section-note">
+            Showing the first {formatCount(result.results.length)} matches — more may exist for this part number.
+          </p>
+        )}
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>EO #</th>
+                <th>Status</th>
+                <th>Manufacturer</th>
+                <th>Device</th>
+                <th>Matches</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result.results.map((r) => (
+                <tr>
+                  <td>
+                    <a href={`/eos/${encodeURIComponent(r.eo)}`}>{r.eo}</a>
+                  </td>
+                  <td>
+                    {r.state ? (
+                      <span class={`status status-${r.state}`}>{STATE_LABELS[r.state] ?? r.state}</span>
+                    ) : (
+                      '—'
+                    )}
+                  </td>
+                  <td>{r.manufacturer ?? '—'}</td>
+                  <td>{r.device_name ?? '—'}</td>
+                  <td class="num">{r.match_count !== undefined ? formatCount(r.match_count) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {(hasPrev || hasNext) && (
+          <div class="pagination">
+            {hasPrev && <a href={pageUrl(cursorStack.slice(0, -1))}>&larr; Previous</a>}
+            {hasNext && <a href={pageUrl([...cursorStack, result.nextCursor as string])}>Next &rarr;</a>}
+          </div>
+        )}
+      </>
+    )
+  }
+</Base>
