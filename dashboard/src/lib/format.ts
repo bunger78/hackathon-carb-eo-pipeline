@@ -46,3 +46,19 @@ export function formatEventTime(tsSeconds: number | null | undefined): string {
   const d = new Date(tsSeconds * 1000);
   return localTimeFormatter({ hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(d);
 }
+
+/**
+ * Format a non-negative elapsed duration in seconds as "+Ns" (under a minute)
+ * or "+Mm SSs". Used by the run detail page's per-EO timelines to show the gap
+ * between one stage's event and the next. Returns an em dash for missing,
+ * non-finite, or negative input (e.g. a timeline's first step has no prior
+ * stage to measure from).
+ */
+export function formatElapsed(seconds: number | null | undefined): string {
+  if (typeof seconds !== 'number' || !isFinite(seconds) || seconds < 0) return '—';
+  const total = Math.round(seconds);
+  if (total < 60) return `+${total}s`;
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `+${m}m ${String(s).padStart(2, '0')}s`;
+}

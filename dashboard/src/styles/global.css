@@ -246,6 +246,66 @@ a {
   overflow-x: auto;
 }
 
+/* --- run detail: per-EO reasoning timelines --- */
+
+.timelines {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+
+.timeline-eo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.timeline-eo h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+}
+
+.timeline-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.timeline-step {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.timeline-step:first-child {
+  border-top: none;
+}
+
+.timeline-ts {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.timeline-agent {
+  font-weight: 600;
+  min-width: 6.5rem;
+}
+
+.timeline-action {
+  flex: 1;
+}
+
+.timeline-elapsed {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 /* --- live agent console (signature visual) --- */
 
 .console {

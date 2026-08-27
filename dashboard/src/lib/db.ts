@@ -131,6 +131,12 @@ export interface RunDoc {
   cost_usd?: number;
   tok_in?: number;
   tok_out?: number;
+  // Merged into the doc by finish_run() (pipeline/core/db.py) once the run
+  // completes — see workflow_graph.py's summarize() node. Absent while running.
+  new_eos?: number;
+  completed?: number;
+  needs_review?: number;
+  failed?: number;
 }
 
 export interface RunEvent {

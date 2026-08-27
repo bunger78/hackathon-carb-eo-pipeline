@@ -1,0 +1,116 @@
+---
+import Base from '../../layouts/Base.astro';
+import { runWithEvents } from '../../lib/db';
+import { formatCost, formatCount, formatElapsed, formatTimestamp } from '../../lib/format';
+import { groupEventsByEo } from '../../lib/timeline';
+
+const { id } = Astro.params;
+const data = id ? await runWithEvents(id) : null;
+
+if (!data) {
+  Astro.response.status = 404;
+}
+
+const run = data?.run ?? null;
+const timelines = data ? groupEventsByEo(data.events) : [];
+
+const AGENT_CLASS: Record<string, string> = {
+  scout: 'agent-scout',
+  extractor: 'agent-extractor',
+  auditor: 'agent-auditor',
+  matchmaker: 'agent-matchmaker',
+};
+
+// Run status strings come from the pipeline as free-form values ("running",
+// "ok", "budget_exceeded", ...) rather than the fixed EO_STATES enum, so this
+// only prettifies the text; the `.status` dot color falls back to muted gray
+// for any value without a matching --status-* CSS token.
+function statusLabel(status: string | undefined): string {
+  if (!status) return 'Unknown';
+  return status.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+}
+
+const hasSummary =
+  run?.new_eos !== undefined || run?.completed !== undefined || run?.needs_review !== undefined || run?.failed !== undefined;
+---
+
+<Base title={run ? `CarbLegal — Run ${id}` : 'CarbLegal — Run not found'}>
+  {
+    !run ? (
+      <>
+        <h1>Run not found</h1>
+        <p>No run exists with id "{id}". It may have been deleted, or the link may be incorrect.</p>
+        <p>
+          <a href="/">&larr; Back to overview</a>
+        </p>
+      </>
+    ) : (
+      <>
+        <h1>Run {id}</h1>
+
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-label">Trigger</span>
+            <span>{run.trigger ?? '—'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Started</span>
+            <span>{formatTimestamp(run.started_at)}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Finished</span>
+            <span>{run.finished_at ? formatTimestamp(run.finished_at) : 'In progress'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Status</span>
+            <span class={`status status-${run.status ?? 'unknown'}`}>{statusLabel(run.status)}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Cost</span>
+            <span class="num">{formatCost(run.cost_usd)}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Tokens in / out</span>
+            <span class="num">
+              {formatCount(run.tok_in)} / {formatCount(run.tok_out)}
+            </span>
+          </div>
+          {hasSummary && (
+            <div class="meta-item">
+              <span class="meta-label">Summary</span>
+              <span class="num">
+                {formatCount(run.new_eos ?? 0)} new · {formatCount(run.completed ?? 0)} completed ·{' '}
+                {formatCount(run.needs_review ?? 0)} needs review · {formatCount(run.failed ?? 0)} failed
+              </span>
+            </div>
+          )}
+        </div>
+
+        <h2>Per-EO reasoning timelines</h2>
+        {timelines.length === 0 ? (
+          <p>No events recorded for this run.</p>
+        ) : (
+          <div class="timelines">
+            {timelines.map((t) => (
+              <div class="timeline-eo">
+                <h3>
+                  <a href={`/eos/${encodeURIComponent(t.eo)}`}>{t.eo}</a>
+                </h3>
+                <ol class="timeline-steps">
+                  {t.steps.map((s) => (
+                    <li class="timeline-step">
+                      <span class="timeline-ts">{formatTimestamp(s.ts)}</span>
+                      <span class={`timeline-agent ${AGENT_CLASS[s.agent ?? ''] ?? ''}`}>{s.agent ?? 'unknown'}</span>
+                      <span class="timeline-action">{s.action ?? '—'}</span>
+                      <span class="timeline-elapsed num">{formatElapsed(s.elapsedSec)}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        )}
+      </>
+    )
+  }
+</Base>
