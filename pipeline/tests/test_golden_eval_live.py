@@ -23,7 +23,7 @@ if not _firestore_reachable():
     pytest.skip("Firestore ADC/network unavailable", allow_module_level=True)
 
 from core.db import Repo
-from tools.golden_eval import GOLD, score
+from tools.golden_eval import GOLD, legacy_with_id, score
 
 
 def _aggregate():
@@ -35,7 +35,7 @@ def _aggregate():
         ext = [d.to_dict() for d in repo.db.collection("extractions")
                .where("eo_number", "==", eo).stream()]
         agent = max(ext, key=lambda d: d.get("created_at", 0))["payload"] if ext else None
-        legacy = repo.get_legacy(eo)
+        legacy = legacy_with_id(repo.get_legacy(eo), eo)
         for src, got in (("agent", agent), ("legacy", legacy)):
             agg[src].append(score(expected, got))
     return agg

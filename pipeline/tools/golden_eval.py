@@ -25,17 +25,37 @@ def f1(a: set, b: set) -> float:
 def row_key(r): return (r.get("year_start"), (r.get("model") or "").casefold())
 
 
+def legacy_with_id(doc: dict | None, eo: str) -> dict | None:
+    """legacy_extractions docs carry the EO number as the Firestore doc ID, not an
+    eo_number field (see seed/seed_legacy.py) -- inject it before scoring so the
+    scalar eo_number comparison in score() isn't structurally unwinnable for legacy."""
+    return {**doc, "eo_number": eo} if doc else None
+
+
 def score(expected: dict, got: dict | None) -> dict:
     if not got:
-        return {"scalar": 0.0, "pn_f1": 0.0, "assoc_f1": 0.0, "fit_delta": -len(expected.get("fitment", []))}
+        n_expected_rows = len(expected.get("fitment", []))
+        return {"scalar": 0.0, "pn_f1": 0.0, "assoc_f1": 0.0,
+                "fit_delta": -n_expected_rows, "row_coverage": (0, n_expected_rows)}
     scal = [expected.get(k) == got.get(k) for k in ("eo_number", "manufacturer", "category")]
     pn = f1(set(expected.get("part_numbers", [])), set(got.get("part_numbers", [])))
     e_rows = {row_key(r): set(r.get("part_numbers", [])) for r in expected.get("fitment", [])}
     g_rows = {row_key(r): set(r.get("part_numbers", [])) for r in got.get("fitment", [])}
-    assoc = ([f1(e_rows[k], g_rows[k]) for k in e_rows if k in g_rows] or [0.0])
+    if not e_rows:
+        # No expected rows: a perfect match means the agent also produced none.
+        assoc_avg, matched = (1.0 if not g_rows else 0.0), 0
+    else:
+        # Honest denominator: EVERY expected row counts. A row the agent never produced at
+        # all (key absent from g_rows) scores 0, it is not dropped from the average. Extra
+        # agent rows that aren't in `expected` never hurt assoc -- those are already
+        # penalized via fit_delta, so g_rows-only keys are intentionally not scored here.
+        assoc_scores = [f1(e_rows[k], g_rows[k]) if k in g_rows else 0.0 for k in e_rows]
+        assoc_avg = sum(assoc_scores) / len(assoc_scores)
+        matched = sum(1 for k in e_rows if k in g_rows)
     return {"scalar": sum(scal) / len(scal), "pn_f1": round(pn, 3),
-            "assoc_f1": round(sum(assoc) / len(assoc), 3),
-            "fit_delta": len(got.get("fitment", [])) - len(expected.get("fitment", []))}
+            "assoc_f1": round(assoc_avg, 3),
+            "fit_delta": len(got.get("fitment", [])) - len(expected.get("fitment", [])),
+            "row_coverage": (matched, len(e_rows))}
 
 
 # --- checkers: deterministic, need no golden answer ---
@@ -105,8 +125,8 @@ def check_trajectory(repo: Repo, eo: str, eo_doc: dict | None) -> tuple[bool, st
 
 def main():
     repo = Repo()
-    lines = ["| EO | src | scalar | PN F1 | assoc F1 | fit Δ | checks | trajectory |",
-              "|---|---|---|---|---|---|---|---|"]
+    lines = ["| EO | src | scalar | PN F1 | assoc F1 | coverage | fit Δ | checks | trajectory |",
+              "|---|---|---|---|---|---|---|---|---|"]
     agg = {"agent": [], "legacy": []}
     checker_totals = []
     trajectory_results = []
@@ -116,7 +136,7 @@ def main():
         ext = [d.to_dict() for d in repo.db.collection("extractions")
                .where("eo_number", "==", eo).stream()]
         agent = max(ext, key=lambda d: d.get("created_at", 0))["payload"] if ext else None
-        legacy = repo.get_legacy(eo)
+        legacy = legacy_with_id(repo.get_legacy(eo), eo)
         for src, got in (("agent", agent), ("legacy", legacy)):
             s = score(expected, got)
             agg[src].append(s)
@@ -129,8 +149,9 @@ def main():
                 trajectory_results.append(traj_ok)
                 checks_col = f"{n_pass}/3"
                 traj_col = f"{'pass' if traj_ok else 'fail'} ({traj_note})"
+            matched, total = s["row_coverage"]
             lines.append(f"| {eo} | {src} | {s['scalar']:.2f} | {s['pn_f1']} | {s['assoc_f1']} | "
-                          f"{s['fit_delta']} | {checks_col} | {traj_col} |")
+                          f"{matched}/{total} | {s['fit_delta']} | {checks_col} | {traj_col} |")
     for src in ("agent", "legacy"):
         ss = agg[src]
         if ss:
@@ -143,6 +164,20 @@ def main():
                       f"({sum(checker_totals)/(3*n):.0%})")
     if trajectory_results:
         lines.append(f"\n**trajectory pass rate:** {sum(trajectory_results)}/{len(trajectory_results)}")
+    lines.append("\n## Metric notes\n")
+    lines.append("- assoc F1 is computed over every expected fitment row (see the coverage "
+                 "column, matched/total expected rows): a row the agent never produced at all "
+                 "counts as 0 and is not dropped from the average. Coverage explains why an "
+                 "assoc F1 is low -- low coverage means many expected rows were never matched "
+                 "(genuinely missed, or matched under a different year/model key spelling); a "
+                 "low assoc F1 with high coverage instead means the rows were found but their "
+                 "part numbers are wrong.")
+    lines.append("- Legacy association averages near 0 (not always exactly 0): legacy_extractions "
+                 "never stored a per-row part-number breakdown (only a flat fitment_count), so "
+                 "legacy's coverage is 0 for every EO and its assoc F1 is 0.0 in every row -- "
+                 "except an EO where the expected document itself has zero fitment rows, where "
+                 "both sides trivially agree on \"no rows\" and score 1.0. That is a property of "
+                 "the empty-vs-empty scoring rule, not of legacy having any real per-row data.")
     REPORT.parent.mkdir(exist_ok=True)
     REPORT.write_text("\n".join(lines), encoding="utf-8")
     print(REPORT)
