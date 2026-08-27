@@ -8,3 +8,4 @@ pypdfium2>=4.30
 pillow>=10.0
 requests>=2.32
 python-dotenv>=1.0
+google-adk>=1.0
