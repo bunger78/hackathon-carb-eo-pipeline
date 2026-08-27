@@ -7,6 +7,7 @@ class LLMResult:
     data: dict
     tok_in: int
     tok_out: int
+    finish_reason: str = "STOP"
 
 def _default_client():
     from google import genai
@@ -22,9 +23,14 @@ class LLM:
         resp = self.client.models.generate_content(
             model=self.model, contents=contents,
             config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json",
-                                               response_schema=schema))
+                                               response_schema=schema, max_output_tokens=65535))
         u = resp.usage_metadata
-        return LLMResult(json.loads(resp.text), u.prompt_token_count or 0, u.candidates_token_count or 0)
+        try:
+            fr = resp.candidates[0].finish_reason
+            fr = getattr(fr, "name", str(fr)) if fr is not None else "STOP"
+        except (AttributeError, IndexError, TypeError):
+            fr = "STOP"
+        return LLMResult(json.loads(resp.text), u.prompt_token_count or 0, u.candidates_token_count or 0, fr)
 
     def extract_pdf(self, gcs_uri: str, prompt: str, schema) -> LLMResult:
         from google.genai import types
