@@ -1,4 +1,5 @@
 import json, random, re, time
+from pydantic import ValidationError
 from schemas.extraction import Extraction, CritiqueVerdict
 from prompts.critic import CRITIC_PROMPT
 from core.costs import cost_usd
@@ -69,7 +70,8 @@ def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> str:
         _accept(repo, eo, ex, run_id)
         return "accepted"
     reason = ("validation_failure" if issues else
-              "low_confidence" if ex.confidence < settings.confidence_threshold else "qa_sample")
+              "low_confidence" if ex.confidence < settings.confidence_threshold else
+              "legacy_divergence" if div > 0.4 else "qa_sample")
     uri = repo.get_eo(eo)["gcs_uri"]
     res = llm.extract_pdf(uri, CRITIC_PROMPT + json.dumps(ex.model_dump()), CritiqueVerdict)
     usd = cost_usd(res.tok_in, res.tok_out)
@@ -77,7 +79,12 @@ def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> str:
     repo.add_run_cost(run_id, usd, res.tok_in, res.tok_out)
     verdict = CritiqueVerdict.model_validate(res.data)
     if verdict.verdict == "fix":
-        fixed = apply_corrections(ex, verdict.corrections)
+        try:
+            fixed = apply_corrections(ex, verdict.corrections)
+        except ValidationError:
+            _escalate(repo, eo, ex, "validation_failure",
+                      "; ".join(verdict.reasons) + " (corrections failed validation)", run_id)
+            return "escalated"
         if not deterministic_issues(fixed, known_makes):
             _accept(repo, eo, fixed, run_id)
             return "accepted"

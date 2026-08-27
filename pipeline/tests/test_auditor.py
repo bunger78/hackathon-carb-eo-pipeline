@@ -67,3 +67,32 @@ def test_supersession_marks_predecessor():
     llm = FakeLLM([])
     audit(llm, repo, BudgetGuard(5), "D-5-5", _ex(supersedes=["D-5-4"]), MAKES, run, rand=0.9)
     assert repo.get_eo("D-5-4")["eo_status"] == "superseded"
+
+def test_fix_verdict_applies_corrections():
+    repo = FakeRepo(); run = repo.create_run("t")
+    repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
+    llm = FakeLLM([LLMResult({"verdict": "fix", "corrections": {"category": "intake"}, "reasons": ["misread section"]}, 50, 20)])
+    ex = _ex(confidence=0.4, category=None)  # forces critique, has fixable defect
+    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    assert out == "accepted"
+    assert repo.get_eo("D-5-5")["category"] == "intake"
+
+def test_malformed_corrections_escalate():
+    repo = FakeRepo(); run = repo.create_run("t")
+    repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
+    llm = FakeLLM([LLMResult({"verdict": "fix", "corrections": {"confidence": "not-a-number"}, "reasons": ["typo"]}, 50, 20)])
+    ex = _ex(confidence=0.4)  # forces critique
+    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    assert out == "escalated"
+    assert repo.reviews[0]["reason"] == "validation_failure"
+    assert "corrections failed validation" in repo.reviews[0]["agent_notes"]
+
+def test_divergence_only_escalation():
+    repo = FakeRepo(); run = repo.create_run("t")
+    repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
+    repo.legacy["D-5-5"] = {"part_numbers": ["ZZZ999"], "fitment_count": 40}  # high divergence
+    llm = FakeLLM([LLMResult({"verdict": "escalate", "reasons": ["legacy mismatch"]}, 50, 20)])
+    ex = _ex(confidence=0.99)  # high confidence, no deterministic issues
+    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    assert out == "escalated"
+    assert repo.reviews[0]["reason"] == "legacy_divergence"
