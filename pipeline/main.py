@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Header, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from config import settings
+from core.costs import BudgetExceeded
 from runner import Deps
 from workflow_graph import run_workflow
 
@@ -48,8 +49,14 @@ def admin_resolve_review(body: ReviewResolution, x_admin_token: str = Header(def
         raise HTTPException(401)
     if body.action not in ("approve", "reject"):
         raise HTTPException(422)
-    from agents.reviewer import resolve_review
+    from agents.reviewer import resolve_review, ReviewNotOpen
     try:
         return resolve_review(build_deps(), body.review_id, body.action, body.corrections)
     except KeyError as e:
         raise HTTPException(404, str(e))
+    except ReviewNotOpen as e:
+        raise HTTPException(409, detail={"review_id": e.review_id, "status": e.status})
+    except ValidationError as e:
+        raise HTTPException(422, str(e))
+    except BudgetExceeded:
+        raise HTTPException(503, detail={"status": "budget_exceeded"})
