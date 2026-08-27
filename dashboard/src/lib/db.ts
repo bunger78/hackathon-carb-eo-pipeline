@@ -9,6 +9,7 @@
 // before handing data to callers; callers (and lib/diff.ts) never see the
 // raw envelope shape.
 import { AggregateField, FieldPath, Firestore, type Query } from '@google-cloud/firestore';
+import { prefixRange } from './prefixRange';
 
 const db = new Firestore({ projectId: process.env.PROJECT_ID || 'carblegal' });
 
@@ -173,15 +174,17 @@ export async function overviewCounts(): Promise<{ states: Record<string, number>
 // would otherwise inflate the number every time an operator clicks a button.
 // Two queries (equality on "scheduled" + a prefix range on "backfill"/
 // "backfill-worker-{n}") rather than one, since Firestore can't OR an equality
-// and a range clause together server-side; each needs no composite index.
+// and a range clause together server-side; each needs no composite index. The
+// prefix bound itself is built by prefixRange() (lib/prefixRange.ts), which is
+// unit-tested in isolation — see prefixRange.test.ts.
 export async function pipelineSpend(): Promise<number> {
-  const BACKFILL_PREFIX_END = 'backfill';
+  const backfillRange = prefixRange('backfill');
   const [scheduledSnap, backfillSnap] = await Promise.all([
     db.collection('runs').where('trigger', '==', 'scheduled').aggregate({ total: AggregateField.sum('cost_usd') }).get(),
     db
       .collection('runs')
-      .where('trigger', '>=', 'backfill')
-      .where('trigger', '<', BACKFILL_PREFIX_END)
+      .where('trigger', '>=', backfillRange.gte)
+      .where('trigger', '<', backfillRange.lt)
       .aggregate({ total: AggregateField.sum('cost_usd') })
       .get(),
   ]);
