@@ -1,0 +1,30 @@
+{
+  "name": "carb-dash",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9",
+    "@astrojs/react": "^4",
+    "@google-cloud/firestore": "^7",
+    "astro": "^5",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "typescript": "^5",
+    "vitest": "^3"
+  }
+}

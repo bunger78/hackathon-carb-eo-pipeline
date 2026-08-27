@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import { overviewCounts } from '../lib/db';
+import { formatCount } from '../lib/format';
+
+const { states, total } = await overviewCounts();
+
+const STATE_LABELS: Record<string, string> = {
+  discovered: 'Discovered',
+  matching: 'Matching',
+  needs_review: 'Needs review',
+  complete: 'Complete',
+  failed: 'Failed',
+  superseded: 'Superseded',
+};
+---
+
+<Base title="CarbLegal — Overview">
+  <h1>Overview</h1>
+  <p>
+    <span class="num">{formatCount(total)}</span> Executive Orders tracked.
+  </p>
+  <ul>
+    {
+      Object.entries(states).map(([state, count]) => (
+        <li>
+          <span class={`status status-${state}`}>{STATE_LABELS[state] ?? state}</span>:{' '}
+          <span class="num">{formatCount(count)}</span>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

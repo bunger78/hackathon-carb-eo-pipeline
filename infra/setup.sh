@@ -22,4 +22,8 @@ gcloud firestore indexes composite create --collection-group=work_items \
   --field-config field-path=status,order=ascending --field-config field-path=created_at,order=ascending -q || true
 
 gcloud firestore databases update --database="(default)" --enable-pitr -q || true
+
+gcloud iam service-accounts create sa-dash 2>/dev/null || true
+gcloud projects add-iam-policy-binding "$P" --member="serviceAccount:sa-dash@$P.$SFX" --role=roles/datastore.viewer -q
+
 echo "setup done"
