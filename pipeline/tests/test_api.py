@@ -6,7 +6,7 @@ def test_health():
 
 def test_run_scheduled(monkeypatch):
     monkeypatch.setattr(main, "build_deps", lambda: object())
-    monkeypatch.setattr(main, "run_once", lambda deps, trigger: {"status": "ok", "trigger": trigger})
+    monkeypatch.setattr(main, "run_workflow", lambda deps, trigger: {"status": "ok", "trigger": trigger})
     c = TestClient(main.app)
     resp = c.post("/run")
     assert resp.status_code == 200
@@ -14,7 +14,7 @@ def test_run_scheduled(monkeypatch):
 
 def test_admin_requires_token(monkeypatch):
     monkeypatch.setattr(main, "build_deps", lambda: object())
-    monkeypatch.setattr(main, "run_once", lambda deps, trigger: {"status": "ok"})
+    monkeypatch.setattr(main, "run_workflow", lambda deps, trigger: {"status": "ok"})
     monkeypatch.setattr(main, "ADMIN_TOKEN", "sekret")
     c = TestClient(main.app)
     assert c.post("/admin/run-now").status_code == 401
@@ -23,7 +23,7 @@ def test_admin_requires_token(monkeypatch):
 
 def test_admin_wrong_token_rejected(monkeypatch):
     monkeypatch.setattr(main, "build_deps", lambda: object())
-    monkeypatch.setattr(main, "run_once", lambda deps, trigger: {"status": "ok"})
+    monkeypatch.setattr(main, "run_workflow", lambda deps, trigger: {"status": "ok"})
     monkeypatch.setattr(main, "ADMIN_TOKEN", "sekret")
     c = TestClient(main.app)
     resp = c.post("/admin/run-now", headers={"X-Admin-Token": "wrong"})
@@ -31,7 +31,7 @@ def test_admin_wrong_token_rejected(monkeypatch):
 
 def test_admin_no_token_configured_rejects_all(monkeypatch):
     monkeypatch.setattr(main, "build_deps", lambda: object())
-    monkeypatch.setattr(main, "run_once", lambda deps, trigger: {"status": "ok"})
+    monkeypatch.setattr(main, "run_workflow", lambda deps, trigger: {"status": "ok"})
     monkeypatch.setattr(main, "ADMIN_TOKEN", "")
     c = TestClient(main.app)
     resp = c.post("/admin/run-now", headers={"X-Admin-Token": ""})
