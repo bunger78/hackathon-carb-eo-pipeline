@@ -1,0 +1,27 @@
+{
+  "eo_number": "D-99-1",
+  "issue_date": "1986-11-19",
+  "manufacturer": "Turbonetics, Inc.",
+  "device_name": "Turbotronic Turbocharger System, Model No. 454 TCI-HD",
+  "category": "boost",
+  "description": "A turbocharger system (using an AiResearch T04B turbocharger with a 1.30 A/R ratio and an Airsensors N-8A-HD electronic fuel injection system) that replaces the OEM carbureted induction system, exempted for 1987 and older Chevrolet/GMC 454 CID heavy-duty gasoline engines originally equipped with a Rochester 4-barrel carburetor.",
+  "supersedes": [],
+  "part_numbers": ["454 TCI-HD", "T04B", "N-8A-HD", "10101-5B", "10350", "10553"],
+  "fitment": [
+    {
+      "part_numbers": ["454 TCI-HD"],
+      "year_start": null,
+      "year_end": 1987,
+      "make": "Chevrolet/GMC",
+      "model": null,
+      "trim_note": "1987 and older Chevrolet/GMC 454 CID heavy-duty gasoline engines originally equipped with a Rochester 4-barrel carburetor; no defined start year is given in the document. Emissions test vehicle was a 1985 Fleetwood motorhome powered by the GMC 454 CID engine (1986-1987 engine family certified as a carryover from 1985).",
+      "displacement_l": 7.4,
+      "induction": "TURBO",
+      "cylinders": 8
+    }
+  ],
+  "confidence": 0.85,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "This 74-page PDF contains the 2-page Executive Order plus a full staff evaluation report and an appendix (Installation Instructions, Prototype Identification Label, and a generic 'Turbocharger Test Program' procedure), followed by a lengthy AirSensors N-8A/N-8A-HD electronic fuel injection technical manual (pages ~20-74) bundled as reference documentation. Pages 20-74 were skimmed (sampled at pages 21, 30, 40, 50, 60, 70, 74) as legal/technical boilerplate per instructions for >40 page documents; no additional vehicle-application tables or part numbers relevant to D-99-1's own scope were found there. The applicability is defined by engine family (Chevrolet/GMC 454 CID heavy-duty gasoline, 1987 and older), not a specific vehicle make/model line, so 'model' is left null and displacement is converted from the document's '454 CID' to 7.4L. Cylinder count (8) is explicitly supported by the AirSensors 'N-8A-HD ... V-8 Heavy Duty Applications' manual title page included in the same PDF. The AirSensors N-8A-HD fuel injection system was separately exempted under Executive Order D-163 (May 1986); D-99-1 does not supersede it, only incorporates it as a component of the Turbonetics kit. Part numbers 10101-5B (DeltaGate wastegate assembly), 10350 (boost gauge kit), and 10553 (water-jacketed center section installation kit) come from the kit's Parts List (Appendix)."
+}

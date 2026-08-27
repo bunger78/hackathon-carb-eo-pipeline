@@ -1,0 +1,148 @@
+{
+  "eo_number": "D-873-2",
+  "issue_date": "2025-07-16",
+  "manufacturer": "Enthusiast Auto Care, Inc.",
+  "device_name": "EAC Flash Tune",
+  "category": "tune",
+  "description": "A new ECU calibration (flash tune) delivered via an EcuTek unit that modifies fuel and timing values, the rev limiter, knock control, and adds anti-theft/valet modes on 3.7L Nissan/Infiniti vehicles, with no hardware modifications.",
+  "supersedes": [],
+  "part_numbers": [
+    "EAC-FT-G37",
+    "EAC-FT-370Z",
+    "EAC-FT-M37",
+    "EAC-FT-EX37",
+    "EAC-FT-FX37",
+    "EAC-FT-Q50",
+    "EAC-FT-Q60",
+    "EAC-FT-Q70",
+    "EAC-FT-QX50",
+    "EAC-FT-Q40"
+  ],
+  "fitment": [
+    {
+      "part_numbers": ["EAC-FT-G37"],
+      "year_start": 2008,
+      "year_end": 2013,
+      "make": "INFINITI",
+      "model": "G37",
+      "trim_note": "Includes 2013 G37x",
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-370Z"],
+      "year_start": 2009,
+      "year_end": 2021,
+      "make": "NISSAN",
+      "model": "370Z",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-M37"],
+      "year_start": 2011,
+      "year_end": 2013,
+      "make": "INFINITI",
+      "model": "M37, M37x",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-EX37"],
+      "year_start": 2013,
+      "year_end": 2013,
+      "make": "INFINITI",
+      "model": "EX37",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-FX37"],
+      "year_start": 2013,
+      "year_end": 2013,
+      "make": "INFINITI",
+      "model": "FX37",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-Q50"],
+      "year_start": 2014,
+      "year_end": 2015,
+      "make": "INFINITI",
+      "model": "Q50",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-Q60"],
+      "year_start": 2014,
+      "year_end": 2015,
+      "make": "INFINITI",
+      "model": "Q60",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-Q70"],
+      "year_start": 2014,
+      "year_end": 2019,
+      "make": "INFINITI",
+      "model": "Q70",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-Q70"],
+      "year_start": 2014,
+      "year_end": 2017,
+      "make": "INFINITI",
+      "model": "QX70",
+      "trim_note": "Document lists the same part number (EAC-FT-Q70) for both the Q70 and QX70 rows; transcribed as printed and possibly a document error.",
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-QX50"],
+      "year_start": 2014,
+      "year_end": 2017,
+      "make": "INFINITI",
+      "model": "QX50",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["EAC-FT-Q40"],
+      "year_start": 2015,
+      "year_end": 2015,
+      "make": "INFINITI",
+      "model": "Q40",
+      "trim_note": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.95,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "The Exhibit A table lists the same part number 'EAC-FT-Q70' for both the Q70 (2014-2019) and QX70 (2014-2017) rows; this is transcribed exactly as printed and may be a typo in the source document. Issue date (16th) is handwritten on the signature page."
+}

@@ -1,0 +1,40 @@
+{
+  "eo_number": "D-533",
+  "issue_date": "2002-08-12",
+  "manufacturer": "CP Products",
+  "device_name": "Cold Air Intake",
+  "category": "intake",
+  "description": "A cold air intake system consisting of a K&N style open-element air filter and ducting designed to replace the stock air filter box and air inlet ducting on the listed Honda, Acura, and Mitsubishi vehicles.",
+  "supersedes": [],
+  "part_numbers": [
+    "CP-400", "CP-401", "CP-402", "CP-403", "CP-404", "CP-405", "CP-406", "CP-407",
+    "CP-408", "CP-409", "CP-413", "CP-414", "CP-415", "CP-416", "CP-417", "CP-430",
+    "CP-432", "CP-433", "CP-500", "CP-502"
+  ],
+  "fitment": [
+    { "part_numbers": ["CP-400"], "year_start": 1988, "year_end": 1991, "make": "Honda", "model": "Civic/CRX", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-401"], "year_start": 1992, "year_end": 1995, "make": "Honda", "model": "Civic/Del Sol", "trim_note": "SOHC", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-402"], "year_start": 1990, "year_end": 1993, "make": "Acura", "model": "Integral", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-403"], "year_start": 1994, "year_end": 2000, "make": "Acura", "model": "Integral", "trim_note": "Non V-Tec", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-404"], "year_start": 1994, "year_end": 2000, "make": "Acura", "model": "Integral", "trim_note": "V-Tec", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-405"], "year_start": 1992, "year_end": 1996, "make": "Honda", "model": "Prelude", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-406"], "year_start": 1997, "year_end": 2000, "make": "Honda", "model": "Prelude", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-407"], "year_start": 1990, "year_end": 1993, "make": "Honda", "model": "Accord", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-408"], "year_start": 1994, "year_end": 1997, "make": "Honda", "model": "Accord", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-409"], "year_start": 1996, "year_end": 1998, "make": "Honda", "model": "Civic", "trim_note": "EX", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-413"], "year_start": 1996, "year_end": 2000, "make": "Honda", "model": "Civic", "trim_note": "DX", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-414"], "year_start": 1999, "year_end": 2000, "make": "Honda", "model": "Civic", "trim_note": "EX", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-415"], "year_start": 1998, "year_end": 2000, "make": "Honda", "model": "Accord", "trim_note": "4 cyl.", "displacement_l": null, "induction": null, "cylinders": 4 },
+    { "part_numbers": ["CP-416"], "year_start": 1998, "year_end": 2000, "make": "Honda", "model": "Accord", "trim_note": null, "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-417"], "year_start": 1999, "year_end": 2000, "make": "Honda", "model": "Civic", "trim_note": "SI DOHC", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-430"], "year_start": 1995, "year_end": 1999, "make": "Mitsubishi", "model": "Eclipse", "trim_note": "Non-Turbo", "displacement_l": null, "induction": "NA", "cylinders": null },
+    { "part_numbers": ["CP-432"], "year_start": 2000, "year_end": 2000, "make": "Mitsubishi", "model": "Eclipse", "trim_note": "6 cyl.", "displacement_l": null, "induction": null, "cylinders": 6 },
+    { "part_numbers": ["CP-433"], "year_start": 2000, "year_end": 2002, "make": "Mitsubishi", "model": "Eclipse", "trim_note": "4 cyl.", "displacement_l": null, "induction": null, "cylinders": 4 },
+    { "part_numbers": ["CP-500"], "year_start": 2001, "year_end": 2002, "make": "Honda", "model": "Civic", "trim_note": "EX, Manual trans", "displacement_l": null, "induction": null, "cylinders": null },
+    { "part_numbers": ["CP-502"], "year_start": 2001, "year_end": 2002, "make": "Honda", "model": "Civic", "trim_note": "DX/LX, Manual trans", "displacement_l": null, "induction": null, "cylinders": null }
+  ],
+  "confidence": 0.93,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "The document prints the Acura model as 'Integral' (rows CP-402, CP-403, CP-404); transcribed verbatim as printed, though this is likely a typo for 'Integra'. Displacement is not given in the Applications table; the only displacement mentioned in the document (2.3L) refers specifically to the 2000 Honda Accord test vehicle used for the OBD-II durability evaluation, not to the fitment table generally, so displacement_l is left null throughout. Induction and cylinder count are left null except where explicitly stated in the Applications table (CP-430 'Non-Turbo' -> NA; CP-415 and CP-433 '4 cyl.'; CP-432 '6 cyl.')."
+}

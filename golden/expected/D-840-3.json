@@ -1,0 +1,49 @@
+{
+  "eo_number": "D-840-3",
+  "issue_date": "2022-09-07",
+  "manufacturer": "Vitalen Auto Performance Inc. DBA Pedal Commander",
+  "device_name": "Pedal Commander",
+  "category": "tune",
+  "description": "The Pedal Commander is an electronic accelerator-response device installed between the pedal position sensor and the ECU that modifies the pedal signal (with ECO, City, Sport, and Sport+ user-selectable modes, each adjustable across 4 levels) to change throttle sensitivity without modifying ECU calibrations.",
+  "supersedes": [],
+  "part_numbers": ["PC18"],
+  "fitment": [
+    {
+      "part_numbers": ["PC18"],
+      "year_start": 2018,
+      "year_end": 2021,
+      "make": "FORD",
+      "model": "F-150",
+      "trim_note": "Diesel; 3.0L TC",
+      "displacement_l": 3.0,
+      "induction": "TURBO",
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["PC18"],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "FORD",
+      "model": "F-250, F-350, F-450",
+      "trim_note": "Diesel; 6.7L TC",
+      "displacement_l": 6.7,
+      "induction": "TURBO",
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["PC18"],
+      "year_start": 2015,
+      "year_end": 2019,
+      "make": "FORD",
+      "model": "TRANSIT T-150, T-250, T-350",
+      "trim_note": "Diesel; 3.2L TC",
+      "displacement_l": 3.2,
+      "induction": "TURBO",
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.93,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "Exhibit A abbreviates engine description as 'TC', which is read as 'Turbocharged' (all listed Ford diesel engines here are turbo-diesels); induction is set to TURBO on that basis. Cylinder count is not stated in the document. Category is ambiguous among the fixed enum: the Pedal Commander is an electronic pedal-signal/throttle-response modifier rather than a mechanical intake, boost, cat, exhaust, or ignition part, and does not alter ECU calibration per the document; it was classified as 'tune' as the closest fit, but 'other' would also be defensible. Document does not name any prior Executive Order it supersedes."
+}

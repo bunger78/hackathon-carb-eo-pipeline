@@ -1,0 +1,20 @@
+{
+  "eo_number": "D-695-4",
+  "issue_date": "2020-08-07",
+  "manufacturer": "Sprintex Ltd.",
+  "device_name": "Supercharger System",
+  "category": "boost",
+  "description": "Exempts installation of the Sprintex Supercharger System (S5-210 screw-type compressor with 69mm pulley, intake manifold, bypass valve, intercooler, wire harness extensions, intake tube, and reflashed ECM limiting boost to 12 psi) on the listed Subaru/Toyota coupes.",
+  "supersedes": [],
+  "part_numbers": ["260A1011", "260A1023"],
+  "fitment": [
+    {"part_numbers": ["260A1011", "260A1023"], "year_start": 2012, "year_end": 2016, "make": "Subaru", "model": "BRZ", "trim_note": null, "displacement_l": 2.0, "induction": null, "cylinders": null},
+    {"part_numbers": ["260A1011", "260A1023"], "year_start": 2012, "year_end": 2016, "make": "Toyota", "model": "Scion FR-S", "trim_note": null, "displacement_l": 2.0, "induction": null, "cylinders": null},
+    {"part_numbers": ["260A1011", "260A1023"], "year_start": 2017, "year_end": 2019, "make": "Subaru", "model": "BRZ", "trim_note": null, "displacement_l": 2.0, "induction": null, "cylinders": null},
+    {"part_numbers": ["260A1011", "260A1023"], "year_start": 2017, "year_end": 2019, "make": "Toyota", "model": "86", "trim_note": null, "displacement_l": 2.0, "induction": null, "cylinders": null}
+  ],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "3-page document; page 2 signature date has a minor OCR artifact ('7tit'/'7th') but is legibly '7th day of August 2020'. Exhibit A literally lists Make='Toyota' / Model='Scion FR-S' for the 2012-2016 row (Scion was technically a separate marque); transcribed as printed. Device is itself a forced-induction (supercharger) kit for engines that are stock naturally-aspirated, but since Exhibit A does not mark an induction code (unlike other EOs' engine-description columns), the per-row induction field is left null rather than inferred; category is set to 'boost' to reflect the product type."
+}

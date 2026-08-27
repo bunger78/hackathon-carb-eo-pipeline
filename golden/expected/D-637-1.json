@@ -1,0 +1,344 @@
+{
+  "eo_number": "D-637-1",
+  "issue_date": "2008-07-08",
+  "manufacturer": "CT-Engineering",
+  "device_name": "Performance Header System",
+  "category": "exhaust",
+  "description": "Exemption for the CT-Engineering Performance Header System, a stainless-steel exhaust header (short-tube style, one-piece for RSX/2002-2004 Civic, with a connecting Y-pipe for other models) that preserves stock oxygen sensor locations, for specified 1991-2008 Honda/Acura vehicles excluding those originally equipped with a close-coupled catalyst.",
+  "supersedes": [],
+  "part_numbers": [
+    "220-060",
+    "220-011",
+    "220-012",
+    "210-021",
+    "210-020",
+    "210-022",
+    "210-035",
+    "210-002",
+    "210-001",
+    "210-030",
+    "210-040",
+    "210-050",
+    "210-060",
+    "220-042",
+    "NPN"
+  ],
+  "fitment": [
+    {
+      "part_numbers": [
+        "220-060"
+      ],
+      "year_start": 1991,
+      "year_end": 1994,
+      "make": "Acura",
+      "model": "NSX",
+      "trim_note": null,
+      "displacement_l": 3,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-011"
+      ],
+      "year_start": 1995,
+      "year_end": 1999,
+      "make": "Acura",
+      "model": "NSX",
+      "trim_note": null,
+      "displacement_l": 3,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-011"
+      ],
+      "year_start": 1997,
+      "year_end": 1999,
+      "make": "Acura",
+      "model": "NSX",
+      "trim_note": null,
+      "displacement_l": 3.2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-012"
+      ],
+      "year_start": 2000,
+      "year_end": 2005,
+      "make": "Acura",
+      "model": "NSX",
+      "trim_note": null,
+      "displacement_l": 3,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-012"
+      ],
+      "year_start": 2000,
+      "year_end": 2005,
+      "make": "Acura",
+      "model": "NSX",
+      "trim_note": null,
+      "displacement_l": 3.2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-021"
+      ],
+      "year_start": 1992,
+      "year_end": 2000,
+      "make": "Honda",
+      "model": "Civic DX, EX",
+      "trim_note": null,
+      "displacement_l": 1.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-020"
+      ],
+      "year_start": 1999,
+      "year_end": 2000,
+      "make": "Honda",
+      "model": "Civic Si",
+      "trim_note": null,
+      "displacement_l": 1.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-022"
+      ],
+      "year_start": 2002,
+      "year_end": 2005,
+      "make": "Honda",
+      "model": "Civic Si",
+      "trim_note": null,
+      "displacement_l": 2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-035"
+      ],
+      "year_start": 2006,
+      "year_end": 2011,
+      "make": "Honda",
+      "model": "Civic Si",
+      "trim_note": null,
+      "displacement_l": 2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-002"
+      ],
+      "year_start": 1994,
+      "year_end": 1999,
+      "make": "Acura",
+      "model": "Integra GSR",
+      "trim_note": null,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-001"
+      ],
+      "year_start": 1994,
+      "year_end": 2001,
+      "make": "Acura",
+      "model": "Integra LS, RS, GS",
+      "trim_note": null,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-001"
+      ],
+      "year_start": 1997,
+      "year_end": 2001,
+      "make": "Acura",
+      "model": "Integra Type R",
+      "trim_note": null,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-001"
+      ],
+      "year_start": 2000,
+      "year_end": 2001,
+      "make": "Acura",
+      "model": "Integra GSR",
+      "trim_note": null,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-030"
+      ],
+      "year_start": 1997,
+      "year_end": 2000,
+      "make": "Honda",
+      "model": "CRV",
+      "trim_note": null,
+      "displacement_l": 2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-040"
+      ],
+      "year_start": 2000,
+      "year_end": 2008,
+      "make": "Honda",
+      "model": "S2000",
+      "trim_note": "2.0L & 2.2L",
+      "displacement_l": null,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-022"
+      ],
+      "year_start": 2002,
+      "year_end": 2006,
+      "make": "Acura",
+      "model": "RSX",
+      "trim_note": null,
+      "displacement_l": 2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-050"
+      ],
+      "year_start": 2002,
+      "year_end": 2006,
+      "make": "Acura",
+      "model": "RSX-S",
+      "trim_note": null,
+      "displacement_l": 2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "210-060"
+      ],
+      "year_start": 2004,
+      "year_end": 2008,
+      "make": "Acura",
+      "model": "TSX",
+      "trim_note": null,
+      "displacement_l": 2.4,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-042"
+      ],
+      "year_start": 1999,
+      "year_end": 2003,
+      "make": "Acura",
+      "model": "TL, TL-S",
+      "trim_note": null,
+      "displacement_l": 3.2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-042"
+      ],
+      "year_start": 2001,
+      "year_end": 2003,
+      "make": "Acura",
+      "model": "CL, CL-S",
+      "trim_note": null,
+      "displacement_l": 3.2,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "220-042"
+      ],
+      "year_start": 1998,
+      "year_end": 2002,
+      "make": "Honda",
+      "model": "Accord V6",
+      "trim_note": null,
+      "displacement_l": 3,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "NPN"
+      ],
+      "year_start": 1996,
+      "year_end": 2004,
+      "make": "Acura",
+      "model": "RL",
+      "trim_note": null,
+      "displacement_l": 3.5,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "NPN"
+      ],
+      "year_start": 1999,
+      "year_end": 2003,
+      "make": "Honda",
+      "model": "Odyssey",
+      "trim_note": null,
+      "displacement_l": 3.5,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "NPN"
+      ],
+      "year_start": 1991,
+      "year_end": 1995,
+      "make": "Acura",
+      "model": "Legend",
+      "trim_note": null,
+      "displacement_l": 3.5,
+      "induction": "NA",
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "Exhibit A table transcribed from the rendered page image; the PDF's extracted text layer had several rows with Make/Model/Engine values shifted or swapped between adjacent rows (e.g. 1997-1999 and 2000-2005 NSX displacement values were transposed in the text layer), so the image was used as the authoritative source. Three rows (Acura RL, Honda Odyssey, Acura Legend) list 'NPN' in the Part Number column in the source document, apparently meaning 'no part number' rather than a real catalog number; included verbatim as printed rather than omitted. Execution date handwritten as '8' (day) confirmed from the signature page image: July 8, 2008."
+}

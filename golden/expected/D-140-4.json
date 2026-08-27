@@ -1,0 +1,23 @@
+{
+  "eo_number": "D-140-4",
+  "issue_date": "1984-11-14",
+  "manufacturer": "Spearco Performance Products, Inc.",
+  "device_name": "Turbocharger Kit (Including an Optional Intercooler) for 2.8 Liter Toyota Supra and Cressida Vehicles",
+  "category": "boost",
+  "description": "An add-on turbocharger kit, using a 0.98 A/R ratio Ishikawajima-Harima Heavy Industries turbocharger with an optional intercooler, for Toyota vehicles with a 2.8 liter (168 CID) fuel-injected six-cylinder engine.",
+  "supersedes": ["D-140-1"],
+  "part_numbers": ["9898", "9899", "9900", "9909", "9910", "9909-A"],
+  "fitment": [
+    {"part_numbers": ["9898"], "year_start": 1982, "year_end": 1982, "make": "Toyota", "model": "Supra", "trim_note": "Turbo Kit No. 9898, not intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6},
+    {"part_numbers": ["9899"], "year_start": 1983, "year_end": 1983, "make": "Toyota", "model": "Supra", "trim_note": "Turbo Kit No. 9899, not intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6},
+    {"part_numbers": ["9900"], "year_start": 1983, "year_end": 1983, "make": "Toyota", "model": "Cressida", "trim_note": "Turbo Kit No. 9900, not intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6},
+    {"part_numbers": ["9909"], "year_start": 1982, "year_end": 1984, "make": "Toyota", "model": "Supra", "trim_note": "Turbo Kit No. 9909, intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6},
+    {"part_numbers": ["9910"], "year_start": 1983, "year_end": 1984, "make": "Toyota", "model": "Cressida", "trim_note": "Turbo Kit No. 9910, intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6},
+    {"part_numbers": ["9909-A"], "year_start": 1985, "year_end": 1985, "make": "Toyota", "model": "Supra", "trim_note": "Turbo Kit No. 9909-A, intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6},
+    {"part_numbers": ["9909-A"], "year_start": 1985, "year_end": 1985, "make": "Toyota", "model": "Cressida", "trim_note": "Turbo Kit No. 9909-A, intercooled", "displacement_l": 2.8, "induction": "NA", "cylinders": 6}
+  ],
+  "confidence": 0.95,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "9-page document (2-page EO plus 7-page staff evaluation report dated October 26, 1984). This order updates prior Executive Order D-140-1 (dated Feb 6, 1984) to add 1985 model-year coverage via new Turbo Kit No. 9909-A; D-140-1 is explicitly superseded. 'induction' is set to NA for all rows since the kit is an aftermarket add-on turbocharger installed on vehicles that are naturally aspirated from the factory; the document does not use the induction field terminology itself. Executed date read from handwritten '14th' over a typed blank on page 2."
+}

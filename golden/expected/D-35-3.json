@@ -1,0 +1,27 @@
+{
+  "eo_number": "D-35-3",
+  "issue_date": "1974-08-01",
+  "manufacturer": "Kar Automotive Manufacturing Co.",
+  "device_name": "Safeguard Gas Booster-California Design",
+  "category": "other",
+  "description": "A device consisting of two formed fine-mesh wire screens (the upstream screen cadmium-plated, the downstream screen nickel-plated) mounted under the carburetor barrels, identical in construction and operation to the Hydro-Catalyst Corporation's Precombustion Catalyst-California Design device (Executive Order D-35), exempted for 1974 and older model-year vehicles.",
+  "supersedes": [],
+  "part_numbers": [],
+  "fitment": [
+    {
+      "part_numbers": [],
+      "year_start": null,
+      "year_end": 1974,
+      "make": null,
+      "model": null,
+      "trim_note": "Exempt for 1974 and older model-year vehicles; no specific make/model or engine application is listed in the document.",
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.85,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "Device is manufactured by the Hydro-Catalyst Corporation (Old Bridge, NJ) and marketed by Kar Automotive Manufacturing Co. (Tappahannock, VA); the 'manufacturer' field uses the company named in the Executive Order's header/title block (Kar Automotive Manufacturing Co.), consistent with how the EO identifies the applicant. No part numbers or make/model fitment table appear anywhere in the document; the exemption applies generically to '1974 and older model-year vehicles.' The execution date on page 2 was originally typed as 'July, 1974' with the day left blank, then hand-corrected to 'August' with the day filled in as '1' -- read as August 1, 1974. Category is ambiguous: the device functions like a catalytic screen but is installed in the intake/carburetor path rather than the exhaust, so it does not cleanly fit 'cat' (catalytic converter) or 'intake'; categorized as 'other'. Includes a July 23, 1974 CARB staff report (pages 3-4) as an attachment."
+}

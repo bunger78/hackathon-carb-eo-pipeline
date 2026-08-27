@@ -1,0 +1,17 @@
+{
+  "eo_number": "D-660-310",
+  "issue_date": "2026-04-20",
+  "manufacturer": "Cobb Tuning",
+  "device_name": "Redline Carbon Fiber Power Scoop",
+  "category": "intake",
+  "description": "Exempts installation of the Redline Carbon Fiber Power Scoop, a carbon fiber snorkel that connects directly to the original air intake box without modifying the ECU, on the listed Subaru WRX model years.",
+  "supersedes": [],
+  "part_numbers": ["746150", "746150-RMC"],
+  "fitment": [
+    {"part_numbers": ["746150", "746150-RMC"], "year_start": 2022, "year_end": 2026, "make": "Subaru", "model": "WRX", "trim_note": null, "displacement_l": 2.4, "induction": "TURBO", "cylinders": null}
+  ],
+  "confidence": 0.95,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "3-page document, fully legible. Part number '746150-RMC' has a matte finish; '746150' (without RMC) has a gloss finish -- same fitment otherwise. Engine listed in Exhibit A as '2.4L TC' (TC = turbocharged), hence induction TURBO."
+}

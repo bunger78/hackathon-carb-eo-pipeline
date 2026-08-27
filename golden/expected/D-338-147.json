@@ -1,0 +1,31 @@
+{
+  "eo_number": "D-338-147",
+  "issue_date": "2026-04-27",
+  "manufacturer": "Harley Davidson Motor Company",
+  "device_name": "Screamin' Eagle Heavy Breather Extreme Air Cleaner",
+  "category": "intake",
+  "description": "Exempts installation of the Screamin' Eagle Heavy Breather Extreme Air Cleaner, which includes a replacement filter, housing/hardware, and an included ECU tune, on the listed Harley-Davidson motorcycle models and model years.",
+  "supersedes": [],
+  "part_numbers": ["29400518B", "29400519B"],
+  "fitment": [
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2023, "year_end": 2023, "make": "Harley-Davidson", "model": "CVO Road Glide / CVO Street Glide", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2024, "year_end": 2024, "make": "Harley-Davidson", "model": "Road Glide / Street Glide", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2024, "year_end": 2024, "make": "Harley-Davidson", "model": "CVO Road Glide / CVO Street Glide", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2024, "year_end": 2024, "make": "Harley-Davidson", "model": "CVO Street Glide ST", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2025, "year_end": 2025, "make": "Harley-Davidson", "model": "Road Glide / Street Glide", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2025, "year_end": 2025, "make": "Harley-Davidson", "model": "CVO Road Glide / CVO Street Glide", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2025, "year_end": 2025, "make": "Harley-Davidson", "model": "CVO Road Glide ST", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2025, "year_end": 2025, "make": "Harley-Davidson", "model": "Low Rider S / Heritage Classic / Street Bob", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2025, "year_end": 2025, "make": "Harley-Davidson", "model": "Fat Boy / Breakout / Fat Boy Gray Ghost", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2026, "year_end": 2026, "make": "Harley-Davidson", "model": "Road Glide / Street Glide", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2026, "year_end": 2026, "make": "Harley-Davidson", "model": "CVO Street Glide", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2026, "year_end": 2026, "make": "Harley-Davidson", "model": "CVO Street Glide ST / CVO Road Glide ST", "trim_note": null, "displacement_l": 1.977, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2026, "year_end": 2026, "make": "Harley-Davidson", "model": "Low Rider S / Heritage Classic / Street Bob", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2026, "year_end": 2026, "make": "Harley-Davidson", "model": "Fat Boy / Breakout", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null},
+    {"part_numbers": ["29400518B", "29400519B"], "year_start": 2026, "year_end": 2026, "make": "Harley-Davidson", "model": "Road Glide 3", "trim_note": null, "displacement_l": 1.923, "induction": null, "cylinders": null}
+  ],
+  "confidence": 0.95,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "3-page document, fully legible. Exhibit A table's last row (2026 Road Glide 3) lists displacement as 1923cc while its engine family code (THDXC1.98DHM) matches the '1.98' (1977cc) family used elsewhere in the table; transcribed as printed (1923cc) without correction. Part numbers ending '518B' = black finish, '519B' = chrome finish (same two part numbers apply to every fitment row). 'Make' (Harley-Davidson) is inferred from the manufacturer/product line named in the document header, not from a per-row table column."
+}

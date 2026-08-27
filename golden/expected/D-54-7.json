@@ -1,0 +1,38 @@
+{
+  "eo_number": "D-54-7",
+  "issue_date": "1977-08-16",
+  "manufacturer": "Prestolite Electrical Division of Eltra Corporation",
+  "device_name": "\"BID\" Breakerless Inductive Ignition System",
+  "category": "ignition",
+  "description": "A breakerless, retrofit inductive-discharge ignition system (electronic pack, trigger wheel, and pick-up assembly) exempted for installation on 1971 through 1973 Ford Pinto vehicles with 1.6L (98 CID) 4-cylinder engines and Kettering ignition systems.",
+  "supersedes": [],
+  "part_numbers": [
+    "75C12", "15810", "RL-7037", "CM7037", "DZ-5009", "EL-9", "ECK-5G", "36014",
+    "IDL-5021", "IDL-5022", "IDL-5023",
+    "70-37", "70-35", "70-36",
+    "75C13", "75C14",
+    "RL-7035", "RL-7036",
+    "CM7035", "CM7036",
+    "DZ-5010", "DZ-5011",
+    "EL-10", "EL-11",
+    "ECK-4F", "ECK-5F",
+    "36021", "36022"
+  ],
+  "fitment": [
+    {
+      "part_numbers": ["75C12", "15810", "RL-7037", "CM7037", "DZ-5009", "EL-9", "ECK-5G", "36014"],
+      "year_start": 1971,
+      "year_end": 1973,
+      "make": "Ford",
+      "model": "Pinto",
+      "trim_note": null,
+      "displacement_l": 1.6,
+      "induction": null,
+      "cylinders": 4
+    }
+  ],
+  "confidence": 0.8,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "The operative order's kit-number table (page 1 of the EO, company/kit number list: Co-Op 75C12, Montgomery Ward 15810, Rite-Line RL-7037, Gulf CM7037, Ford Motorcraft DZ-5009, Wells EL-9, Echlin ECK-5G, Echlin-ACCEL 36014) exactly matches the 'Vega' column of the Exhibit A kit-number table found later in the same PDF (a January 19, 1977 Prestolite letter), rather than the 'Pinto 98 C.I.D.' column (75C13, RL-7035, CM7035, DZ-5010, EL-10, ECK-4F, 36021) -- even though the EO's applicability text names only 1971-1973 Ford Pinto 1.6L vehicles and never mentions the Chevrolet Vega. This may be a clerical error in the original filing. All part numbers are transcribed as printed; the single fitment row reflects only the vehicle scope stated in the EO's operative text (Ford Pinto). A May 19, 1977 letter (Appendix I) shows Prestolite withdrew the Pinto 140 CID application and pursued only Vega and Pinto 98 CID engines, though only Pinto appears in the final operative text. Pages 11-14 of the PDF are a marketing brochure and installation/troubleshooting guide with no additional part numbers or fitment data."
+}

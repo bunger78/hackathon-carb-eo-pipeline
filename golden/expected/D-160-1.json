@@ -1,0 +1,15 @@
+{
+  "eo_number": "D-160-1",
+  "issue_date": "1986-06-10",
+  "manufacturer": "Advanced Emission Technology",
+  "device_name": "Universal Fuel Fill Pipe Restrictor",
+  "category": "other",
+  "description": "A replacement fuel tank fill pipe restrictor used to repair damaged or missing OEM restrictors on vehicles certified for unleaded gasoline only, installable by soldering, silver soldering, brazing, welding, or J-B Weld cold-weld compound.",
+  "supersedes": [],
+  "part_numbers": [],
+  "fitment": [],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "Executed date is handwritten over a typed '1' on page 2; handwriting appears to read '10th day of June, 1986' -- verify against original scan. This order is an update to prior Executive Order D-160 (adds J-B Weld as an installation method and removes a sales restriction to qualified mechanics), per the accompanying staff evaluation report, but the EO text itself does not use explicit 'supersedes' or 'cancels' language regarding D-160, so supersedes is left empty. Document is a universal, non-vehicle-specific device (applies to any vehicle certified for unleaded gasoline only); no make/model/year fitment table or part numbers are present anywhere in the 9-page PDF (EO pages 1-2, evaluation report pages 3-9)."
+}

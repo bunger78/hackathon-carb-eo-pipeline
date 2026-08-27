@@ -1,0 +1,27 @@
+{
+  "eo_number": "D-562-7",
+  "issue_date": "2007-03-28",
+  "manufacturer": "Valina, Inc. (d.b.a. Cartex)",
+  "device_name": "Three-Way Catalytic Converter Series 92100",
+  "category": "cat",
+  "description": "An aftermarket three-way catalytic converter (Series 92100, round type) approved for non-OBD-II equipped vehicles up to 5.9L (360 CID) engine size and 6,000 lbs test weight.",
+  "supersedes": ["D-562-5"],
+  "part_numbers": ["92100"],
+  "fitment": [
+    {
+      "part_numbers": ["92100"],
+      "year_start": null,
+      "year_end": null,
+      "make": null,
+      "model": null,
+      "trim_note": "Applies to non-OBD-II equipped vehicles with engine size up to 5.9L (360 CID) and vehicle test weight up to 6,000 lbs (not for OBD-II equipped vehicles). Emissions tested on a 1994 5.9L Dodge Pickup 2500.",
+      "displacement_l": 5.9,
+      "induction": null,
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "This EO defines applicability by engine size/vehicle weight class and OBD status rather than by specific make/model/year, so make, model, and year fields are null; the 1994 Dodge Pickup 2500 is only the emissions test vehicle used to validate performance, not a fitment list. An internal 'Aftermarket Parts Section' checklist page (included in the PDF, for internal ARB use only) refers to the device as 'Series 92000 non-OBD II TWC', while the operative Executive Order text and table both say 'Series 92100' (Round). This discrepancy is transcribed as-is; '92000' was not added to part_numbers since the operative order and table consistently use 92100. Executive Order D-562-5 (dated October 30, 2006) is explicitly superseded per the order text."
+}

@@ -1,0 +1,17 @@
+{
+  "eo_number": "D-752-18",
+  "issue_date": "2021-05-28",
+  "manufacturer": "Livernois Motorsports & Engineering",
+  "device_name": "PowerPack",
+  "category": "intake",
+  "description": "Exempts installation of the PowerPack (new sealed air filter housing, cone air filter, intake tube, MAF tube with integrated HCT, throttle body, throttle body adapter, and ECU reflash) on 2018-2021 Ford Mustang 5.0L.",
+  "supersedes": [],
+  "part_numbers": ["M-9603-M8B"],
+  "fitment": [
+    {"part_numbers": ["M-9603-M8B"], "year_start": 2018, "year_end": 2021, "make": "Ford", "model": "Mustang", "trim_note": null, "displacement_l": 5.0, "induction": null, "cylinders": null}
+  ],
+  "confidence": 0.95,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "2-page document, fully legible; no Exhibit/table, fitment stated only in body prose (no per-vehicle part-number breakdown). Document also mentions the PCV/crankcase breather hose may be replaced with SAE30R9-rated hose and the body control module can be reflashed to correct the speedometer after tire/gear-ratio changes; not captured as separate part numbers since none are given for those items. Induction/cylinders not stated in document, left null."
+}

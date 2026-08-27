@@ -1,0 +1,137 @@
+{
+  "eo_number": "D-835-5",
+  "issue_date": "2023-04-18",
+  "manufacturer": "Driverge Vehicle Innovations, LLC",
+  "device_name": "Modified Fuel Systems (long cut, rear entry)",
+  "category": "other",
+  "description": "A replacement fuel tank (long cut, rear entry configuration) that replaces the stock fuel tank on Pacifica and Voyager vehicles as listed in Exhibit A.",
+  "supersedes": [],
+  "part_numbers": ["NPD-20635", "NPD-20636"],
+  "fitment": [
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2017,
+      "year_end": 2017,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2018,
+      "year_end": 2018,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2019,
+      "year_end": 2019,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2020,
+      "year_end": 2020,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2021,
+      "year_end": 2021,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2022,
+      "year_end": 2022,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20635"],
+      "year_start": 2023,
+      "year_end": 2023,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20636"],
+      "year_start": 2020,
+      "year_end": 2020,
+      "make": null,
+      "model": "Voyager",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20636"],
+      "year_start": 2021,
+      "year_end": 2021,
+      "make": null,
+      "model": "Voyager",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20636"],
+      "year_start": 2022,
+      "year_end": 2022,
+      "make": null,
+      "model": "Voyager",
+      "trim_note": null,
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    },
+    {
+      "part_numbers": ["NPD-20636"],
+      "year_start": 2023,
+      "year_end": 2023,
+      "make": null,
+      "model": "Pacifica",
+      "trim_note": "Exhibit A lists 'Pacifica' (not Voyager) for this NPD-20636/2023 row; transcribed exactly as printed and possibly a document error given the other NPD-20636 rows are Voyager.",
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "Vehicle make is not stated anywhere in the document (only 'Pacifica' and 'Voyager' model names appear in Exhibit A), so make is left null rather than inferred. Exhibit A also lists a 'Test Group' and 'Evaporative Family' certification code per row (e.g., HCRXT03.65P1 / HCRXR0140RK0 for the 2017 Pacifica); these are CARB emissions certification codes, not device part numbers, and are not included in part_numbers. The last Exhibit A row (NPD-20636, 2023) is printed as 'Pacifica' rather than 'Voyager', which appears to be a typo given the surrounding rows."
+}

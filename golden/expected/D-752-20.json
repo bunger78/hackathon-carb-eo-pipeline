@@ -1,0 +1,501 @@
+{
+  "eo_number": "D-752-20",
+  "issue_date": "2022-02-01",
+  "manufacturer": "Livernois Motorsports & Engineering",
+  "device_name": "MyCalibrator Tune",
+  "category": "tune",
+  "description": "Exemption for the Livernois Motorsports & Engineering MyCalibrator Tune, an ECU reflash (delivered via the MyCalibrator Tuner, available in 87-89 or 91-93 octane calibrations, with speedometer tire-size/gear-ratio correction) for specified 2006-2021 Chrysler/Dodge/Jeep/Ram vehicles.",
+  "supersedes": [],
+  "part_numbers": [
+    "LPP621101",
+    "LPP621101-9193",
+    "LPP621103",
+    "LPP621103-9193",
+    "LPP621105",
+    "LPP621105-9193",
+    "LPP621109",
+    "LPP621109-9193",
+    "LPP621120",
+    "LPP621120-87-89",
+    "LPP621120-9193",
+    "LPP621121",
+    "LPP621121-8789",
+    "LPP621121-9193",
+    "LPP621123",
+    "LPP621123-9193",
+    "LPP621124",
+    "LPP621124-8789",
+    "LPP621124-9193",
+    "LPP621125",
+    "LPP621125-8789",
+    "LPP621125-9193",
+    "LPP621127",
+    "LPP621127-9193",
+    "LPP621128",
+    "LPP621128-8789",
+    "LPP621128-9193",
+    "LPP621129",
+    "LPP621129-8789",
+    "LPP621129-9193",
+    "LPP621130",
+    "LPP621130-8789",
+    "LPP621130-9193",
+    "LPP621131",
+    "LPP621131-8789",
+    "LPP621131-9193",
+    "LPP621134",
+    "LPP621134-8789",
+    "LPP621134-9193",
+    "LPP621135",
+    "LPP621135-8789",
+    "LPP621135-9193",
+    "LPP621136",
+    "LPP621136-8789",
+    "LPP621136-9193",
+    "LPP621137",
+    "LPP621137-8789",
+    "LPP621137-9193",
+    "LPP621138",
+    "LPP621138-8789",
+    "LPP621138-9193",
+    "LPP621139",
+    "LPP621139-9193",
+    "LPP621160",
+    "LPP621160-8789",
+    "LPP621160-9193",
+    "LPP621165",
+    "LPP621165-9193"
+  ],
+  "fitment": [
+    {
+      "part_numbers": [
+        "LPP621101",
+        "LPP621101-9193"
+      ],
+      "year_start": 2008,
+      "year_end": 2010,
+      "make": "DODGE",
+      "model": "CHALLENGER",
+      "trim_note": null,
+      "displacement_l": 6.1,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621103",
+        "LPP621103-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2010,
+      "make": "DODGE",
+      "model": "CHARGER",
+      "trim_note": null,
+      "displacement_l": 6.1,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621103",
+        "LPP621103-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2008,
+      "make": "DODGE",
+      "model": "MAGNUM",
+      "trim_note": null,
+      "displacement_l": 6.1,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621105",
+        "LPP621105-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2010,
+      "make": "CHRYSLER",
+      "model": "300 SRT8",
+      "trim_note": null,
+      "displacement_l": 6.1,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621109",
+        "LPP621109-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2010,
+      "make": "JEEP",
+      "model": "GRAND CHEROKEE",
+      "trim_note": null,
+      "displacement_l": 6.1,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621120",
+        "LPP621120-87-89",
+        "LPP621120-9193"
+      ],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "CHALLENGER",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621121",
+        "LPP621121-8789",
+        "LPP621121-9193"
+      ],
+      "year_start": 2009,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "CHALLENGER",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621123",
+        "LPP621123-9193"
+      ],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "CHALLENGER",
+      "trim_note": null,
+      "displacement_l": 6.4,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621124",
+        "LPP621124-8789",
+        "LPP621124-9193"
+      ],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "CHARGER",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621125",
+        "LPP621125-8789",
+        "LPP621125-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "CHARGER",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621125",
+        "LPP621125-8789",
+        "LPP621125-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2008,
+      "make": "DODGE",
+      "model": "MAGNUM",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621127",
+        "LPP621127-9193"
+      ],
+      "year_start": 2012,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "CHARGER SRT8",
+      "trim_note": null,
+      "displacement_l": 6.4,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621128",
+        "LPP621128-8789",
+        "LPP621128-9193"
+      ],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "CHRYSLER",
+      "model": "300",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621129",
+        "LPP621129-8789",
+        "LPP621129-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2021,
+      "make": "CHRYSLER",
+      "model": "300",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621130",
+        "LPP621130-8789",
+        "LPP621130-9193"
+      ],
+      "year_start": 2012,
+      "year_end": 2015,
+      "make": "CHRYSLER",
+      "model": "300 SRT8",
+      "trim_note": null,
+      "displacement_l": 6.4,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621131",
+        "LPP621131-8789",
+        "LPP621131-9193"
+      ],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "JEEP",
+      "model": "GRAND CHEROKEE",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621134",
+        "LPP621134-8789",
+        "LPP621134-9193"
+      ],
+      "year_start": 2012,
+      "year_end": 2021,
+      "make": "JEEP",
+      "model": "WRANGLER",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621134",
+        "LPP621134-8789",
+        "LPP621134-9193"
+      ],
+      "year_start": 2020,
+      "year_end": 2021,
+      "make": "JEEP",
+      "model": "GLADIATOR",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621135",
+        "LPP621135-8789",
+        "LPP621135-9193"
+      ],
+      "year_start": 2013,
+      "year_end": 2021,
+      "make": "RAM",
+      "model": "1500",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621135",
+        "LPP621135-8789",
+        "LPP621135-9193"
+      ],
+      "year_start": 2019,
+      "year_end": 2021,
+      "make": "RAM",
+      "model": "1500 CLASSIC",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621136",
+        "LPP621136-8789",
+        "LPP621136-9193"
+      ],
+      "year_start": 2013,
+      "year_end": 2021,
+      "make": "RAM",
+      "model": "1500",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621136",
+        "LPP621136-8789",
+        "LPP621136-9193"
+      ],
+      "year_start": 2019,
+      "year_end": 2021,
+      "make": "RAM",
+      "model": "1500 CLASSIC",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621136",
+        "LPP621136-8789",
+        "LPP621136-9193"
+      ],
+      "year_start": 2014,
+      "year_end": 2021,
+      "make": "RAM",
+      "model": "2500/3500",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621137",
+        "LPP621137-8789",
+        "LPP621137-9193"
+      ],
+      "year_start": 2011,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "DURANGO",
+      "trim_note": null,
+      "displacement_l": 3.6,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621138",
+        "LPP621138-8789",
+        "LPP621138-9193"
+      ],
+      "year_start": 2007,
+      "year_end": 2009,
+      "make": "CHRYSLER",
+      "model": "ASPEN",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621138",
+        "LPP621138-8789",
+        "LPP621138-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "DURANGO",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621139",
+        "LPP621139-9193"
+      ],
+      "year_start": 2018,
+      "year_end": 2021,
+      "make": "DODGE",
+      "model": "DURANGO SRT",
+      "trim_note": null,
+      "displacement_l": 6.4,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621160",
+        "LPP621160-8789",
+        "LPP621160-9193"
+      ],
+      "year_start": 2006,
+      "year_end": 2021,
+      "make": "JEEP",
+      "model": "GRAND CHEROKEE",
+      "trim_note": null,
+      "displacement_l": 5.7,
+      "induction": "NA",
+      "cylinders": null
+    },
+    {
+      "part_numbers": [
+        "LPP621165",
+        "LPP621165-9193"
+      ],
+      "year_start": 2021,
+      "year_end": 2021,
+      "make": "JEEP",
+      "model": "WRANGLER",
+      "trim_note": null,
+      "displacement_l": 6.4,
+      "induction": "NA",
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "Exhibit A table transcribed from the rendered page image; the PDF's extracted text layer badly misaligned Make/Model/Engine/Tunes values across rows (multi-line 'Tunes' cells shifted values onto adjacent rows), so the image was used as the authoritative source. Each fitment row's part_numbers combines the leftmost 'Part Number' column value with the associated 'Tunes' column value(s) (87-89 octane and/or 91-93 octane variants), exactly as paired in that table row. One row (LPP621120, Challenger 3.6L) prints its 87-89-octane tune suffix as 'LPP621120-87-89' (with hyphen) while all other rows use the unhyphenated 'NNNN-8789' form - transcribed exactly as printed, not normalized. Execution date handwritten as '1st' confirmed from the signature page image: February 1, 2022. 'Cylinders' left null throughout since the Engine Size column states displacement only, not cylinder count; 'Induction' set to NA since no turbocharged/supercharged engine is listed."
+}

@@ -1,0 +1,17 @@
+{
+  "eo_number": "D-628-11",
+  "issue_date": "2019-03-19",
+  "manufacturer": "Toyota Racing Development (TRD)",
+  "device_name": "F-Sport Performance Air Intake",
+  "category": "intake",
+  "description": "Exempts installation of the F-Sport Performance Air Intake (modified air filter housing lid with a permanently heat-staked Toyota hydrocarbon trap, TRD flat panel air filter, and intake tubing to the stock throttle body, with the stock MAF sensor retained and no change to engine calibration) on 2014-2019 Lexus IS350 3.5L.",
+  "supersedes": [],
+  "part_numbers": ["PTR03-53141"],
+  "fitment": [
+    {"part_numbers": ["PTR03-53141"], "year_start": 2014, "year_end": 2019, "make": "Lexus", "model": "IS350", "trim_note": null, "displacement_l": 3.5, "induction": null, "cylinders": null}
+  ],
+  "confidence": 0.9,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "2-page document; the handwritten execution date ('19th') is faintly legible/OCR-garbled but confirmed as 19th day of March 2019. Document states the product is manufactured by Toyota Racing Development (TRD) and marketed under the 'F-Sport' brand name by F-Sport, 6565 Headquarters Drive, Plano, Texas 75024; 'manufacturer' field uses the stated manufacturer (TRD) rather than the marketing brand. Document references prior emissions test data submitted by TRD in support of a separate EO, D-425-64 -- this is not a supersession, so supersedes is left empty. Induction/cylinders not stated in document, left null."
+}

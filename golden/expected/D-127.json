@@ -1,0 +1,27 @@
+{
+  "eo_number": "D-127",
+  "issue_date": "1982-09-23",
+  "manufacturer": "EPM Industries, Inc.",
+  "device_name": "Octameter Injection System",
+  "category": "intake",
+  "description": "The Octameter Injection System is an aftermarket vapor injector that uses engine vacuum to draw a metered water/methanol mixture (Octamite Formula) from a reservoir, through an adjustable Barometric Altitude Selector and a 0.022-inch orifice, injecting the resulting vapor mist into the engine intake to supplement the air/fuel charge.",
+  "supersedes": [],
+  "part_numbers": [],
+  "fitment": [
+    {
+      "part_numbers": [],
+      "year_start": null,
+      "year_end": 1982,
+      "make": null,
+      "model": null,
+      "trim_note": "Exempt for 1982 and older model-year gasoline and propane powered motor vehicles; no specific make/model is listed in the document.",
+      "displacement_l": null,
+      "induction": null,
+      "cylinders": null
+    }
+  ],
+  "confidence": 0.85,
+  "sections_confidence": {},
+  "illegible_pages": [],
+  "notes": "No part numbers or make/model fitment table appear anywhere in the document; the exemption applies generically to '1982 and older' gasoline and propane powered vehicles. Category is ambiguous under the fixed enum: the device is a vacuum-driven water/alcohol vapor injector that ties into the intake vacuum system rather than a traditional intake manifold or air filter/duct; classified as 'intake' as the closest fit ('other' would also be defensible). Executed date is a handwritten numeral on page 2 read as the 23rd day of September, 1982. Document includes a August 3, 1982 CARB staff report (pages 3-5), a device diagram (page 6, Figure 1), and a September 8, 1982 letter from EPM Industries (page 7, Attachment 2) as supporting attachments; these do not add any part numbers or vehicle fitment beyond what is stated in the Executive Order itself."
+}
