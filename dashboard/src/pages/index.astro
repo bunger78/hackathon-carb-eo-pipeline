@@ -1,9 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { overviewCounts } from '../lib/db';
-import { formatCount } from '../lib/format';
+import Console from '../components/Console';
+import RunNow from '../components/RunNow';
+import { getOverviewData } from '../lib/overview';
+import { formatCost, formatCount, formatTimestamp } from '../lib/format';
 
-const { states, total } = await overviewCounts();
+const { states, totalEos, extractionsCount, totalCostUsd, recentRuns, nextScheduled, openReviewCount } =
+  await getOverviewData();
+
+const STATE_ORDER = ['discovered', 'matching', 'needs_review', 'complete', 'failed', 'superseded'] as const;
 
 const STATE_LABELS: Record<string, string> = {
   discovered: 'Discovered',
@@ -17,17 +22,59 @@ const STATE_LABELS: Record<string, string> = {
 
 <Base title="CarbLegal — Overview">
   <h1>Overview</h1>
-  <p>
-    <span class="num">{formatCount(total)}</span> Executive Orders tracked.
-  </p>
-  <ul>
+
+  <section class="receipt">
+    <p class="receipt-line">
+      ≈<span class="num">{formatCount(states.complete ?? 0)}</span> EOs ·{' '}
+      <span class="num">{formatCount(extractionsCount)}</span> extractions ·{' '}
+      <span class="num">{formatCost(totalCostUsd)}</span> total Gemini spend
+    </p>
+    <p class="receipt-sub">Gemini 3.7 Flash · {formatCount(totalEos)} EOs tracked overall</p>
+  </section>
+
+  <div class="tiles">
     {
-      Object.entries(states).map(([state, count]) => (
-        <li>
-          <span class={`status status-${state}`}>{STATE_LABELS[state] ?? state}</span>:{' '}
-          <span class="num">{formatCount(count)}</span>
-        </li>
+      STATE_ORDER.map((state) => (
+        <div class="tile">
+          <span class="tile-count num">{formatCount(states[state] ?? 0)}</span>
+          <span class={`status status-${state}`}>{STATE_LABELS[state] ?? state}</span>
+        </div>
       ))
     }
-  </ul>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Recent runs</span>
+      {
+        recentRuns.length === 0 ? (
+          <span>No runs yet</span>
+        ) : (
+          <ul class="run-list">
+            {recentRuns.map((run) => (
+              <li>
+                <a href={`/runs/${run.id}`}>
+                  {formatTimestamp(run.started_at)} · {run.trigger ?? 'run'} · {run.status ?? 'unknown'}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Next scheduled</span>
+      <span>{nextScheduled}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Open reviews</span>
+      <span class="num">{formatCount(openReviewCount)}</span>
+    </div>
+  </div>
+
+  <h2>Live agent console</h2>
+  <Console client:load />
+
+  <h2>Manual run</h2>
+  <RunNow client:load />
 </Base>

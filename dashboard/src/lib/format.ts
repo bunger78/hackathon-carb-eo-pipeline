@@ -32,3 +32,19 @@ export function formatTimestamp(tsSeconds: number | null | undefined): string {
     hour12: false,
   }).format(d);
 }
+
+/**
+ * Format a Unix timestamp in seconds as HH:MM:SS (24-hour, America/Los_Angeles).
+ * Used by the live agent console feed. Returns '--:--:--' for missing/invalid input.
+ */
+export function formatEventTime(tsSeconds: number | null | undefined): string {
+  if (typeof tsSeconds !== 'number' || !isFinite(tsSeconds)) return '--:--:--';
+  const d = new Date(tsSeconds * 1000);
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).format(d);
+}

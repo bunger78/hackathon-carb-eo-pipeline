@@ -165,6 +165,13 @@ export async function totalBackfillCost(): Promise<number> {
   return snap.data().total ?? 0;
 }
 
+// Count of extraction docs (`extractions/{eo}_v{n}`) — each doc is one extraction
+// attempt, so this doubles as "extractions performed" for the overview receipt stat.
+export async function extractionsCount(): Promise<number> {
+  const snap = await db.collection('extractions').count().get();
+  return snap.data().count;
+}
+
 // --- runs ---
 
 export async function recentRuns(n: number): Promise<RunDoc[]> {
@@ -178,6 +185,20 @@ export async function runWithEvents(id: string): Promise<{ run: RunDoc; events: 
   const eventsSnap = await db.collection('runs').doc(id).collection('events').orderBy('ts', 'asc').get();
   return {
     run: { id: runSnap.id, ...(runSnap.data() as RunDoc) },
+    events: eventsSnap.docs.map((d) => ({ id: d.id, ...(d.data() as RunEvent) })),
+  };
+}
+
+// For the live agent console: only the latest run's most recent events, newest
+// first, capped at `limit` — cheaper than runWithEvents() for a 3s poll loop
+// since it never fetches a run's full event history.
+export async function latestRunFeed(limit: number): Promise<{ runId: string | null; events: RunEvent[] }> {
+  const runsSnap = await db.collection('runs').orderBy('started_at', 'desc').limit(1).get();
+  if (runsSnap.empty) return { runId: null, events: [] };
+  const runDoc = runsSnap.docs[0];
+  const eventsSnap = await runDoc.ref.collection('events').orderBy('ts', 'desc').limit(limit).get();
+  return {
+    runId: runDoc.id,
     events: eventsSnap.docs.map((d) => ({ id: d.id, ...(d.data() as RunEvent) })),
   };
 }
@@ -380,6 +401,13 @@ export async function legacyFor(eo: string): Promise<LegacyDoc | null> {
 export async function openReviews(): Promise<ReviewDoc[]> {
   const snap = await db.collection('review_queue').where('status', '==', 'open').orderBy('created_at', 'asc').limit(50).get();
   return snap.docs.map((d) => ({ id: d.id, ...(d.data() as ReviewDoc) }));
+}
+
+// True count of open reviews (openReviews() above caps at 50 docs fetched, which
+// would undercount during a busy backfill).
+export async function openReviewCount(): Promise<number> {
+  const snap = await db.collection('review_queue').where('status', '==', 'open').count().get();
+  return snap.data().count;
 }
 
 export async function reviewDetail(id: string): Promise<ReviewDoc | null> {
