@@ -1,6 +1,6 @@
 """Backfill. Bootstrap locally: py -3 backfill.py --bootstrap
    Worker mode runs as Cloud Run Job (env CLOUD_RUN_TASK_INDEX/TASK_COUNT)."""
-import os, sys, time, zlib
+import os, sys, time
 from config import settings
 from core.costs import BudgetGuard, BudgetExceeded
 from runner import Deps, process_work_item
@@ -22,8 +22,11 @@ def bootstrap():
     print(f"bootstrap: {n} work items under run {run_id}")
 
 def worker():
+    # No shard filter: claim_next's transactional lease already gives exclusive
+    # ownership, so any worker may process any item. A crc32 pre-filter with
+    # release-back-to-pending live-locks the queue head (all workers bounce the
+    # oldest foreign item instead of advancing past it).
     idx = int(os.environ.get("CLOUD_RUN_TASK_INDEX", "0"))
-    cnt = int(os.environ.get("CLOUD_RUN_TASK_COUNT", "1"))
     deps = build_deps()
     deps.budget = BudgetGuard(float(os.environ.get("RUN_BUDGET_USD", "200")))
     run_id = deps.repo.create_run(f"backfill-worker-{idx}")
@@ -32,10 +35,6 @@ def worker():
         item = deps.repo.claim_next(f"bf-{idx}", now=time.time())
         if item is None:
             break
-        if zlib.crc32(item["eo_number"].encode()) % cnt != idx:
-            deps.repo.update_work_item(item["id"], {"status": "pending"})  # not my shard
-            time.sleep(0.05)
-            continue
         try:
             process_work_item(item, deps, run_id)
             done += 1
@@ -43,7 +42,7 @@ def worker():
             print("budget exceeded — stopping shard")
             break
     deps.repo.finish_run(run_id, {"processed": done, "status": "ok"})
-    print(f"shard {idx}: {done} processed, ${deps.budget.spent:.2f}")
+    print(f"worker {idx}: {done} processed, ${deps.budget.spent:.2f}")
 
 if __name__ == "__main__":
     bootstrap() if "--bootstrap" in sys.argv else worker()

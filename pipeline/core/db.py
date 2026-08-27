@@ -96,7 +96,7 @@ class Repo:
         now = now or time.time()
         cands = (self.db.collection("work_items")
                  .where("status", "in", ["pending", "in_progress"])
-                 .order_by("created_at").limit(25).stream())
+                 .order_by("created_at").limit(100).stream())
         for snap in cands:
             item = snap.to_dict() | {"id": snap.id}
             if not is_claimable(item, now):
