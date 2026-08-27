@@ -1,4 +1,5 @@
 import json
+from pydantic import ValidationError
 from schemas.extraction import ResolverBatch
 from prompts.resolver import RESOLVER_PROMPT
 from matching.engine import match_row
@@ -40,21 +41,36 @@ def run_matching(llm, repo, budget, eo, ex, index, run_id) -> dict:
         budget.add(usd)
         repo.add_run_cost(run_id, usd, res.tok_in, res.tok_out)
         rows = {i: r for i, r, _ in unresolved}
-        for d in ResolverBatch.model_validate(res.data).decisions:
-            row = rows.get(d.fitment_index)
-            if row is None:
-                continue
-            if d.confidence < settings.confidence_threshold:
-                repo.add_review({"eo_number": eo, "reason": "ambiguous_match",
-                                 "agent_notes": d.rationale,
-                                 "payload": {"fitment": row.model_dump(),
-                                             "proposed_vehicle_ids": d.vehicle_ids}})
-                continue
-            for vid in d.vehicle_ids:
-                if vid not in best:
-                    best[vid] = _doc(eo, ex, vid, "generic", "gemini_resolved",
-                                     row.part_numbers, d.rationale)
-                    resolved_via_llm += 1
+        cands_by_index = {i: {c["id"] for c in cands} for i, _, cands in unresolved}
+        try:
+            batch = ResolverBatch.model_validate(res.data)
+        except ValidationError:
+            repo.add_event(run_id, {"agent": "matchmaker", "eo": eo, "action": "resolver_output_invalid"})
+            repo.add_review({"eo_number": eo, "reason": "ambiguous_match",
+                             "agent_notes": "resolver output failed validation",
+                             "payload": {"unresolved_count": len(unresolved)}})
+            batch = None
+        if batch:
+            for d in batch.decisions:
+                row = rows.get(d.fitment_index)
+                if row is None:
+                    continue
+                if d.confidence < settings.confidence_threshold:
+                    repo.add_review({"eo_number": eo, "reason": "ambiguous_match",
+                                     "agent_notes": d.rationale,
+                                     "payload": {"fitment": row.model_dump(),
+                                                 "proposed_vehicle_ids": d.vehicle_ids}})
+                    continue
+                valid_ids = [v for v in d.vehicle_ids if v in cands_by_index.get(d.fitment_index, set())]
+                if d.vehicle_ids and not valid_ids:
+                    repo.add_event(run_id, {"agent": "matchmaker", "eo": eo, "action": "resolver_hallucinated_ids",
+                                            "fitment_index": d.fitment_index})
+                    continue
+                for vid in valid_ids:
+                    if vid not in best:
+                        best[vid] = _doc(eo, ex, vid, "generic", "gemini_resolved",
+                                         row.part_numbers, d.rationale)
+                        resolved_via_llm += 1
     repo.replace_matches(eo, list(best.values()))
     repo.upsert_eo(eo, {"state": "complete", "match_count": len(best)})
     repo.add_event(run_id, {"agent": "matchmaker", "eo": eo, "action": "matched",

@@ -96,3 +96,12 @@ def test_divergence_only_escalation():
     out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
     assert repo.reviews[0]["reason"] == "legacy_divergence"
+
+def test_invalid_critique_output_escalates():
+    repo = FakeRepo(); run = repo.create_run("t")
+    repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
+    llm = FakeLLM([LLMResult({"garbage": 1}, 10, 5)])
+    ex = _ex(confidence=0.4)  # forces critique
+    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    assert out == "escalated"
+    assert repo.reviews[0]["reason"] == "validation_failure"

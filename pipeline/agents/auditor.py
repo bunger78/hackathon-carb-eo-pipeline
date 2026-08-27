@@ -77,7 +77,11 @@ def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> str:
     usd = cost_usd(res.tok_in, res.tok_out)
     budget.add(usd)
     repo.add_run_cost(run_id, usd, res.tok_in, res.tok_out)
-    verdict = CritiqueVerdict.model_validate(res.data)
+    try:
+        verdict = CritiqueVerdict.model_validate(res.data)
+    except ValidationError:
+        _escalate(repo, eo, ex, "validation_failure", "critique output failed validation", run_id)
+        return "escalated"
     if verdict.verdict == "fix":
         try:
             fixed = apply_corrections(ex, verdict.corrections)

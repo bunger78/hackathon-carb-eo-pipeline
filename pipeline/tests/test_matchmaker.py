@@ -47,3 +47,25 @@ def test_low_confidence_resolution_goes_to_review():
     run_matching(llm, repo, BudgetGuard(5), "D-7-7", ex, VehicleIndex(VEHICLES), run)
     assert repo.matches.get("D-7-7", []) == []
     assert repo.reviews[0]["reason"] == "ambiguous_match"
+
+def test_hallucinated_vehicle_ids_filtered():
+    repo = FakeRepo(); run = repo.create_run("t")
+    ex = _ex([FitmentRow(make="Toyota", model="Celicaand Corolla", year_start=1999, year_end=1999)])
+    llm = FakeLLM([LLMResult({"decisions": [{"fitment_index": 0, "vehicle_ids": ["v1", "ghost-99"],
+                   "rationale": "hallucinated ghost-99", "confidence": 0.9}]}, 100, 40)])
+    run_matching(llm, repo, BudgetGuard(5), "D-7-7", ex, VehicleIndex(VEHICLES), run)
+    docs = repo.matches["D-7-7"]
+    assert len(docs) == 1 and docs[0]["vehicle_id"] == "v1"
+    assert not any(d["vehicle_id"] == "ghost-99" for d in docs)
+
+def test_invalid_resolver_output_degrades_gracefully():
+    repo = FakeRepo(); run = repo.create_run("t")
+    deterministic_row = FitmentRow(make="Toyota", model="Celica", year_start=1999, year_end=1999,
+                                   displacement_l=1.8, induction="NA", cylinders=4)
+    ambiguous_row = FitmentRow(make="Toyota", model="Celicaand Corolla", year_start=1999, year_end=1999)
+    ex = _ex([deterministic_row, ambiguous_row])
+    llm = FakeLLM([LLMResult({"nonsense": True}, 10, 5)])
+    run_matching(llm, repo, BudgetGuard(5), "D-7-7", ex, VehicleIndex(VEHICLES), run)
+    docs = repo.matches["D-7-7"]
+    assert len(docs) == 1 and docs[0]["vehicle_id"] == "v1" and docs[0]["method"] == "deterministic"
+    assert len(repo.reviews) == 1 and repo.reviews[0]["reason"] == "ambiguous_match"
