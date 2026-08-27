@@ -61,6 +61,13 @@ class Repo:
         ref.set(item)
         return ref.id
 
+    def get_review(self, review_id):
+        snap = self.db.collection("review_queue").document(review_id).get()
+        return snap.to_dict() if snap.exists else None
+
+    def update_review(self, review_id, fields):
+        self.db.collection("review_queue").document(review_id).set(fields, merge=True)
+
     # --- runs ---
     def create_run(self, trigger):
         ref = self.db.collection("runs").document()

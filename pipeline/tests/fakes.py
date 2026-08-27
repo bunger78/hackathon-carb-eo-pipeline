@@ -72,6 +72,19 @@ class FakeRepo:
         self.reviews.append({**item, "id": review_id, "status": "open"})
         return review_id
 
+    def get_review(self, review_id):
+        for r in self.reviews:
+            if r.get("id") == review_id:
+                return r
+        return None
+
+    def update_review(self, review_id, fields):
+        for r in self.reviews:
+            if r.get("id") == review_id:
+                r.update(fields)
+                return
+        raise KeyError(review_id)
+
     # --- runs ---
     def create_run(self, trigger):
         self._run_seq += 1

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Header, HTTPException
+from pydantic import BaseModel
 from config import settings
 from runner import Deps
 from workflow_graph import run_workflow
@@ -35,3 +36,20 @@ def run_now(x_admin_token: str = Header(default="")):
     if not ADMIN_TOKEN or x_admin_token != ADMIN_TOKEN:
         raise HTTPException(401)
     return run_workflow(build_deps(), "manual")
+
+class ReviewResolution(BaseModel):
+    review_id: str
+    action: str  # "approve" | "reject"
+    corrections: dict | None = None
+
+@app.post("/admin/resolve-review")
+def admin_resolve_review(body: ReviewResolution, x_admin_token: str = Header(default="")):
+    if not ADMIN_TOKEN or x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(401)
+    if body.action not in ("approve", "reject"):
+        raise HTTPException(422)
+    from agents.reviewer import resolve_review
+    try:
+        return resolve_review(build_deps(), body.review_id, body.action, body.corrections)
+    except KeyError as e:
+        raise HTTPException(404, str(e))
