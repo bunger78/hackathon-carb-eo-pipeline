@@ -19,8 +19,10 @@ def build_deps() -> Deps:
     return Deps(repo=repo, llm=LLM(), gcs=GCSStore(settings.bucket), carb=CarbClient(),
                 index=VehicleIndex(repo.vehicles_all()), budget=BudgetGuard(settings.run_budget_usd))
 
-@app.get("/healthz")
-def healthz():
+# /health, not /healthz: Google's frontend reserves /healthz on *.run.app and
+# answers 404 before the request reaches the container.
+@app.get("/health")
+def health():
     return {"ok": True}
 
 @app.post("/run")

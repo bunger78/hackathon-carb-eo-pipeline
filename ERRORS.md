@@ -16,6 +16,17 @@ Check before retrying similar tasks.
 - For buildpack images, define every entrypoint as a Procfile process type and exec `/cnb/process/<type>`; never point --command at a bare interpreter.
 - `gcloud run jobs update` has no `--clear-args`; passing `--args ""` from PowerShell also fails (PS eats the empty string). Updating `--command` alone left the args empty as needed.
 
-## 2026-08-27 — Cloud Run service URL 404 (unresolved ~1 hr, not a config error)
+## 2026-08-27 — "Cloud Run URL doesn't route" that was actually a reserved path (~10 hrs elapsed, many attempts)
 
-Both service URLs return Google-frontend generic 404s from the local network ~1 hr after deploy; service is Ready, ingress=all, both URLs listed active, DNS consistent across resolvers (34.143.72-79.2), no request ever reaches Cloud Run logs. Ruled out: auth (would be 401/403), ingress, DNS poisoning, client TLS/SNI (PowerShell and Python agree). Working theory: slow edge/GFE route propagation for a brand-new project, possibly VPN/geo egress related (resolver returns non-US anycast IPs). Scheduler calls originate inside Google's network and may be unaffected. Next steps if still dead: test from Cloud Shell (note: `gcloud cloud-shell ssh` on Windows hits an interactive PuTTY host-key prompt — pre-seed the key or use another remote vantage), then Google issue tracker.
+**What didn't work:** treating GET /healthz -> Google-style 404 as broken URL routing. Chased: propagation waits, DNS comparisons across resolvers, client TLS/SNI (PowerShell vs Python), no-op revision update, Cloud Build vantage test, full service delete+recreate, service rename (carb-pipeline -> carb-api), temporary allUsers binding. All 404. A stock hello-container probe "worked" — misleadingly (see below).
+
+**Root cause:** **`/healthz` is reserved by Google's frontend on `*.run.app`** — GFE answers 404 itself and never forwards the request (hence zero request logs, which read as "not routed"). Two coincidences hid it: (1) Google's hello container serves a *pixel-perfect imitation of GFE's 404 page* for unknown paths, so the hello probe at `/` "proving routing works" proved nothing about /healthz; (2) FastAPI's JSON 404 on `/` was the first response that visibly came from our app.
+
+**What worked:** requesting `/openapi.json` — 200 from our own app with /healthz in its route table, same second /healthz returned the Google page. Endpoint renamed to `/health`. Every deployment had been serving correctly the entire time.
+
+**Notes for next time:**
+- On *.run.app, never name a health endpoint `/healthz`. Use `/health`.
+- "No request logs + generic Google 404" ≠ broken routing — request a path you KNOW the app serves (`/openapi.json` for FastAPI) before concluding anything about routing.
+- The Cloud Run hello container fakes Google's 404 page; never use it to differentiate GFE-vs-app responses.
+- Side effects kept: service is now named carb-api (scheduler rewired by deploy.sh); the delete/recreate cycles were harmless.
+- Sub-lesson from the same session: `gcloud cloud-shell ssh` on Windows hits an interactive PuTTY host-key prompt in non-interactive shells; a Cloud Build step with a python one-liner is the reliable inside-Google vantage.

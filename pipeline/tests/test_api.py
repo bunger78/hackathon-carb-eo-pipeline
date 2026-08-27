@@ -1,8 +1,8 @@
 from fastapi.testclient import TestClient
 import main
 
-def test_healthz():
-    assert TestClient(main.app).get("/healthz").json() == {"ok": True}
+def test_health():
+    assert TestClient(main.app).get("/health").json() == {"ok": True}
 
 def test_run_scheduled(monkeypatch):
     monkeypatch.setattr(main, "build_deps", lambda: object())
