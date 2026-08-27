@@ -1,4 +1,5 @@
 import json
+import time
 
 from config import settings
 from core.costs import BudgetGuard, BudgetExceeded
@@ -189,6 +190,126 @@ def test_ingest_line_budget_exceeded_bounces_and_raises(monkeypatch):
         pass
     assert deps.repo.work_items[item_id]["status"] == "pending"
     assert deps.repo.extractions == {}
+
+
+def test_ingest_line_leases_work_item_at_start():
+    deps = _deps()
+    item_id = deps.repo.create_work_item("D-9-9", "run0")
+    work_item = dict(deps.repo.work_items[item_id])
+    before = time.time()
+
+    batchfill._lease(deps.repo, work_item)
+
+    assert deps.repo.work_items[item_id]["status"] == "in_progress"
+    assert deps.repo.work_items[item_id]["worker"] == "batch-ingest"
+    assert deps.repo.work_items[item_id]["lease_expires"] >= before + settings.lease_seconds
+
+
+def test_already_done_true_only_when_extraction_exists():
+    repo = FakeRepo()
+    assert batchfill._already_done(repo, "D-9-9") is False
+    repo.write_extraction("D-9-9", 1, {"eo_number": "D-9-9"})
+    assert batchfill._already_done(repo, "D-9-9") is True
+
+
+# --- crash-safety: tail (audit/match) exceptions never crash --ingest,
+# and never re-book an already-committed extraction on re-run ---
+
+def test_tail_exception_bounces_with_attempts_increment_but_keeps_extraction_committed(monkeypatch):
+    monkeypatch.setattr(batchfill, "audit", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom")))
+    deps = _deps()
+    run_id = deps.repo.create_run("batch-backfill")
+    item_id = deps.repo.create_work_item("D-9-9", run_id)
+    work_item = dict(deps.repo.work_items[item_id])
+    tok_in, tok_out = 1000, 200
+    line = _line("gs://b/pdfs/d-9-9.pdf", GOOD, tok_in=tok_in, tok_out=tok_out)
+
+    outcome = batchfill.ingest_line(line, work_item, deps, run_id)
+
+    assert outcome == "retry"
+    assert deps.repo.work_items[item_id]["status"] == "pending"
+    assert deps.repo.work_items[item_id]["attempts"] == 1
+    assert deps.repo.work_items[item_id]["last_error"] == "boom"
+    # Extraction + cost were committed BEFORE the tail ran -- not rolled back.
+    assert deps.repo.next_extraction_version("D-9-9") == 2  # v1 exists
+    expected = tok_in * settings.price_in_per_mtok / 2 / 1e6 + tok_out * settings.price_out_per_mtok / 2 / 1e6
+    assert deps.repo.runs[run_id]["cost_usd"] == expected
+
+
+def test_tail_exception_at_max_attempts_marks_item_and_eo_failed(monkeypatch):
+    monkeypatch.setattr(batchfill, "audit", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom")))
+    deps = _deps()
+    run_id = deps.repo.create_run("batch-backfill")
+    item_id = deps.repo.create_work_item("D-9-9", run_id)
+    deps.repo.update_work_item(item_id, {"attempts": settings.max_attempts - 1})
+    work_item = dict(deps.repo.work_items[item_id])
+    line = _line("gs://b/pdfs/d-9-9.pdf", GOOD)
+
+    outcome = batchfill.ingest_line(line, work_item, deps, run_id)
+
+    assert outcome == "failed"
+    assert deps.repo.work_items[item_id]["status"] == "failed"
+    assert deps.repo.work_items[item_id]["attempts"] == settings.max_attempts
+    assert deps.repo.get_eo("D-9-9")["state"] == "failed"
+
+
+def test_rerun_after_tail_crash_is_idempotent_via_already_done(monkeypatch):
+    """The mechanism fix 1a relies on: once extraction+cost are committed,
+    _already_done reports True regardless of the work item's status, so the
+    ingest() orchestrator never calls ingest_line a second time for this EO --
+    one extraction, one cost booking, even though the tail blew up."""
+    monkeypatch.setattr(batchfill, "audit", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom")))
+    deps = _deps()
+    run_id = deps.repo.create_run("batch-backfill")
+    item_id = deps.repo.create_work_item("D-9-9", run_id)
+    work_item = dict(deps.repo.work_items[item_id])
+    line = _line("gs://b/pdfs/d-9-9.pdf", GOOD, tok_in=1000, tok_out=200)
+
+    assert batchfill._already_done(deps.repo, "D-9-9") is False
+    outcome = batchfill.ingest_line(line, work_item, deps, run_id)
+    assert outcome == "retry"
+
+    # Re-run: the orchestrator checks _already_done BEFORE calling ingest_line
+    # again -- it must now say "skip", so a naive re-run of --ingest over the
+    # same output prefix never reprocesses this line.
+    assert batchfill._already_done(deps.repo, "D-9-9") is True
+    assert deps.repo.next_extraction_version("D-9-9") == 2  # still just the one (v1)
+    expected = 1000 * settings.price_in_per_mtok / 2 / 1e6 + 200 * settings.price_out_per_mtok / 2 / 1e6
+    assert deps.repo.runs[run_id]["cost_usd"] == expected  # booked exactly once
+
+
+def test_ingest_continues_to_next_line_after_tail_failure(monkeypatch):
+    """A tail failure for one EO's line must not crash processing of the next
+    line in the same --ingest pass (this is what makes 'ingest continues to
+    next line' true even without going through the full GCS-streaming loop:
+    ingest_line itself never lets a plain exception escape)."""
+    monkeypatch.setattr("agents.auditor.random.random", lambda: 0.99)
+    deps = _deps()
+    run_id = deps.repo.create_run("batch-backfill")
+
+    real_audit = batchfill.audit
+    calls = {"n": 0}
+    def flaky_audit(*a, **k):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise RuntimeError("boom")
+        return real_audit(*a, **k)
+    monkeypatch.setattr(batchfill, "audit", flaky_audit)
+
+    item1 = deps.repo.create_work_item("D-9-9", run_id)
+    item2 = deps.repo.create_work_item("D-9-10", run_id)
+    work_item1 = dict(deps.repo.work_items[item1])
+    work_item2 = dict(deps.repo.work_items[item2])
+    line1 = _line("gs://b/pdfs/d-9-9.pdf", GOOD, tok_in=1000, tok_out=200)
+    line2 = _line("gs://b/pdfs/d-9-10.pdf", GOOD | {"eo_number": "D-9-10"}, tok_in=1000, tok_out=200)
+
+    outcome1 = batchfill.ingest_line(line1, work_item1, deps, run_id)
+    outcome2 = batchfill.ingest_line(line2, work_item2, deps, run_id)
+
+    assert outcome1 == "retry"
+    assert outcome2 == "complete"
+    assert deps.repo.work_items[item1]["status"] == "pending"
+    assert deps.repo.work_items[item2]["status"] == "done"
 
 
 # --- cost accounting: batch tokens at half price ---

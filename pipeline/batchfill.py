@@ -176,25 +176,55 @@ def _eo_from_request(request: dict) -> str:
     raise ValueError("echoed request has no file_data part")
 
 
-def _already_done(repo, eo, work_item) -> bool:
-    return work_item.get("status") == "done" and repo.next_extraction_version(eo) > 1
+def _already_done(repo, eo) -> bool:
+    """Deliberately extraction-existence ONLY, not work-item status. If a
+    crash lands between committing the extraction (write_extraction +
+    add_run_cost) and marking the work item "done" (i.e. anywhere in the
+    online audit/match tail), the item can be left pending/in_progress/failed
+    with the extraction already written. Gating on status=="done" too would
+    let a re-run reprocess that same line and double-book its cost via a
+    second write_extraction/add_run_cost call; extraction-exists is the one
+    fact that's true if and only if this EO's batch cost has actually been
+    booked, regardless of what happened to the work item afterwards."""
+    return repo.next_extraction_version(eo) > 1
+
+
+def _lease(repo, work_item) -> None:
+    """Claim this EO's work item for the duration of --ingest's handling of
+    it (own status/worker/lease, same shape core.db.Repo.claim_next uses) so
+    a concurrently running online runner -- which leases via its own
+    claim_next -- can't reclaim and reprocess the same EO while batch ingest
+    is mid-handling it (that would be a second, full-price online
+    extraction+cost for an EO batch already paid for at half price)."""
+    repo.update_work_item(work_item["id"], {"status": "in_progress", "worker": "batch-ingest",
+                                            "lease_expires": time.time() + settings.lease_seconds})
 
 
 def ingest_line(line: dict, work_item: dict, deps, run_id) -> str:
     """Processes one decoded batch-output JSONL line against its (already
-    resolved) work item. Mirrors runner.process_work_item's outcome semantics:
-    valid line -> write extraction (same envelope shape as agents/extractor.py's
-    extract(), see repo.write_extraction call there) at HALF price, then audit
-    + match online at full price; anything else -> bounce back to pending so
-    the online ladder (image rung included) reprocesses it from scratch.
-    Returns 'complete' | 'needs_review' | 'bounced'.
+    resolved) work item. Bad/truncated lines bounce back to pending so the
+    online ladder (image rung included) reprocesses the EO from scratch.
+
+    Valid lines commit the extraction (write_extraction + add_run_cost, same
+    envelope shape as agents/extractor.py's extract()) at HALF price BEFORE
+    running the online audit/match tail. That ordering matters: once both
+    those calls have run, `_already_done` will correctly skip this EO on any
+    future --ingest re-run, so nothing after this point -- including a crash
+    or exception in audit/match -- can ever cause a second write_extraction/
+    add_run_cost for the same batch tokens. The audit/match tail mirrors
+    runner.process_work_item's own outcome semantics exactly: BudgetExceeded
+    resets to pending and propagates (stops --ingest cleanly); any other
+    exception (a transient online LLM call failure -- network error, timeout,
+    5xx) increments attempts and goes to retry/failed, so one bad online call
+    can never crash the whole --ingest run.
+
+    Returns 'complete' | 'needs_review' | 'bounced' | 'retry' | 'failed'.
     """
     eo = work_item["eo_number"]
+    _lease(deps.repo, work_item)
+
     response = line.get("response")
-    if response is None:
-        deps.repo.update_work_item(work_item["id"], {"status": "pending"})
-        return "bounced"
-    if _finish_reason(response) != "STOP":
+    if response is None or _finish_reason(response) != "STOP":
         deps.repo.update_work_item(work_item["id"], {"status": "pending"})
         return "bounced"
     try:
@@ -203,20 +233,28 @@ def ingest_line(line: dict, work_item: dict, deps, run_id) -> str:
         deps.repo.update_work_item(work_item["id"], {"status": "pending"})
         return "bounced"
 
+    # Batch pricing: HALF the configured rate -- see cost_usd() in
+    # core/costs.py for the online (full-price) equivalent.
+    usd = (tok_in * settings.price_in_per_mtok / 2 / 1e6
+           + tok_out * settings.price_out_per_mtok / 2 / 1e6)
     try:
-        # Batch pricing: HALF the configured rate -- see cost_usd() in
-        # core/costs.py for the online (full-price) equivalent.
-        usd = (tok_in * settings.price_in_per_mtok / 2 / 1e6
-               + tok_out * settings.price_out_per_mtok / 2 / 1e6)
         deps.budget.add(usd)
-        version = deps.repo.next_extraction_version(eo)
-        deps.repo.write_extraction(eo, version, {
-            "eo_number": eo, "payload": ex.model_dump(), "prompt_version": PROMPT_VERSION,
-            "ladder_step": 1, "finish_reason": "STOP", "tok_in": tok_in, "tok_out": tok_out,
-            "cost_usd": usd, "created_at": time.time()})
-        deps.repo.add_run_cost(run_id, usd, tok_in, tok_out)
-        deps.repo.add_event(run_id, {"agent": "batchfill", "eo": eo, "action": "extracted",
-                                     "ladder_step": 1, "confidence": ex.confidence})
+    except BudgetExceeded:
+        deps.repo.update_work_item(work_item["id"], {"status": "pending"})
+        raise
+
+    version = deps.repo.next_extraction_version(eo)
+    deps.repo.write_extraction(eo, version, {
+        "eo_number": eo, "payload": ex.model_dump(), "prompt_version": PROMPT_VERSION,
+        "ladder_step": 1, "finish_reason": "STOP", "tok_in": tok_in, "tok_out": tok_out,
+        "cost_usd": usd, "created_at": time.time()})
+    deps.repo.add_run_cost(run_id, usd, tok_in, tok_out)
+    deps.repo.add_event(run_id, {"agent": "batchfill", "eo": eo, "action": "extracted",
+                                 "ladder_step": 1, "confidence": ex.confidence})
+
+    # Extraction + cost are committed as of here -- see _already_done. Anything
+    # below is the "risky", online-network-call tail.
+    try:
         outcome = audit(deps.llm, deps.repo, deps.budget, eo, ex,
                         set(deps.index.by_make.keys()), run_id)
         if outcome == "escalated":
@@ -228,13 +266,32 @@ def ingest_line(line: dict, work_item: dict, deps, run_id) -> str:
     except BudgetExceeded:
         deps.repo.update_work_item(work_item["id"], {"status": "pending"})
         raise
+    except Exception as e:
+        attempts = work_item.get("attempts", 0) + 1
+        if attempts >= settings.max_attempts:
+            deps.repo.update_work_item(work_item["id"], {"status": "failed", "attempts": attempts,
+                                                          "last_error": str(e)[:500]})
+            deps.repo.upsert_eo(eo, {"state": "failed"})
+            return "failed"
+        deps.repo.update_work_item(work_item["id"], {"status": "pending", "attempts": attempts,
+                                                      "last_error": str(e)[:500]})
+        return "retry"
 
 
 def _resolve_work_item(repo, eo):
     """Find the work item doc for this EO. Field query beyond Repo's public
     API (same direct-Firestore idiom as _fetch_candidate_work_items) since
-    Repo only supports single-item claiming, not lookup-by-eo."""
-    docs = list(repo.db.collection("work_items").where("eo_number", "==", eo).stream())
+    Repo only supports single-item claiming, not lookup-by-eo. More than one
+    work_items doc can exist for the same eo_number across runs (e.g.
+    backfill.py's bootstrap() creates a fresh item for any EO not yet
+    "complete", even if an older item for it already exists) -- order by
+    created_at descending and take the newest, so a stale duplicate is never
+    the doc that gets updated (which would leave the current doc dangling,
+    stuck pending forever while the stale one gets marked done)."""
+    from google.cloud import firestore
+    docs = list(repo.db.collection("work_items").where("eo_number", "==", eo)
+                .order_by("created_at", direction=firestore.Query.DESCENDING)
+                .limit(1).stream())
     if not docs:
         return None
     d = docs[0]
@@ -247,7 +304,7 @@ def ingest(deps, job_out_prefix: str, run_id=None) -> dict:
     stops cleanly on BudgetExceeded (work items already bounced to pending
     stay claimable by the normal online run)."""
     run_id = run_id or deps.repo.create_run("batch-backfill")
-    counts = {"complete": 0, "needs_review": 0, "bounced": 0, "skipped": 0}
+    counts = {"complete": 0, "needs_review": 0, "bounced": 0, "skipped": 0, "retry": 0, "failed": 0}
     prefix = job_out_prefix.split(f"gs://{deps.gcs.name}/", 1)[-1]
     status = "ok"
     try:
@@ -262,7 +319,7 @@ def ingest(deps, job_out_prefix: str, run_id=None) -> dict:
                 work_item = _resolve_work_item(deps.repo, eo)
                 if work_item is None:
                     continue
-                if _already_done(deps.repo, eo, work_item):
+                if _already_done(deps.repo, eo):
                     counts["skipped"] += 1
                     continue
                 outcome = ingest_line(line, work_item, deps, run_id)
