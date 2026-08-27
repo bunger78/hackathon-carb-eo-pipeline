@@ -14,6 +14,12 @@ export function formatCount(n: number | null | undefined): string {
   return v.toLocaleString('en-US');
 }
 
+// Shared Intl.DateTimeFormat setup (timezone + 24-hour clock) for both
+// timestamp formatters below; each supplies only the date/time fields it needs.
+function localTimeFormatter(fields: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
+  return new Intl.DateTimeFormat('en-US', { timeZone: TIMEZONE, hour12: false, ...fields });
+}
+
 /**
  * Format a Unix timestamp in seconds (as produced by Python's time.time()) in the
  * America/Los_Angeles timezone. Returns an em dash for missing/invalid input.
@@ -21,15 +27,13 @@ export function formatCount(n: number | null | undefined): string {
 export function formatTimestamp(tsSeconds: number | null | undefined): string {
   if (typeof tsSeconds !== 'number' || !isFinite(tsSeconds)) return '—';
   const d = new Date(tsSeconds * 1000);
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone: TIMEZONE,
+  return localTimeFormatter({
     year: 'numeric',
     month: 'short',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false,
   }).format(d);
 }
 
@@ -40,11 +44,5 @@ export function formatTimestamp(tsSeconds: number | null | undefined): string {
 export function formatEventTime(tsSeconds: number | null | undefined): string {
   if (typeof tsSeconds !== 'number' || !isFinite(tsSeconds)) return '--:--:--';
   const d = new Date(tsSeconds * 1000);
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone: TIMEZONE,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).format(d);
+  return localTimeFormatter({ hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(d);
 }

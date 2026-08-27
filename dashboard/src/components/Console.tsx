@@ -27,8 +27,14 @@ function padCol(s: string, width: number): string {
   return s.length >= width ? `${s} ` : s.padEnd(width);
 }
 
-function eventKey(e: FeedEvent): string {
-  return `${e.ts ?? 'x'}|${e.agent}|${e.action}|${e.eo}`;
+// `index` (position within the current feed array) only breaks ties when `ts`
+// is missing — normal (ts-present) events keep a stable content-only key so a
+// window-slide (older events rolling off the 50-event cap) doesn't force
+// unrelated surviving rows to remount. Without the index fallback, two events
+// in the same poll both lacking `ts` would collide on this key (and on the
+// pulse-detection check below, which reuses it).
+function eventKey(e: FeedEvent, index: number): string {
+  return e.ts !== null ? `${e.ts}|${e.agent}|${e.action}|${e.eo}` : `null-ts|${index}|${e.agent}|${e.action}|${e.eo}`;
 }
 
 export default function Console() {
@@ -50,7 +56,8 @@ export default function Console() {
         if (cancelled) return;
         // server returns newest-first; the console reads oldest-to-newest, top-to-bottom
         const chronological = [...data].reverse();
-        const latestKey = chronological.length ? eventKey(chronological[chronological.length - 1]) : null;
+        const latestIndex = chronological.length - 1;
+        const latestKey = latestIndex >= 0 ? eventKey(chronological[latestIndex], latestIndex) : null;
         if (latestKey !== lastLatestKeyRef.current) {
           lastLatestKeyRef.current = latestKey;
           setPulseKey((k) => k + 1);
@@ -95,8 +102,8 @@ export default function Console() {
         {events.length === 0 ? (
           <div className="console-empty">No events yet — waiting for the next run.</div>
         ) : (
-          events.map((e) => (
-            <div className="console-line" key={eventKey(e)}>
+          events.map((e, i) => (
+            <div className="console-line" key={eventKey(e, i)}>
               <span className="console-ts">[{formatEventTime(e.ts)}]</span>{' '}
               <span className={`console-agent ${AGENT_CLASS[e.agent] ?? ''}`}>{padCol(e.agent, AGENT_COL)}</span>
               <span className="console-action">{padCol(e.action, ACTION_COL)}</span>

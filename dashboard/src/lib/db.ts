@@ -160,9 +160,26 @@ export async function overviewCounts(): Promise<{ states: Record<string, number>
   return { states: counts, total };
 }
 
-export async function totalBackfillCost(): Promise<number> {
-  const snap = await db.collection('runs').aggregate({ total: AggregateField.sum('cost_usd') }).get();
-  return snap.data().total ?? 0;
+// Total Gemini spend across only backfill + scheduled (daily) runs — the honest
+// input to the overview receipt stat's on-camera cost claim. Deliberately
+// excludes "manual" (the Run Now button), "adk", and "review-resolve" triggers
+// (see pipeline/main.py, backfill.py, adk_app.py, agents/reviewer.py), which
+// would otherwise inflate the number every time an operator clicks a button.
+// Two queries (equality on "scheduled" + a prefix range on "backfill"/
+// "backfill-worker-{n}") rather than one, since Firestore can't OR an equality
+// and a range clause together server-side; each needs no composite index.
+export async function pipelineSpend(): Promise<number> {
+  const BACKFILL_PREFIX_END = 'backfill';
+  const [scheduledSnap, backfillSnap] = await Promise.all([
+    db.collection('runs').where('trigger', '==', 'scheduled').aggregate({ total: AggregateField.sum('cost_usd') }).get(),
+    db
+      .collection('runs')
+      .where('trigger', '>=', 'backfill')
+      .where('trigger', '<', BACKFILL_PREFIX_END)
+      .aggregate({ total: AggregateField.sum('cost_usd') })
+      .get(),
+  ]);
+  return (scheduledSnap.data().total ?? 0) + (backfillSnap.data().total ?? 0);
 }
 
 // Count of extraction docs (`extractions/{eo}_v{n}`) — each doc is one extraction

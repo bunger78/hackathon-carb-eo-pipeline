@@ -1,14 +1,12 @@
 import type { APIRoute } from 'astro';
 import { callPipeline } from '../../lib/proxy';
 
+// Canonical admin-token pattern for this dashboard: the browser sends the token
+// as the X-Admin-Token header on the same-origin /api route, which forwards it
+// as-is (never body/query, never logged). A later task (review-action.ts) reuses
+// this exact pattern with the same carblegal_admin token.
 export const POST: APIRoute = async ({ request }) => {
-  let token = '';
-  try {
-    const body = await request.json();
-    if (body && typeof body.token === 'string') token = body.token;
-  } catch {
-    // no/invalid JSON body — forward an empty token; the pipeline will 401
-  }
+  const token = request.headers.get('X-Admin-Token') ?? '';
 
   try {
     return await callPipeline('/admin/run-now', {}, token);

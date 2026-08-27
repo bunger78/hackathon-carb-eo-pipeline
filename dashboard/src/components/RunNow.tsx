@@ -35,8 +35,7 @@ export default function RunNow() {
     try {
       const res = await fetch('/api/run-now', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token }),
+        headers: { 'X-Admin-Token': token },
       });
       if (res.status === 401) {
         setStatus('error');

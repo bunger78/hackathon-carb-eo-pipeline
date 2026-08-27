@@ -2,7 +2,7 @@
 // db.ts aggregate reads behind a single 60s module-scope cache so the SSR page
 // render and the api/overview.ts JSON endpoint don't double up on Firestore
 // aggregate queries (see task-d3-brief.md: "compute server-side, cache 60s").
-import { extractionsCount, openReviewCount, overviewCounts, recentRuns, totalBackfillCost, type RunDoc } from './db';
+import { extractionsCount, openReviewCount, overviewCounts, pipelineSpend, recentRuns, type RunDoc } from './db';
 
 export interface OverviewData {
   states: Record<string, number>;
@@ -24,7 +24,7 @@ export async function getOverviewData(): Promise<OverviewData> {
 
   const [counts, totalCostUsd, extractions, runs, reviewCount] = await Promise.all([
     overviewCounts(),
-    totalBackfillCost(),
+    pipelineSpend(),
     extractionsCount(),
     recentRuns(RECENT_RUNS_LIMIT),
     openReviewCount(),
