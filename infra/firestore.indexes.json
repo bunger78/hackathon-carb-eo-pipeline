@@ -13,5 +13,8 @@
               {"fieldPath": "created_at", "order": "ASCENDING"}]},
   {"collectionGroup": "runs", "queryScope": "COLLECTION",
    "fields": [{"fieldPath": "trigger", "order": "ASCENDING"},
-              {"fieldPath": "cost_usd", "order": "ASCENDING"}]}
+              {"fieldPath": "cost_usd", "order": "ASCENDING"}]},
+  {"collectionGroup": "work_items", "queryScope": "COLLECTION",
+   "fields": [{"fieldPath": "eo_number", "order": "ASCENDING"},
+              {"fieldPath": "created_at", "order": "DESCENDING"}]}
 ]}
