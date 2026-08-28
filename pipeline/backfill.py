@@ -12,6 +12,8 @@ def bootstrap():
     bucket = deps.gcs.bucket
     n = 0
     for blob in bucket.list_blobs(prefix="pdfs/"):
+        if not blob.name.lower().endswith(".pdf"):
+            continue  # corpus dir can carry stray files (e.g. downloader logs)
         eo = blob.name.split("/")[-1].removesuffix(".pdf").upper()
         cur = deps.repo.get_eo(eo)
         if cur and cur.get("state") == "complete":
