@@ -83,16 +83,18 @@ const hasPrev = canPage && cursorStack.length > 0;
     </div>
 
     <div>
-      <span class="chip-group-label">Status</span>
+      <span class="chip-group-label">
+        Status{by === 'part' && ' (applies to EO # and Manufacturer search only)'}
+      </span>
       <div class="chip-group">
         <label class="chip">
-          <input type="radio" name="status" value="" checked={status === ''} />
+          <input type="radio" name="status" value="" checked={status === ''} disabled={by === 'part'} />
           All
         </label>
         {
           STATE_ORDER.map((s) => (
             <label class="chip">
-              <input type="radio" name="status" value={s} checked={status === s} />
+              <input type="radio" name="status" value={s} checked={status === s} disabled={by === 'part'} />
               {STATE_LABELS[s]}
             </label>
           ))

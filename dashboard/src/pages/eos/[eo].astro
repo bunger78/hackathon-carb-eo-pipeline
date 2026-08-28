@@ -79,6 +79,10 @@ const chain: ChainNode[] = detail
     ]
   : [];
 const hasLineage = chain.length > 1;
+// backCapped means older history beyond the oldest node shown may exist;
+// forwardCapped means newer history beyond the newest node shown may exist.
+const backCapped = detail?.lineage.backCapped ?? false;
+const forwardCapped = detail?.lineage.forwardCapped ?? false;
 ---
 
 <Base title={detail?.exists ? `CarbLegal — ${detail.eo}` : 'CarbLegal — EO not found'}>
@@ -159,27 +163,52 @@ const hasLineage = chain.length > 1;
 
         <h2>Supersession lineage</h2>
         {hasLineage ? (
-          <div class="lineage-chain">
-            {chain.map((node, i) => (
-              <>
-                {i > 0 && <span class="lineage-arrow">&rarr;</span>}
-                {node.exists ? (
-                  <a
-                    href={`/eos/${encodeURIComponent(node.eo)}`}
-                    class={`lineage-node ${node.isCurrent ? 'lineage-current' : ''} ${
-                      !node.isCurrent && node.state === 'superseded' ? 'lineage-superseded' : ''
-                    }`}
-                  >
-                    {node.eo}
-                  </a>
-                ) : (
-                  <span class="lineage-node lineage-missing" title="Referenced but not found in Firestore">
-                    {node.eo} (missing)
+          <>
+            <div class="lineage-chain">
+              {backCapped && (
+                <>
+                  <span class="lineage-node lineage-ellipsis" title="More history may exist beyond the 5-hop lineage depth cap">
+                    &hellip;
                   </span>
-                )}
-              </>
-            ))}
-          </div>
+                  <span class="lineage-arrow">&rarr;</span>
+                </>
+              )}
+              {chain.map((node, i) => (
+                <>
+                  {i > 0 && <span class="lineage-arrow">&rarr;</span>}
+                  {node.exists ? (
+                    <a
+                      href={`/eos/${encodeURIComponent(node.eo)}`}
+                      class={`lineage-node ${node.isCurrent ? 'lineage-current' : ''} ${
+                        !node.isCurrent && node.state === 'superseded' ? 'lineage-superseded' : ''
+                      }`}
+                    >
+                      {node.eo}
+                    </a>
+                  ) : (
+                    <span class="lineage-node lineage-missing" title="Referenced but not found in Firestore">
+                      {node.eo} (missing)
+                    </span>
+                  )}
+                </>
+              ))}
+              {forwardCapped && (
+                <>
+                  <span class="lineage-arrow">&rarr;</span>
+                  <span class="lineage-node lineage-ellipsis" title="Chain may continue beyond the 5-hop lineage depth cap">
+                    &hellip;
+                  </span>
+                </>
+              )}
+            </div>
+            {(backCapped || forwardCapped) && (
+              <p class="section-note">
+                Lineage capped at 5 hops in the{' '}
+                {backCapped && forwardCapped ? 'older and newer directions' : backCapped ? 'older direction' : 'newer direction'}{' '}
+                — more of the chain may exist beyond what's shown.
+              </p>
+            )}
+          </>
         ) : (
           <p class="section-note">No supersession lineage recorded for this EO.</p>
         )}

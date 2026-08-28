@@ -580,6 +580,13 @@ a {
   cursor: default;
 }
 
+.lineage-node.lineage-ellipsis {
+  color: var(--text-muted);
+  border-style: dotted;
+  cursor: default;
+  font-weight: 700;
+}
+
 .lineage-arrow {
   color: var(--text-muted);
 }

@@ -374,12 +374,18 @@ async function fetchEo(cache: Map<string, EoDoc | null>, eo: string): Promise<Eo
   return data;
 }
 
+interface LineageWalk {
+  nodes: LineageNode[];
+  /** true if the walk hit maxDepth while the outermost layer still had unexplored supersedes/superseded_by links — i.e. the chain may continue beyond what's returned. False if it stopped because the chain simply ran out. */
+  capped: boolean;
+}
+
 async function walkLineage(
   cache: Map<string, EoDoc | null>,
   startEo: string,
   direction: 'back' | 'forward',
   maxDepth = 5
-): Promise<LineageNode[]> {
+): Promise<LineageWalk> {
   const visited = new Set<string>([startEo]);
   const result: LineageNode[] = [];
   let frontier = [startEo];
@@ -400,7 +406,10 @@ async function walkLineage(
     }
     frontier = next;
   }
-  return result;
+  // `frontier` still holds the last layer found: if non-empty, the loop exited
+  // on the maxDepth condition with that layer's own neighbors never checked
+  // (the depth cap was hit, not a naturally-ended chain).
+  return { nodes: result, capped: frontier.length > 0 };
 }
 
 export interface EoDetail {
@@ -408,7 +417,7 @@ export interface EoDetail {
   exists: boolean;
   data: EoDoc | null;
   latestExtraction: ExtractionSummary | null;
-  lineage: { back: LineageNode[]; forward: LineageNode[] };
+  lineage: { back: LineageNode[]; forward: LineageNode[]; backCapped: boolean; forwardCapped: boolean };
 }
 
 export async function eoDetail(eo: string): Promise<EoDetail> {
@@ -452,7 +461,13 @@ export async function eoDetail(eo: string): Promise<EoDetail> {
   const cache = new Map<string, EoDoc | null>([[eo, eoData]]);
   const [back, forward] = await Promise.all([walkLineage(cache, eo, 'back'), walkLineage(cache, eo, 'forward')]);
 
-  return { eo, exists: eoSnap.exists, data: eoData, latestExtraction, lineage: { back, forward } };
+  return {
+    eo,
+    exists: eoSnap.exists,
+    data: eoData,
+    latestExtraction,
+    lineage: { back: back.nodes, forward: forward.nodes, backCapped: back.capped, forwardCapped: forward.capped },
+  };
 }
 
 export async function legacyFor(eo: string): Promise<LegacyDoc | null> {
