@@ -731,3 +731,79 @@ a {
   padding: 0.75rem 1rem;
   margin: 0;
 }
+
+/* --- vehicle picker (D7): cascading year/make/model/trim/engine selects --- */
+
+.vehicle-picker {
+  margin: 1rem 0 2rem;
+}
+
+.vehicle-picker-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.vehicle-picker-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex: 1;
+  min-width: 150px;
+}
+
+.vehicle-picker-select {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.vehicle-picker-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- vehicle parts results: category sections + confidence badge --- */
+
+.parts-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.parts-category h3 {
+  margin: 0 0 0.5rem;
+}
+
+.confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.confidence-green {
+  background: rgba(26, 127, 55, 0.12);
+  color: var(--status-complete);
+}
+
+.confidence-amber {
+  background: rgba(154, 103, 0, 0.12);
+  color: var(--status-needs_review);
+}
+
+.confidence-red {
+  background: rgba(207, 34, 46, 0.12);
+  color: var(--status-failed);
+}

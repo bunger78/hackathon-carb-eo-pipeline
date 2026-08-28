@@ -10,6 +10,7 @@
 // raw envelope shape.
 import { AggregateField, FieldPath, Firestore, type Query } from '@google-cloud/firestore';
 import { prefixRange } from './prefixRange';
+import { cascadeKey, engineLabel, NO_TRIM, type VehicleCascade, type VehicleEngineOption } from './vehicleCascade';
 
 const db = new Firestore({ projectId: process.env.PROJECT_ID || 'carblegal' });
 
@@ -621,4 +622,53 @@ export async function partsForVehicle(vehicleId: string, category?: string): Pro
   if (category) ref = ref.where('category', '==', category);
   const snap = await ref.get();
   return snap.docs.map((d) => ({ id: d.id, ...(d.data() as MatchDoc) }));
+}
+
+// --- vehicle search cascade (D7) ---
+//
+// The brief sketched a facets shape of {years, makesByYear, modelsByYearMake,
+// trims, engines}; this builds that same year -> make -> model -> trim ->
+// engine cascade over the same memoized allVehicles() cache vehicleFacets()/
+// vehiclesMatching() share above (so no extra Firestore reads), using the
+// actual VehicleDoc fields — there's no separate "engine" field in the
+// vehicles collection, so "engine" here means the (displacement_l,
+// induction, cylinders) triple carried directly on each doc (see
+// pipeline/seed/seed_vehicles.py). Cascade key-building (cascadeKey/NO_TRIM/
+// engineLabel) lives in lib/vehicleCascade.ts, which has no Firestore import,
+// so VehiclePicker.tsx (the browser bundle) can reuse the exact same key
+// logic to read this function's JSON response without pulling in
+// @google-cloud/firestore client-side.
+export async function vehicleCascade(): Promise<VehicleCascade> {
+  const vehicles = await allVehicles();
+  const years = new Set<number>();
+  const makesByYear: Record<string, Set<string>> = {};
+  const modelsByYearMake: Record<string, Set<string>> = {};
+  const trimsByYearMakeModel: Record<string, Set<string>> = {};
+  const enginesByYearMakeModelTrim: Record<string, VehicleEngineOption[]> = {};
+
+  for (const v of vehicles) {
+    if (typeof v.year !== 'number' || !v.make || !v.model || !v.id) continue;
+    const { year, make, model, id } = v;
+    const trim = v.trim || NO_TRIM;
+
+    years.add(year);
+    (makesByYear[String(year)] ??= new Set<string>()).add(make);
+    (modelsByYearMake[cascadeKey(year, make)] ??= new Set<string>()).add(model);
+    (trimsByYearMakeModel[cascadeKey(year, make, model)] ??= new Set<string>()).add(trim);
+    (enginesByYearMakeModelTrim[cascadeKey(year, make, model, trim)] ??= []).push({
+      vehicleId: id,
+      label: engineLabel(v),
+      displacement_l: v.displacement_l ?? null,
+      induction: v.induction ?? null,
+      cylinders: v.cylinders ?? null,
+    });
+  }
+
+  return {
+    years: [...years].sort((a, b) => a - b),
+    makesByYear: Object.fromEntries(Object.entries(makesByYear).map(([y, s]) => [y, [...s].sort()])),
+    modelsByYearMake: Object.fromEntries(Object.entries(modelsByYearMake).map(([k, s]) => [k, [...s].sort()])),
+    trimsByYearMakeModel: Object.fromEntries(Object.entries(trimsByYearMakeModel).map(([k, s]) => [k, [...s].sort()])),
+    enginesByYearMakeModelTrim,
+  };
 }

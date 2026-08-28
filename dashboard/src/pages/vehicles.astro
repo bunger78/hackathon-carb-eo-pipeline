@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import VehiclePicker from '../components/VehiclePicker';
+---
+
+<Base title="CarbLegal — Vehicle Search">
+  <h1>Vehicle Search</h1>
+  <p class="section-note">Pick a year, make, model, trim, and engine to see every CARB-exempt part indexed for that vehicle.</p>
+  <VehiclePicker client:load />
+</Base>

@@ -1,0 +1,245 @@
+import { useEffect, useState } from 'react';
+import { cascadeKey, trimLabel, type VehicleCascade, type VehicleEngineOption } from '../lib/vehicleCascade';
+import { groupByCategory, tierBadge, tierLabel, type PartLike } from '../lib/parts';
+
+type CascadeStatus = 'loading' | 'loaded' | 'error';
+type PartsStatus = 'idle' | 'loading' | 'loaded' | 'error';
+
+// Cascading year -> make -> model -> trim -> engine picker over /api/vehicle-facets
+// (a full-vehicles-collection scan cached server-side — see db.ts's
+// vehicleCascade() — so this fetch can be slow on a cold instance; loading
+// state below covers that), then /api/vehicle-parts?vehicle_id=.. once a
+// specific engine (and therefore vehicle_id) is chosen.
+export default function VehiclePicker() {
+  const [cascade, setCascade] = useState<VehicleCascade | null>(null);
+  const [cascadeStatus, setCascadeStatus] = useState<CascadeStatus>('loading');
+
+  const [year, setYear] = useState('');
+  const [make, setMake] = useState('');
+  const [model, setModel] = useState('');
+  const [trim, setTrim] = useState('');
+  const [vehicleId, setVehicleId] = useState('');
+
+  const [partsStatus, setPartsStatus] = useState<PartsStatus>('idle');
+  const [parts, setParts] = useState<PartLike[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/vehicle-facets')
+      .then((res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json();
+      })
+      .then((data: VehicleCascade) => {
+        if (cancelled) return;
+        setCascade(data);
+        setCascadeStatus('loaded');
+      })
+      .catch(() => {
+        if (!cancelled) setCascadeStatus('error');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!vehicleId) {
+      setParts(null);
+      setPartsStatus('idle');
+      return;
+    }
+    let cancelled = false;
+    setPartsStatus('loading');
+    setParts(null);
+    fetch(`/api/vehicle-parts?vehicle_id=${encodeURIComponent(vehicleId)}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json();
+      })
+      .then((data: PartLike[]) => {
+        if (cancelled) return;
+        setParts(data);
+        setPartsStatus('loaded');
+      })
+      .catch(() => {
+        if (!cancelled) setPartsStatus('error');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [vehicleId]);
+
+  if (cascadeStatus === 'loading') {
+    return <p className="section-note">Loading vehicle data…</p>;
+  }
+  if (cascadeStatus === 'error' || !cascade) {
+    return <p className="run-now-message">Couldn&rsquo;t load vehicle data. Try refreshing the page.</p>;
+  }
+
+  const makes = year ? (cascade.makesByYear[year] ?? []) : [];
+  const models = year && make ? (cascade.modelsByYearMake[cascadeKey(year, make)] ?? []) : [];
+  const trims = year && make && model ? (cascade.trimsByYearMakeModel[cascadeKey(year, make, model)] ?? []) : [];
+  const engines: VehicleEngineOption[] =
+    year && make && model && trim ? (cascade.enginesByYearMakeModelTrim[cascadeKey(year, make, model, trim)] ?? []) : [];
+
+  function handleYearChange(v: string) {
+    setYear(v);
+    setMake('');
+    setModel('');
+    setTrim('');
+    setVehicleId('');
+  }
+  function handleMakeChange(v: string) {
+    setMake(v);
+    setModel('');
+    setTrim('');
+    setVehicleId('');
+  }
+  function handleModelChange(v: string) {
+    setModel(v);
+    setTrim('');
+    setVehicleId('');
+  }
+  function handleTrimChange(v: string) {
+    setTrim(v);
+    setVehicleId('');
+  }
+
+  const sections = parts ? groupByCategory(parts) : [];
+
+  return (
+    <div className="vehicle-picker">
+      <div className="vehicle-picker-row">
+        <label className="vehicle-picker-label">
+          Year
+          <select className="vehicle-picker-select" value={year} onChange={(e) => handleYearChange(e.target.value)}>
+            <option value="">Select year</option>
+            {cascade.years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="vehicle-picker-label">
+          Make
+          <select className="vehicle-picker-select" value={make} onChange={(e) => handleMakeChange(e.target.value)} disabled={!year}>
+            <option value="">{year ? 'Select make' : '—'}</option>
+            {makes.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="vehicle-picker-label">
+          Model
+          <select className="vehicle-picker-select" value={model} onChange={(e) => handleModelChange(e.target.value)} disabled={!make}>
+            <option value="">{make ? 'Select model' : '—'}</option>
+            {models.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="vehicle-picker-label">
+          Trim
+          <select className="vehicle-picker-select" value={trim} onChange={(e) => handleTrimChange(e.target.value)} disabled={!model}>
+            <option value="">{model ? 'Select trim' : '—'}</option>
+            {trims.map((t) => (
+              <option key={t} value={t}>
+                {trimLabel(t)}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="vehicle-picker-label">
+          Engine
+          <select
+            className="vehicle-picker-select"
+            value={vehicleId}
+            onChange={(e) => setVehicleId(e.target.value)}
+            disabled={!trim}
+          >
+            <option value="">{trim ? 'Select engine' : '—'}</option>
+            {engines.map((eng) => (
+              <option key={eng.vehicleId} value={eng.vehicleId}>
+                {eng.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {year && makes.length === 0 && <p className="section-note">No makes indexed for {year}.</p>}
+      {make && models.length === 0 && (
+        <p className="section-note">
+          No models indexed for {year} {make}.
+        </p>
+      )}
+      {model && trims.length === 0 && <p className="section-note">No trims indexed for this model.</p>}
+      {trim && engines.length === 0 && <p className="section-note">No engine variants indexed for this trim.</p>}
+
+      {partsStatus === 'loading' && <p className="section-note">Loading parts…</p>}
+      {partsStatus === 'error' && <p className="run-now-message">Couldn&rsquo;t load parts for this vehicle. Try again.</p>}
+
+      {partsStatus === 'loaded' && parts && parts.length === 0 && (
+        <p className="section-note">No CARB-exempt parts indexed for this vehicle.</p>
+      )}
+
+      {partsStatus === 'loaded' && sections.length > 0 && (
+        <div className="parts-sections">
+          {sections.map((section) => (
+            <section key={section.key} className="parts-category">
+              <h3>{section.label}</h3>
+              <div className="data-table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Device</th>
+                      <th>Manufacturer</th>
+                      <th>EO</th>
+                      <th>Part numbers</th>
+                      <th>Confidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {section.parts.map((p, i) => (
+                      <tr key={`${p.eo_number}-${i}`}>
+                        <td>{p.device_name ?? '—'}</td>
+                        <td>{p.manufacturer ?? '—'}</td>
+                        <td>
+                          <a href={`/eos/${encodeURIComponent(p.eo_number)}`}>{p.eo_number}</a>
+                        </td>
+                        <td>
+                          <div className="pn-pills">
+                            {p.part_numbers.map((pn) => (
+                              <span key={pn} className="pn-pill">
+                                {pn}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`confidence-badge confidence-${tierBadge(p.tier)}`} title={tierLabel(p.tier)}>
+                            {tierLabel(p.tier)}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
