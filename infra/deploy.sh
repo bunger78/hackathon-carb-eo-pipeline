@@ -27,6 +27,6 @@ echo "deployed: $URL — scheduler carb-daily is LIVE (leave it on: run history 
 
 gcloud run deploy carb-dash --source dashboard --region $REGION \
   --service-account "sa-dash@$P.$SFX" --allow-unauthenticated \
-  --memory 512Mi --set-env-vars "PROJECT_ID=$P,PIPELINE_URL=$URL"
+  --memory 512Mi --set-env-vars "PROJECT_ID=$P,PIPELINE_URL=$URL,HOST=0.0.0.0"
 gcloud run services add-iam-policy-binding $SERVICE --region $REGION \
   --member="serviceAccount:sa-dash@$P.$SFX" --role=roles/run.invoker -q
