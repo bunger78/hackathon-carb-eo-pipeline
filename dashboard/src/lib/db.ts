@@ -507,13 +507,39 @@ export async function failureInfo(eo: string): Promise<FailureInfo | null> {
 
 // --- review queue ---
 
-export async function openReviews(): Promise<ReviewDoc[]> {
-  const snap = await db.collection('review_queue').where('status', '==', 'open').orderBy('created_at', 'asc').limit(50).get();
-  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as ReviewDoc) }));
+// Page size for the review queue index's open-reviews list — same
+// cursor-stack pagination idiom as the EO browser's SEARCH_PAGE_SIZE
+// (pages/eos/index.astro).
+export const OPEN_REVIEWS_PAGE_SIZE = 50;
+
+export interface OpenReviewsPage {
+  results: ReviewDoc[];
+  nextCursor: string | null;
 }
 
-// True count of open reviews (openReviews() above caps at 50 docs fetched, which
-// would undercount during a busy backfill).
+// `cursor` is the previous page's last review doc id (same "cursor = document
+// id" idiom searchEos() uses) — resolved back to a DocumentSnapshot so
+// startAfter() has the created_at value to seek past, since ordering here is
+// by created_at (not document id). If the cursor doc no longer exists (e.g.
+// resolved/deleted between page loads), falls back to page 1 rather than
+// erroring.
+export async function openReviews(cursor?: string): Promise<OpenReviewsPage> {
+  let ref: Query = db.collection('review_queue').where('status', '==', 'open').orderBy('created_at', 'asc');
+  if (cursor) {
+    const cursorSnap = await db.collection('review_queue').doc(cursor).get();
+    if (cursorSnap.exists) ref = ref.startAfter(cursorSnap);
+  }
+  ref = ref.limit(OPEN_REVIEWS_PAGE_SIZE);
+  const snap = await ref.get();
+  const results = snap.docs.map((d) => ({ id: d.id, ...(d.data() as ReviewDoc) }));
+  const last = snap.docs.at(-1);
+  return { results, nextCursor: last ? last.id : null };
+}
+
+// True total count of open reviews — an uncapped aggregate, unlike
+// openReviews() above which pages at OPEN_REVIEWS_PAGE_SIZE. This is the same
+// reader the overview page's "Open reviews" stat uses, reused here so the
+// review queue's header always shows the real total instead of a page count.
 export async function openReviewCount(): Promise<number> {
   const snap = await db.collection('review_queue').where('status', '==', 'open').count().get();
   return snap.data().count;

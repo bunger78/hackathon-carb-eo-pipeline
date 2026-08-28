@@ -1,9 +1,16 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { openReviews, resolvedReviews } from '../../lib/db';
-import { formatAge } from '../../lib/format';
+import { OPEN_REVIEWS_PAGE_SIZE, openReviewCount, openReviews, resolvedReviews } from '../../lib/db';
+import { formatAge, formatCount } from '../../lib/format';
 
-const [open, resolved] = await Promise.all([openReviews(), resolvedReviews()]);
+// Same forward/back cursor-stack pattern as the EO browser (pages/eos/index.astro,
+// D5): each entry in `c` is the cursor that fetched one prior page. Next appends,
+// Previous drops the last entry.
+const cursorStack = Astro.url.searchParams.getAll('c').filter(Boolean);
+const cursor = cursorStack.length ? cursorStack[cursorStack.length - 1] : undefined;
+
+const [openPage, openTotal, resolved] = await Promise.all([openReviews(cursor), openReviewCount(), resolvedReviews()]);
+const open = openPage.results;
 
 // Mirrors pipeline/core/db.py's review_queue.reason values (see agents/reviewer.py).
 const REASON_LABELS: Record<string, string> = {
@@ -26,15 +33,38 @@ function firstLine(notes: string | undefined): string {
 }
 
 const RESOLVED_STATUS_LABELS: Record<string, string> = { approved: 'Approved', rejected: 'Rejected' };
+
+function pageUrl(cursors: string[]): string {
+  const p = new URLSearchParams();
+  for (const c of cursors) p.append('c', c);
+  const qs = p.toString();
+  return qs ? `/review?${qs}` : '/review';
+}
+
+const hasNext = open.length === OPEN_REVIEWS_PAGE_SIZE && !!openPage.nextCursor;
+const hasPrev = cursorStack.length > 0;
+
+// Every page before this one was necessarily full (hasNext gated the "Next"
+// link that got here), so cursorStack.length * page size is a reliable 0-based
+// offset into the true open-reviews ordering.
+const rangeStart = openTotal === 0 ? 0 : cursorStack.length * OPEN_REVIEWS_PAGE_SIZE + 1;
+const rangeEnd = cursorStack.length * OPEN_REVIEWS_PAGE_SIZE + open.length;
 ---
 
 <Base title="CarbLegal — Review Queue">
-  <h1>Review Queue</h1>
+  <h1>Review queue — {formatCount(openTotal)} open</h1>
 
-  <h2>Open ({open.length})</h2>
+  {openTotal > 0 && (
+    <p class="section-note">
+      showing {formatCount(rangeStart)}–{formatCount(rangeEnd)} of {formatCount(openTotal)}
+    </p>
+  )}
+
   {
-    open.length === 0 ? (
+    openTotal === 0 ? (
       <p class="section-note">No open reviews — the queue is empty.</p>
+    ) : open.length === 0 ? (
+      <p class="section-note">No reviews on this page.</p>
     ) : (
       <div class="data-table-wrap">
         <table class="data-table">
@@ -65,8 +95,15 @@ const RESOLVED_STATUS_LABELS: Record<string, string> = { approved: 'Approved', r
     )
   }
 
+  {(hasPrev || hasNext) && (
+    <div class="pagination">
+      {hasPrev && <a href={pageUrl(cursorStack.slice(0, -1))}>&larr; Previous</a>}
+      {hasNext && <a href={pageUrl([...cursorStack, openPage.nextCursor as string])}>Next &rarr;</a>}
+    </div>
+  )}
+
   <details class="resolved-section">
-    <summary>Resolved ({resolved.length})</summary>
+    <summary>Resolved — most recent {formatCount(resolved.length)}</summary>
     {
       resolved.length === 0 ? (
         <p class="section-note">No resolved reviews yet.</p>
