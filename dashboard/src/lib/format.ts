@@ -48,6 +48,25 @@ export function formatEventTime(tsSeconds: number | null | undefined): string {
 }
 
 /**
+ * Format the age of a Unix timestamp in seconds (as produced by Python's
+ * time.time()) as a short relative string: "just now", "5m ago", "3h ago",
+ * "2d ago". Used by the review queue index's "age"/"resolved" columns.
+ * `nowSeconds` defaults to the current time but is overridable for tests.
+ * Returns an em dash for missing/invalid input.
+ */
+export function formatAge(tsSeconds: number | null | undefined, nowSeconds: number = Date.now() / 1000): string {
+  if (typeof tsSeconds !== 'number' || !isFinite(tsSeconds)) return '—';
+  const deltaSec = Math.max(0, nowSeconds - tsSeconds);
+  if (deltaSec < 60) return 'just now';
+  const mins = Math.floor(deltaSec / 60);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+/**
  * Format a non-negative elapsed duration in seconds as "+Ns" (under a minute)
  * or "+Mm SSs". Used by the run detail page's per-EO timelines to show the gap
  * between one stage's event and the next. Returns an em dash for missing,

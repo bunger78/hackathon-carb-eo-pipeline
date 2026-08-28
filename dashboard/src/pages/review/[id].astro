@@ -1,0 +1,126 @@
+---
+import Base from '../../layouts/Base.astro';
+import { eoPdfUrl, reviewDetail } from '../../lib/db';
+import { formatTimestamp } from '../../lib/format';
+import ReviewActions from '../../components/ReviewActions';
+
+const { id } = Astro.params;
+const review = id ? await reviewDetail(id) : null;
+
+if (!review) {
+  Astro.response.status = 404;
+}
+
+const pdfUrl = review ? await eoPdfUrl(review.eo_number) : null;
+
+// Mirrors pipeline/core/db.py's review_queue.reason values (see agents/reviewer.py).
+const REASON_LABELS: Record<string, string> = {
+  validation_failure: 'Validation failure',
+  low_confidence: 'Low confidence',
+  legacy_divergence: 'Legacy divergence',
+  qa_sample: 'QA sample',
+  ambiguous_match: 'Ambiguous match',
+};
+
+function reasonLabel(r: string | undefined): string {
+  if (!r) return 'Unknown';
+  return REASON_LABELS[r] ?? r;
+}
+
+// `payload` is an arbitrary dict depending on `reason` (see task-d6 brief) —
+// rendered as a flat definition list; any nested object/array value is shown
+// as its JSON text rather than recursed into.
+function renderValue(v: unknown): string {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'object') return JSON.stringify(v);
+  return String(v);
+}
+
+const payloadEntries: [string, unknown][] =
+  review?.payload && typeof review.payload === 'object' && !Array.isArray(review.payload)
+    ? Object.entries(review.payload as Record<string, unknown>)
+    : [];
+---
+
+<Base title={review ? `CarbLegal — Review ${id}` : 'CarbLegal — Review not found'}>
+  {
+    !review ? (
+      <>
+        <h1>Review not found</h1>
+        <p>No review exists with id "{id}". It may have been deleted, or the link may be incorrect.</p>
+        <p>
+          <a href="/review">&larr; Back to review queue</a>
+        </p>
+      </>
+    ) : (
+      <>
+        <h1>Review {id}</h1>
+
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-label">Reason</span>
+            <span class="reason-chip">{reasonLabel(review.reason)}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">EO</span>
+            <span>
+              <a href={`/eos/${encodeURIComponent(review.eo_number)}`}>{review.eo_number}</a>
+            </span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Status</span>
+            <span class={`status status-${review.status === 'open' ? 'needs_review' : review.status === 'approved' ? 'complete' : 'failed'}`}>
+              {review.status}
+            </span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Opened</span>
+            <span>{formatTimestamp(review.created_at)}</span>
+          </div>
+          {review.resolved_at && (
+            <div class="meta-item">
+              <span class="meta-label">Resolved</span>
+              <span>{formatTimestamp(review.resolved_at)}</span>
+            </div>
+          )}
+          <div class="meta-item">
+            <span class="meta-label">PDF</span>
+            <span>
+              {pdfUrl ? (
+                <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
+                  View PDF ↗
+                </a>
+              ) : (
+                '—'
+              )}
+            </span>
+          </div>
+        </div>
+
+        <h2>Agent notes</h2>
+        {review.agent_notes ? <p class="review-notes">{review.agent_notes}</p> : <p class="section-note">No agent notes recorded.</p>}
+
+        <h2>Payload</h2>
+        {payloadEntries.length === 0 ? (
+          <p class="section-note">No structured payload data.</p>
+        ) : (
+          <dl class="definition-list">
+            {payloadEntries.map(([key, value]) => (
+              <>
+                <dt>{key}</dt>
+                <dd>{renderValue(value)}</dd>
+              </>
+            ))}
+          </dl>
+        )}
+
+        <h2>Resolve</h2>
+        {review.status !== 'open' ? (
+          <p class="section-note">This review was already resolved ({review.status}).</p>
+        ) : (
+          <ReviewActions client:load reviewId={id as string} initialStatus={review.status} />
+        )}
+      </>
+    )
+  }
+</Base>

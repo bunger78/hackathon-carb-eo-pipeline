@@ -1,0 +1,107 @@
+---
+import Base from '../../layouts/Base.astro';
+import { openReviews, resolvedReviews } from '../../lib/db';
+import { formatAge } from '../../lib/format';
+
+const [open, resolved] = await Promise.all([openReviews(), resolvedReviews()]);
+
+// Mirrors pipeline/core/db.py's review_queue.reason values (see agents/reviewer.py).
+const REASON_LABELS: Record<string, string> = {
+  validation_failure: 'Validation failure',
+  low_confidence: 'Low confidence',
+  legacy_divergence: 'Legacy divergence',
+  qa_sample: 'QA sample',
+  ambiguous_match: 'Ambiguous match',
+};
+
+function reasonLabel(r: string | undefined): string {
+  if (!r) return 'Unknown';
+  return REASON_LABELS[r] ?? r;
+}
+
+function firstLine(notes: string | undefined): string {
+  if (!notes) return '—';
+  const line = notes.split('\n')[0]?.trim();
+  return line || '—';
+}
+
+const RESOLVED_STATUS_LABELS: Record<string, string> = { approved: 'Approved', rejected: 'Rejected' };
+---
+
+<Base title="CarbLegal — Review Queue">
+  <h1>Review Queue</h1>
+
+  <h2>Open ({open.length})</h2>
+  {
+    open.length === 0 ? (
+      <p class="section-note">No open reviews — the queue is empty.</p>
+    ) : (
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Reason</th>
+              <th>EO #</th>
+              <th>Agent notes</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {open.map((r) => (
+              <tr>
+                <td>
+                  <span class="reason-chip">{reasonLabel(r.reason)}</span>
+                </td>
+                <td>
+                  <a href={`/review/${encodeURIComponent(r.id)}`}>{r.eo_number}</a>
+                </td>
+                <td>{firstLine(r.agent_notes)}</td>
+                <td class="num">{formatAge(r.created_at)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  <details class="resolved-section">
+    <summary>Resolved ({resolved.length})</summary>
+    {
+      resolved.length === 0 ? (
+        <p class="section-note">No resolved reviews yet.</p>
+      ) : (
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Reason</th>
+                <th>EO #</th>
+                <th>Status</th>
+                <th>Resolved</th>
+              </tr>
+            </thead>
+            <tbody>
+              {resolved.map((r) => (
+                <tr>
+                  <td>
+                    <span class="reason-chip">{reasonLabel(r.reason)}</span>
+                  </td>
+                  <td>
+                    <a href={`/review/${encodeURIComponent(r.id)}`}>{r.eo_number}</a>
+                  </td>
+                  <td>
+                    <span class={`status status-${r.status === 'approved' ? 'complete' : 'failed'}`}>
+                      {RESOLVED_STATUS_LABELS[r.status] ?? r.status}
+                    </span>
+                  </td>
+                  <td class="num">{formatAge(r.resolved_at)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </details>
+</Base>

@@ -1,5 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import { formatElapsed } from './format';
+import { formatAge, formatElapsed } from './format';
+
+describe('formatAge', () => {
+  const now = 1_000_000;
+
+  it('formats missing/invalid input as an em dash', () => {
+    expect(formatAge(null, now)).toBe('—');
+    expect(formatAge(undefined, now)).toBe('—');
+    expect(formatAge(NaN, now)).toBe('—');
+  });
+
+  it('formats sub-minute and future/clock-skew deltas as "just now"', () => {
+    expect(formatAge(now, now)).toBe('just now');
+    expect(formatAge(now - 30, now)).toBe('just now');
+    expect(formatAge(now + 5, now)).toBe('just now'); // future timestamp clamps to 0
+  });
+
+  it('formats minutes, hours, and days', () => {
+    expect(formatAge(now - 5 * 60, now)).toBe('5m ago');
+    expect(formatAge(now - 3 * 3600, now)).toBe('3h ago');
+    expect(formatAge(now - 2 * 86400, now)).toBe('2d ago');
+  });
+});
 
 describe('formatElapsed', () => {
   it('formats missing/invalid/negative input as an em dash', () => {

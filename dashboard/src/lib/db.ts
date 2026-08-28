@@ -121,6 +121,7 @@ export interface ReviewDoc {
   agent_notes?: string;
   payload?: unknown;
   created_at?: number;
+  resolved_at?: number;
 }
 
 export interface RunDoc {
@@ -476,6 +477,35 @@ export async function openReviewCount(): Promise<number> {
 export async function reviewDetail(id: string): Promise<ReviewDoc | null> {
   const snap = await db.collection('review_queue').doc(id).get();
   return snap.exists ? { id: snap.id, ...(snap.data() as ReviewDoc) } : null;
+}
+
+// Collapsed "resolved" section on the review queue index. Deliberately no
+// `orderBy` alongside the `in` filter — an `in` + orderBy-on-a-different-field
+// query needs a composite index (see overviewCounts/pipelineSpend/
+// vehiclesMatching above for this file's running effort to avoid requiring
+// any), so instead this fetches a bounded, unsorted batch and sorts/caps in JS,
+// the same tactic searchEos() uses for part-number search.
+const RESOLVED_REVIEWS_FETCH_LIMIT = 100;
+const RESOLVED_REVIEWS_RESULT_LIMIT = 20;
+
+export async function resolvedReviews(): Promise<ReviewDoc[]> {
+  const snap = await db
+    .collection('review_queue')
+    .where('status', 'in', ['approved', 'rejected'])
+    .limit(RESOLVED_REVIEWS_FETCH_LIMIT)
+    .get();
+  const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as ReviewDoc) }));
+  docs.sort((a, b) => (b.resolved_at ?? 0) - (a.resolved_at ?? 0));
+  return docs.slice(0, RESOLVED_REVIEWS_RESULT_LIMIT);
+}
+
+// Single-field lookup for the review-detail page's PDF link — avoids the
+// heavier eoDetail() (which also fetches the latest extraction and walks
+// supersession lineage) when only pdf_url is needed.
+export async function eoPdfUrl(eo: string): Promise<string | null> {
+  const snap = await db.collection('eos').doc(eo).get();
+  if (!snap.exists) return null;
+  return (snap.data() as EoDoc).pdf_url ?? null;
 }
 
 // --- vehicles ---

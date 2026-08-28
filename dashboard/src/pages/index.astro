@@ -68,7 +68,9 @@ const STATE_LABELS: Record<string, string> = {
     </div>
     <div class="meta-item">
       <span class="meta-label">Open reviews</span>
-      <span class="num">{formatCount(openReviewCount)}</span>
+      <span class="num">
+        <a href="/review">{formatCount(openReviewCount)}</a>
+      </span>
     </div>
   </div>
 
