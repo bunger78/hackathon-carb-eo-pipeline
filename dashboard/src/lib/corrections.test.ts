@@ -14,6 +14,21 @@ describe('parseCorrections', () => {
     });
   });
 
+  it('accepts a nested array value (e.g. a full replacement fitment array)', () => {
+    const fitment = [{ year_start: 2018, year_end: 2020, make: 'Toyota', model: 'Supra', part_numbers: ['A1'] }];
+    expect(parseCorrections(JSON.stringify({ fitment }))).toEqual({
+      value: { fitment },
+      error: null,
+    });
+  });
+
+  it('accepts a nested object value', () => {
+    expect(parseCorrections('{"sections_confidence": {"fitment": 0.4}}')).toEqual({
+      value: { sections_confidence: { fitment: 0.4 } },
+      error: null,
+    });
+  });
+
   it('rejects invalid JSON', () => {
     const result = parseCorrections('{not json');
     expect(result.value).toBeNull();
@@ -30,18 +45,6 @@ describe('parseCorrections', () => {
     const result = parseCorrections('"just a string"');
     expect(result.value).toBeNull();
     expect(result.error).toMatch(/JSON object/);
-  });
-
-  it('rejects a nested object value', () => {
-    const result = parseCorrections('{"fitment": {"year": 2020}}');
-    expect(result.value).toBeNull();
-    expect(result.error).toMatch(/shallow/);
-  });
-
-  it('rejects an array value', () => {
-    const result = parseCorrections('{"part_numbers": ["A1", "B2"]}');
-    expect(result.value).toBeNull();
-    expect(result.error).toMatch(/shallow/);
   });
 
   it('accepts a null value (explicit field clear)', () => {

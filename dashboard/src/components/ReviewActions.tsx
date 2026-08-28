@@ -135,7 +135,8 @@ export default function ReviewActions({ reviewId, initialStatus }: Props) {
       </label>
 
       <label className="review-actions-label">
-        Corrections (optional JSON — flat field: value pairs, e.g. {'{"manufacturer": "Acme"}'})
+        Corrections (optional) — JSON object of fields to replace, e.g. {'{"confidence": 0.9}'} or{' '}
+        {'{"fitment": [...]}'} — replaced wholesale, validated server-side.
         <textarea
           value={correctionsText}
           onChange={(e) => {
