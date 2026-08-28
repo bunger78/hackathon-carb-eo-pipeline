@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatAge, formatElapsed } from './format';
+import { failureHint, formatAge, formatElapsed, truncate } from './format';
 
 describe('formatAge', () => {
   const now = 1_000_000;
@@ -39,5 +39,43 @@ describe('formatElapsed', () => {
   it('formats minute-plus deltas as +Mm SSs, including when rounding crosses the minute boundary', () => {
     expect(formatElapsed(59.6)).toBe('+1m 00s');
     expect(formatElapsed(125)).toBe('+2m 05s');
+  });
+});
+
+describe('truncate', () => {
+  it('returns the string unchanged when within the limit', () => {
+    expect(truncate('short', 300)).toBe('short');
+  });
+
+  it('formats missing input as an empty string', () => {
+    expect(truncate(null, 300)).toBe('');
+    expect(truncate(undefined, 300)).toBe('');
+  });
+
+  it('cuts to max length and appends an ellipsis when over the limit', () => {
+    const long = 'a'.repeat(310);
+    const result = truncate(long, 300);
+    expect(result).toBe(`${'a'.repeat(300)}…`);
+    expect(result.length).toBe(301);
+  });
+});
+
+describe('failureHint', () => {
+  it('flags a 429 as safe to retry', () => {
+    expect(failureHint('google.api_core.exceptions.ResourceExhausted: 429 Quota exceeded')).toBe(
+      '(rate-limit during bulk processing — safe to retry)'
+    );
+  });
+
+  it('flags the 1M-token input cap as not retry-safe', () => {
+    expect(failureHint('exceeds the maximum number of tokens allowed: 1048576')).toBe(
+      "(document exceeds the model's input limit)"
+    );
+  });
+
+  it('returns null for an unmatched or missing error', () => {
+    expect(failureHint('some other transient error')).toBeNull();
+    expect(failureHint(null)).toBeNull();
+    expect(failureHint(undefined)).toBeNull();
   });
 });

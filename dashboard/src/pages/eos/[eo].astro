@@ -1,11 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { eoDetail, legacyFor, recentRuns, type LineageNode } from '../../lib/db';
+import { eoDetail, failureInfo, legacyFor, recentRuns, type LineageNode } from '../../lib/db';
 import { diffLegacyAgent } from '../../lib/diff';
-import { formatCount } from '../../lib/format';
+import { failureHint, formatCount, truncate } from '../../lib/format';
+import RetryEo from '../../components/RetryEo';
 
 const { eo } = Astro.params;
-const [detail, legacy, recentRunsList] = eo ? await Promise.all([eoDetail(eo), legacyFor(eo), recentRuns(1)]) : [null, null, []];
+const [detail, legacy, recentRunsList, failure] = eo
+  ? await Promise.all([eoDetail(eo), legacyFor(eo), recentRuns(1), failureInfo(eo)])
+  : [null, null, [], null];
 
 if (!detail || !detail.exists) {
   Astro.response.status = 404;
@@ -160,6 +163,27 @@ const forwardCapped = detail?.lineage.forwardCapped ?? false;
             </div>
           )}
         </div>
+
+        {data?.state === 'failed' && (
+          <>
+            <h2>Why it failed</h2>
+            {failure ? (
+              <>
+                <dl class="definition-list">
+                  <dt>Attempts</dt>
+                  <dd>{failure.attempts}</dd>
+                  <dt>Stage</dt>
+                  <dd>{failure.stage}</dd>
+                </dl>
+                <p class="review-notes">{truncate(failure.lastError, 300) || '—'}</p>
+                {failureHint(failure.lastError) && <p class="section-note">{failureHint(failure.lastError)}</p>}
+              </>
+            ) : (
+              <p class="section-note">No work item record found for this EO.</p>
+            )}
+            <RetryEo client:load eoNumber={detail.eo} />
+          </>
+        )}
 
         <h2>Supersession lineage</h2>
         {hasLineage ? (

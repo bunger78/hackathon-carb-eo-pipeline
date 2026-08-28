@@ -81,3 +81,27 @@ export function formatElapsed(seconds: number | null | undefined): string {
   const s = total % 60;
   return `+${m}m ${String(s).padStart(2, '0')}s`;
 }
+
+/**
+ * Truncate a string to at most `max` characters, appending an ellipsis when
+ * cut. Used for the EO detail "why it failed" panel's raw last_error text.
+ * Missing input formats as an empty string.
+ */
+export function truncate(s: string | null | undefined, max: number): string {
+  const v = s ?? '';
+  return v.length > max ? `${v.slice(0, max)}…` : v;
+}
+
+/**
+ * Human-readable hint for a work item's last_error, shown on the EO detail
+ * "why it failed" panel. Matches the same substrings pipeline/batchfill.py's
+ * select_batch_items() uses to route failed items: a 429 (rate limit, safe to
+ * retry) vs. the Gemini/Vertex 1M-token input cap (retrying won't help).
+ * Returns null when neither applies.
+ */
+export function failureHint(lastError: string | null | undefined): string | null {
+  const v = lastError ?? '';
+  if (v.includes('429')) return '(rate-limit during bulk processing — safe to retry)';
+  if (v.includes('1048576')) return "(document exceeds the model's input limit)";
+  return null;
+}

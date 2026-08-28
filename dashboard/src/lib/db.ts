@@ -476,6 +476,30 @@ export async function legacyFor(eo: string): Promise<LegacyDoc | null> {
   return snap.exists ? (snap.data() as LegacyDoc) : null;
 }
 
+// --- work items (EO detail "why it failed" panel) ---
+
+export interface FailureInfo {
+  lastError: string;
+  attempts: number;
+  stage: string;
+}
+
+// Newest work_items doc for this EO (there can be more than one across runs —
+// see pipeline/core/db.py's Repo.latest_work_item, which the retry endpoint
+// uses server-side), ordered by created_at descending so a stale duplicate is
+// never mistaken for the current one — same "latest" idiom eoDetail() above
+// uses for the newest extraction.
+export async function failureInfo(eo: string): Promise<FailureInfo | null> {
+  const snap = await db.collection('work_items').where('eo_number', '==', eo).orderBy('created_at', 'desc').limit(1).get();
+  if (snap.empty) return null;
+  const data = snap.docs[0].data() as { last_error?: string; attempts?: number; stage?: string };
+  return {
+    lastError: data.last_error ?? '',
+    attempts: data.attempts ?? 0,
+    stage: data.stage ?? 'unknown',
+  };
+}
+
 // --- review queue ---
 
 export async function openReviews(): Promise<ReviewDoc[]> {
