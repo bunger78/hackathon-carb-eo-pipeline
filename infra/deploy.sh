@@ -22,7 +22,10 @@ gcloud scheduler jobs create http carb-daily --schedule="0 6 * * *" \
   --time-zone="America/Los_Angeles" --uri="$URL/run" --http-method=POST \
   --oidc-service-account-email="sa-scheduler@$P.$SFX" --location=$REGION 2>/dev/null \
   || gcloud scheduler jobs update http carb-daily --schedule="0 6 * * *" \
-     --uri="$URL/run" --location=$REGION
+     --uri="$URL/run" --location=$REGION \
+     --oidc-service-account-email="sa-scheduler@$P.$SFX" --oidc-token-audience="$URL"
+# --oidc-token-audience on update is load-bearing: audience is baked at create
+# time and a URI-only update leaves it stale -> IAM rejects every trigger.
 echo "deployed: $URL — scheduler carb-daily is LIVE (leave it on: run history is the async evidence)"
 
 gcloud run deploy carb-dash --source dashboard --region $REGION \
