@@ -80,6 +80,21 @@ def test_select_batch_items_resets_429_and_excludes_1m_cap(monkeypatch):
     assert repo.work_items[other_failed_id]["status"] == "failed"
 
 
+def test_select_batch_items_leaves_permanent_400_error_failed_even_if_it_mentions_429():
+    """Regression: select_batch_items now shares agents.healer.is_transient
+    with the daily self-heal stage, so a permanent 400/INVALID_ARGUMENT error
+    that happens to mention "429" in its body is no longer wrongly reset."""
+    repo = FakeRepo()
+    mixed_id = repo.create_work_item("D-5-5", "run0")
+    repo.update_work_item(mixed_id, {"status": "failed", "attempts": 3,
+                                     "last_error": "400 INVALID_ARGUMENT. body mentions 429 but is permanent"})
+
+    selected = batchfill.select_batch_items(list(repo.work_items.values()), repo)
+
+    assert selected == []
+    assert repo.work_items[mixed_id]["status"] == "failed"
+
+
 def test_build_requests_looks_up_gcs_uri_per_item():
     repo = FakeRepo()
     repo.upsert_eo("D-1-1", {"gcs_uri": "gs://b/pdfs/d-1-1.pdf"})

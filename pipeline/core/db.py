@@ -130,9 +130,11 @@ class Repo:
 
     def failed_work_items(self):
         """Single-field equality query (status == "failed"), no ordering --
-        no composite index needed. Feeds agents.healer.requeue_transient_failures."""
+        no composite index needed. Feeds agents.healer.requeue_transient_failures.
+        Capped at 200 so this stays a bounded read regardless of how large the
+        failed set grows."""
         return [d.to_dict() | {"id": d.id} for d in
-                self.db.collection("work_items").where("status", "==", "failed").stream()]
+                self.db.collection("work_items").where("status", "==", "failed").limit(200).stream()]
 
     def latest_work_item(self, eo):
         """Newest work_items doc for this EO (more than one can exist across

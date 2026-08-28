@@ -133,7 +133,8 @@ class FakeRepo:
         self.work_items[item_id] = {**self.work_items[item_id], **fields}
 
     def failed_work_items(self):
-        return [dict(i) for i in self.work_items.values() if i.get("status") == "failed"]
+        items = [dict(i) for i in self.work_items.values() if i.get("status") == "failed"]
+        return items[:200]
 
     def latest_work_item(self, eo):
         items = [i for i in self.work_items.values() if i.get("eo_number") == eo]

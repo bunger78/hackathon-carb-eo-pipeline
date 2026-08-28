@@ -31,6 +31,7 @@ from pydantic import ValidationError
 from config import settings
 from core.costs import BudgetGuard, BudgetExceeded
 from agents.auditor import audit
+from agents.healer import is_transient
 from agents.matchmaker import run_matching
 from prompts.extractor import EXTRACTOR_PROMPT, PROMPT_VERSION
 from runner import Deps
@@ -84,17 +85,18 @@ def build_request_line(gcs_uri: str) -> dict:
 
 def select_batch_items(candidates: list[dict], repo) -> list[dict]:
     """candidates: work items already queried with status pending or failed.
-    Resets failed items whose last_error mentions a 429 back to pending with
-    attempts=0 and includes them; excludes (leaves failed, untouched) any item
-    whose last_error mentions the 1M-token input cap; returns the final
-    pending set eligible for this batch."""
+    Resets failed items classified transient by agents.healer.is_transient
+    (the same classification the daily self-heal stage uses) back to pending
+    with attempts=0 and includes them; excludes (leaves failed, untouched)
+    any item whose last_error mentions the 1M-token input cap; returns the
+    final pending set eligible for this batch."""
     selected = []
     for item in candidates:
         last_error = item.get("last_error") or ""
         if _is_token_cap_error(last_error):
             continue
         if item["status"] == "failed":
-            if "429" not in last_error:
+            if not is_transient(last_error):
                 continue
             repo.update_work_item(item["id"], {"status": "pending", "attempts": 0})
             item = {**item, "status": "pending", "attempts": 0}
