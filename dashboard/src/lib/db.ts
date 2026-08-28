@@ -140,6 +140,9 @@ export interface RunDoc {
   completed?: number;
   needs_review?: number;
   failed?: number;
+  // Count of transient-failure work items auto-requeued by the heal stage
+  // (pipeline/agents/healer.py's requeue_transient_failures()). Absent while running.
+  healed?: number;
 }
 
 export interface RunEvent {
@@ -232,16 +235,18 @@ export async function runWithEvents(id: string): Promise<{ run: RunDoc; events: 
   };
 }
 
-// For the live agent console: only the latest run's most recent events, newest
+// For the live agent console: the latest run's own doc (trigger/status/cost/
+// tokens/healed for the header strip) plus its most recent events, newest
 // first, capped at `limit` — cheaper than runWithEvents() for a 3s poll loop
 // since it never fetches a run's full event history.
-export async function latestRunFeed(limit: number): Promise<{ runId: string | null; events: RunEvent[] }> {
+export async function latestRunFeed(limit: number): Promise<{ runId: string | null; run: RunDoc | null; events: RunEvent[] }> {
   const runsSnap = await db.collection('runs').orderBy('started_at', 'desc').limit(1).get();
-  if (runsSnap.empty) return { runId: null, events: [] };
+  if (runsSnap.empty) return { runId: null, run: null, events: [] };
   const runDoc = runsSnap.docs[0];
   const eventsSnap = await runDoc.ref.collection('events').orderBy('ts', 'desc').limit(limit).get();
   return {
     runId: runDoc.id,
+    run: { id: runDoc.id, ...(runDoc.data() as RunDoc) },
     events: eventsSnap.docs.map((d) => ({ id: d.id, ...(d.data() as RunEvent) })),
   };
 }
