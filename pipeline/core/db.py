@@ -128,5 +128,18 @@ class Repo:
     def update_work_item(self, item_id, fields):
         self.db.collection("work_items").document(item_id).set(fields, merge=True)
 
+    def latest_work_item(self, eo):
+        """Newest work_items doc for this EO (more than one can exist across
+        runs -- see batchfill.py's _resolve_work_item), ordered by created_at
+        descending so a stale duplicate is never mistaken for the current one."""
+        from google.cloud import firestore
+        docs = list(self.db.collection("work_items").where("eo_number", "==", eo)
+                    .order_by("created_at", direction=firestore.Query.DESCENDING)
+                    .limit(1).stream())
+        if not docs:
+            return None
+        d = docs[0]
+        return d.to_dict() | {"id": d.id}
+
     def vehicles_all(self):
         return [d.to_dict() | {"id": d.id} for d in self.db.collection("vehicles").stream()]

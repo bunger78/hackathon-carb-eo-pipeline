@@ -10,6 +10,23 @@ class ReviewNotOpen(Exception):
         self.status = status
         super().__init__(f"review {review_id} already resolved (status={status})")
 
+class EoNotFailed(Exception):
+    """Raised when the EO's newest work item isn't in status "failed" (idempotency guard)."""
+    def __init__(self, eo_number: str, status: str):
+        self.eo_number = eo_number
+        self.status = status
+        super().__init__(f"eo {eo_number} not failed (status={status})")
+
+def retry_eo(deps, eo_number: str) -> dict:
+    item = deps.repo.latest_work_item(eo_number)
+    if item is None:
+        raise KeyError(f"no work item for {eo_number}")
+    if item.get("status") != "failed":
+        raise EoNotFailed(eo_number, item.get("status"))
+    deps.repo.update_work_item(item["id"], {"status": "pending", "attempts": 0, "last_error": ""})
+    deps.repo.upsert_eo(eo_number, {"state": "discovered"})
+    return {"eo_number": eo_number, "requeued": True}
+
 def resolve_review(deps, review_id: str, action: str, corrections: dict | None) -> dict:
     review = deps.repo.get_review(review_id)
     if review is None:

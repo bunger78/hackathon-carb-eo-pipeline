@@ -60,3 +60,18 @@ def admin_resolve_review(body: ReviewResolution, x_admin_token: str = Header(def
         raise HTTPException(422, str(e))
     except BudgetExceeded:
         raise HTTPException(503, detail={"status": "budget_exceeded"})
+
+class RetryEo(BaseModel):
+    eo_number: str
+
+@app.post("/admin/retry-eo")
+def admin_retry_eo(body: RetryEo, x_admin_token: str = Header(default="")):
+    if not ADMIN_TOKEN or x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(401)
+    from agents.reviewer import retry_eo, EoNotFailed
+    try:
+        return retry_eo(build_deps(), body.eo_number)
+    except KeyError as e:
+        raise HTTPException(404, str(e))
+    except EoNotFailed as e:
+        raise HTTPException(409, detail={"eo_number": e.eo_number, "status": e.status})

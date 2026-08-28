@@ -5,7 +5,7 @@ from core.costs import BudgetGuard, BudgetExceeded
 from core.llm import LLMResult
 from matching.engine import VehicleIndex
 from tests.fakes import FakeLLM, FakeRepo
-from agents.reviewer import resolve_review, ReviewNotOpen
+from agents.reviewer import resolve_review, ReviewNotOpen, retry_eo, EoNotFailed
 
 def _deps(repo, llm=None, index=None, budget=None):
     return Deps(repo=repo, llm=llm or FakeLLM([]), gcs=None, carb=None,
@@ -83,3 +83,35 @@ def test_budget_exceeded_leaves_review_open_and_finishes_run():
     assert repo.get_extraction("D-100-1", 2) is not None  # extraction version already written
     run = list(repo.runs.values())[-1]
     assert run["status"] == "budget_exceeded"
+
+def test_retry_eo_requeues_newest_failed_item():
+    repo = FakeRepo()
+    old_id = repo.create_work_item("D-167-36", "run0")
+    repo.update_work_item(old_id, {"status": "failed", "attempts": 3, "last_error": "boom old"})
+    new_id = repo.create_work_item("D-167-36", "run1")
+    repo.work_items[new_id]["created_at"] += 10  # guarantee "newest" regardless of clock resolution
+    repo.update_work_item(new_id, {"status": "failed", "attempts": 3, "last_error": "boom new"})
+    deps = _deps(repo)
+    out = retry_eo(deps, "D-167-36")
+    assert out == {"eo_number": "D-167-36", "requeued": True}
+    assert repo.work_items[new_id]["status"] == "pending"
+    assert repo.work_items[new_id]["attempts"] == 0
+    assert repo.work_items[new_id]["last_error"] == ""
+    assert repo.work_items[old_id]["status"] == "failed"  # stale duplicate untouched
+    assert repo.get_eo("D-167-36")["state"] == "discovered"
+
+def test_retry_eo_unknown_eo_raises_404():
+    repo = FakeRepo()
+    deps = _deps(repo)
+    with pytest.raises(KeyError):
+        retry_eo(deps, "D-999-1")
+
+def test_retry_eo_non_failed_raises_409():
+    repo = FakeRepo()
+    item_id = repo.create_work_item("D-1-1", "run0")  # freshly created -> status "pending"
+    deps = _deps(repo)
+    with pytest.raises(EoNotFailed) as exc:
+        retry_eo(deps, "D-1-1")
+    assert exc.value.eo_number == "D-1-1"
+    assert exc.value.status == "pending"
+    assert repo.work_items[item_id]["status"] == "pending"  # untouched

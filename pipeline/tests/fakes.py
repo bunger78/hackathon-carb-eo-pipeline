@@ -1,3 +1,4 @@
+import time
 from core.llm import LLMResult
 from core.db import is_claimable
 from config import settings
@@ -114,7 +115,7 @@ class FakeRepo:
         item_id = f"{run_id}_{eo}"
         self.work_items[item_id] = {
             "id": item_id, "eo_number": eo, "run_id": run_id, "status": "pending",
-            "stage": "extract", "attempts": 0, "lease_expires": 0}
+            "stage": "extract", "attempts": 0, "lease_expires": 0, "created_at": time.time()}
         return item_id
 
     def claim_next(self, worker, now):
@@ -130,6 +131,12 @@ class FakeRepo:
         if item_id not in self.work_items:
             raise KeyError(item_id)
         self.work_items[item_id] = {**self.work_items[item_id], **fields}
+
+    def latest_work_item(self, eo):
+        items = [i for i in self.work_items.values() if i.get("eo_number") == eo]
+        if not items:
+            return None
+        return max(items, key=lambda i: i.get("created_at", 0))
 
     def vehicles_all(self):
         return self.vehicles
