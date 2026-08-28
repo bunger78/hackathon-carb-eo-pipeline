@@ -535,6 +535,12 @@ a {
   background: rgba(154, 103, 0, 0.1);
 }
 
+/* Unchanged legacy/agent field rows are the common case (every legacy doc
+   diverges the same way), so mute them to let the rare changed row stand out. */
+.data-table tr.diff-unchanged td {
+  color: var(--text-muted);
+}
+
 .pagination {
   display: flex;
   gap: 1rem;

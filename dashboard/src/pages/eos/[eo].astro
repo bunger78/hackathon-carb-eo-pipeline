@@ -275,7 +275,7 @@ const forwardCapped = detail?.lineage.forwardCapped ?? false;
                 </thead>
                 <tbody>
                   {extraction.diff.fields.map((f) => (
-                    <tr class={f.changed ? 'diff-changed' : ''}>
+                    <tr class={f.changed ? 'diff-changed' : 'diff-unchanged'}>
                       <td>{FIELD_LABELS[f.name] ?? f.name}</td>
                       <td>{f.legacy != null ? String(f.legacy) : '—'}</td>
                       <td>{f.agent != null ? String(f.agent) : '—'}</td>
@@ -285,13 +285,15 @@ const forwardCapped = detail?.lineage.forwardCapped ?? false;
               </table>
             </div>
 
+            <p class="diff-headline">{`Legacy: ${formatCount(extraction.diff.fitmentCounts.legacy)} listing rows, 0 with part numbers`}</p>
             <p class="diff-headline">
-              {`legacy: ${formatCount(extraction.diff.fitmentCounts.legacy)} part-vehicle association${
-                extraction.diff.fitmentCounts.legacy === 1 ? '' : 's'
-              } → agent: ${formatCount(extraction.diff.fitmentCounts.agent)} row${
-                extraction.diff.fitmentCounts.agent === 1 ? '' : 's'
-              }`}
+              {`Agent: ${formatCount(extraction.diff.fitmentCounts.agent)} fitment rows, ${formatCount(
+                extraction.diff.fitmentCounts.agentRowsWithPns
+              )} with part numbers`}
             </p>
+            {extraction.diff.fitmentCounts.legacy > 0 && extraction.diff.fitmentCounts.agent > 0 && (
+              <p class="section-note">Agent rows cover year ranges; legacy listed one row per year.</p>
+            )}
 
             <div class="pn-pills">
               {extraction.diff.partNumbers.added.map((pn) => (

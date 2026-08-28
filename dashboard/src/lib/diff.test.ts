@@ -26,7 +26,7 @@ describe('diffLegacyAgent', () => {
       { name: 'category', legacy: 'boost', agent: 'boost', changed: false },
     ]);
     expect(result.partNumbers).toEqual({ added: ['P4'], removed: ['P1'], kept: ['P2', 'P3'] });
-    expect(result.fitmentCounts).toEqual({ legacy: 2, agent: 3 });
+    expect(result.fitmentCounts).toEqual({ legacy: 2, agent: 3, agentRowsWithPns: 0 });
   });
 
   it('legacy missing: legacy side is null for every field, agent side unaffected', () => {
@@ -46,7 +46,7 @@ describe('diffLegacyAgent', () => {
       { name: 'category', legacy: null, agent: 'exhaust', changed: true },
     ]);
     expect(result.partNumbers).toEqual({ added: ['X1'], removed: [], kept: [] });
-    expect(result.fitmentCounts).toEqual({ legacy: 0, agent: 1 });
+    expect(result.fitmentCounts).toEqual({ legacy: 0, agent: 1, agentRowsWithPns: 0 });
   });
 
   it('identical: no field changes and every part number is kept', () => {
@@ -69,6 +69,21 @@ describe('diffLegacyAgent', () => {
 
     expect(result.fields.every((f) => !f.changed)).toBe(true);
     expect(result.partNumbers).toEqual({ added: [], removed: [], kept: ['Q1', 'Q2'] });
-    expect(result.fitmentCounts).toEqual({ legacy: 4, agent: 4 });
+    expect(result.fitmentCounts).toEqual({ legacy: 4, agent: 4, agentRowsWithPns: 0 });
+  });
+
+  it('agentRowsWithPns counts only fitment rows carrying at least one part number', () => {
+    const agent = {
+      fitment: [
+        { part_numbers: ['A1', 'A2'] },
+        { part_numbers: [] },
+        { part_numbers: ['A3'] },
+        {},
+      ],
+    };
+
+    const result = diffLegacyAgent(null, agent);
+
+    expect(result.fitmentCounts).toEqual({ legacy: 0, agent: 4, agentRowsWithPns: 2 });
   });
 });

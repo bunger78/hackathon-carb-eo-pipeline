@@ -12,12 +12,16 @@ export interface LegacyDocLike {
   fitment_count?: number;
 }
 
+export interface AgentFitmentRowLike {
+  part_numbers?: string[];
+}
+
 export interface AgentExtractionLike {
   device_name?: string | null;
   manufacturer?: string | null;
   category?: string | null;
   part_numbers?: string[];
-  fitment?: unknown[];
+  fitment?: AgentFitmentRowLike[];
 }
 
 export interface DiffField {
@@ -30,7 +34,12 @@ export interface DiffField {
 export interface DiffResult {
   fields: DiffField[];
   partNumbers: { added: string[]; removed: string[]; kept: string[] };
-  fitmentCounts: { legacy: number; agent: number };
+  // `legacy` is a row COUNT only — legacy_extractions docs carry no per-row part
+  // numbers at all (that's the gap this project closes), so there is no
+  // "legacy rows with part numbers" figure to report. `agent`/`agentRowsWithPns`
+  // are both row counts over the agent's fitment array: the number of rows, and
+  // how many of those rows carry at least one part number.
+  fitmentCounts: { legacy: number; agent: number; agentRowsWithPns: number };
 }
 
 const COMPARE_FIELDS = ['device_name', 'manufacturer', 'category'] as const;
@@ -51,12 +60,16 @@ export function diffLegacyAgent(
   const removed = [...legacyPns].filter((p) => !agentPns.has(p)).sort();
   const kept = [...agentPns].filter((p) => legacyPns.has(p)).sort();
 
+  const agentFitment = agent?.fitment ?? [];
+  const agentRowsWithPns = agentFitment.filter((row) => (row.part_numbers?.length ?? 0) > 0).length;
+
   return {
     fields,
     partNumbers: { added, removed, kept },
     fitmentCounts: {
       legacy: legacy?.fitment_count ?? 0,
-      agent: agent?.fitment?.length ?? 0,
+      agent: agentFitment.length,
+      agentRowsWithPns,
     },
   };
 }
