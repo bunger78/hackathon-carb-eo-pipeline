@@ -33,7 +33,7 @@ def test_no_work_day_reaches_summarize_with_zero_llm_calls():
     deps = _deps(llm, listings=[])
     summary = run_workflow(deps, "test")
     assert summary == {"new_eos": 0, "completed": 0, "needs_review": 0, "failed": 0,
-                        "healed": 0, "status": "ok", "cost_usd": 0.0}
+                        "healed": 0, "status": "ok", "time_capped": False, "cost_usd": 0.0}
     assert llm.calls == []
     assert list(deps.repo.runs.values())[0]["status"] == "ok"
 
@@ -93,3 +93,29 @@ def test_budget_exceeded_releases_item_to_pending(monkeypatch):
     assert summary["status"] == "budget_exceeded"
     item = next(iter(deps.repo.work_items.values()))
     assert item["status"] == "pending"
+
+class _FakeClock:
+    """First call returns `start`; every later call jumps far past the cap."""
+    def __init__(self, start, cap):
+        self.start = start
+        self.cap = cap
+        self.n = 0
+
+    def time(self):
+        self.n += 1
+        return self.start if self.n == 1 else self.start + self.cap + 1
+
+def test_time_cap_exceeded_routes_to_summarize_without_claiming(monkeypatch):
+    from config import settings
+    monkeypatch.setattr("workflow_graph.time", _FakeClock(1_000_000.0, settings.run_time_cap_seconds))
+    listings = [{"eo_number": "D-9-9", "pdf_url": "http://x/d-9-9.pdf"}]
+    llm = FakeLLM([])  # must not be called: claim must not fire once capped
+    deps = _deps(llm, listings=listings)
+    summary = run_workflow(deps, "test")
+    assert summary["time_capped"] is True
+    assert summary["completed"] == 0
+    assert summary["needs_review"] == 0
+    assert summary["failed"] == 0
+    assert summary["status"] == "ok"
+    assert llm.calls == []
+    assert deps.repo.get_eo("D-9-9")["state"] == "discovered"

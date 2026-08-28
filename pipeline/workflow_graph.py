@@ -19,12 +19,14 @@ from google.genai import types as gt
 
 from agents.healer import requeue_transient_failures
 from agents.scout import discover
+from config import settings
 from core.costs import BudgetExceeded
 from runner import process_work_item
 
 
 def build_workflow(deps, run_id) -> Workflow:
     """Build the daily-run graph, closing over `deps`/`run_id` (not session state)."""
+    start_time = time.time()
 
     @node
     def scout(ctx):
@@ -33,6 +35,7 @@ def build_workflow(deps, run_id) -> Workflow:
         ctx.state["needs_review"] = 0
         ctx.state["failed"] = 0
         ctx.state["status"] = "ok"
+        ctx.state["time_capped"] = False
 
     @node
     def heal(ctx):
@@ -40,6 +43,11 @@ def build_workflow(deps, run_id) -> Workflow:
 
     @node
     def claim(ctx):
+        if time.time() - start_time > settings.run_time_cap_seconds:
+            ctx.state["time_capped"] = True
+            ctx.state["current_item"] = None
+            ctx.route = False
+            return
         item = deps.repo.claim_next("runner", now=time.time())
         ctx.state["current_item"] = item
         ctx.route = item is not None
@@ -62,9 +70,10 @@ def build_workflow(deps, run_id) -> Workflow:
         ctx.route = "loop"
 
     @node
-    def summarize(ctx, new_eos, completed, needs_review, failed, healed, status):
+    def summarize(ctx, new_eos, completed, needs_review, failed, healed, status, time_capped):
         summary = {"new_eos": new_eos, "completed": completed, "needs_review": needs_review,
                    "failed": failed, "healed": healed, "status": status,
+                   "time_capped": time_capped,
                    "cost_usd": round(deps.budget.spent, 4)}
         deps.repo.finish_run(run_id, summary)
         ctx.state["summary"] = summary

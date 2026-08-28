@@ -30,6 +30,7 @@ def test_full_happy_run(monkeypatch):
     deps = _deps(FakeLLM([LLMResult(GOOD, 100, 50)]))
     summary = run_once(deps, "test")
     assert summary["new_eos"] == 1 and summary["completed"] == 1
+    assert summary["time_capped"] is False
     assert deps.repo.get_eo("D-9-9")["state"] == "complete"
     assert len(deps.repo.matches["D-9-9"]) == 1
 
@@ -41,3 +42,28 @@ def test_failure_retries_then_fails(monkeypatch):
     summary = run_once(deps, "test")
     assert summary["failed"] == 1
     assert deps.repo.get_eo("D-9-9")["state"] == "failed"
+
+class _FakeClock:
+    """First call returns `start`; every later call jumps far past the cap."""
+    def __init__(self, start, cap):
+        self.start = start
+        self.cap = cap
+        self.n = 0
+
+    def time(self):
+        self.n += 1
+        return self.start if self.n == 1 else self.start + self.cap + 1
+
+def test_time_cap_exceeded_breaks_before_claim(monkeypatch):
+    from config import settings
+    monkeypatch.setattr("runner.time", _FakeClock(1_000_000.0, settings.run_time_cap_seconds))
+    llm = FakeLLM([])  # must not be called: loop must break before claiming
+    deps = _deps(llm)
+    summary = run_once(deps, "test")
+    assert summary["time_capped"] is True
+    assert summary["completed"] == 0
+    assert summary["needs_review"] == 0
+    assert summary["failed"] == 0
+    assert summary["status"] == "ok"
+    assert llm.calls == []
+    assert deps.repo.get_eo("D-9-9")["state"] == "discovered"

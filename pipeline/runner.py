@@ -44,11 +44,19 @@ def process_work_item(item, deps, run_id) -> str:
 
 def run_once(deps, trigger: str) -> dict:
     run_id = deps.repo.create_run(trigger)
+    start_time = time.time()
     counts = {"new_eos": 0, "completed": 0, "needs_review": 0, "failed": 0}
     status = "ok"
+    time_capped = False
     try:
         counts["new_eos"] = discover(deps.repo, deps.carb, deps.gcs, run_id)
-        while (item := deps.repo.claim_next("runner", now=time.time())) is not None:
+        while True:
+            if time.time() - start_time > settings.run_time_cap_seconds:
+                time_capped = True
+                break
+            item = deps.repo.claim_next("runner", now=time.time())
+            if item is None:
+                break
             out = process_work_item(item, deps, run_id)
             if out == "complete":
                 counts["completed"] += 1
@@ -58,6 +66,6 @@ def run_once(deps, trigger: str) -> dict:
                 counts["failed"] += 1
     except BudgetExceeded:
         status = "budget_exceeded"
-    summary = counts | {"status": status, "cost_usd": round(deps.budget.spent, 4)}
+    summary = counts | {"status": status, "time_capped": time_capped, "cost_usd": round(deps.budget.spent, 4)}
     deps.repo.finish_run(run_id, summary)
     return summary
