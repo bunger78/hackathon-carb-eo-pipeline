@@ -239,6 +239,19 @@ a {
   margin: 0.6rem 0 0;
 }
 
+/* A real <button> styled to read as inline text inside a message (e.g. the
+   vehicle-parts "Try again" retry) rather than a boxed control. */
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .run-now-summary {
   font-family: var(--font-mono);
   font-size: 0.8rem;

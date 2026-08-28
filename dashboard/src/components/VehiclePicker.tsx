@@ -22,6 +22,9 @@ export default function VehiclePicker() {
 
   const [partsStatus, setPartsStatus] = useState<PartsStatus>('idle');
   const [parts, setParts] = useState<PartLike[] | null>(null);
+  // Bumped by the "Try again" button to refire the parts fetch below for the
+  // current vehicleId without changing any selection.
+  const [partsRetry, setPartsRetry] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -68,7 +71,7 @@ export default function VehiclePicker() {
     return () => {
       cancelled = true;
     };
-  }, [vehicleId]);
+  }, [vehicleId, partsRetry]);
 
   if (cascadeStatus === 'loading') {
     return <p className="section-note">Loading vehicle data…</p>;
@@ -187,7 +190,14 @@ export default function VehiclePicker() {
       {trim && engines.length === 0 && <p className="section-note">No engine variants indexed for this trim.</p>}
 
       {partsStatus === 'loading' && <p className="section-note">Loading parts…</p>}
-      {partsStatus === 'error' && <p className="run-now-message">Couldn&rsquo;t load parts for this vehicle. Try again.</p>}
+      {partsStatus === 'error' && (
+        <p className="run-now-message">
+          Couldn&rsquo;t load parts for this vehicle.{' '}
+          <button type="button" className="link-button" onClick={() => setPartsRetry((n) => n + 1)}>
+            Try again
+          </button>
+        </p>
+      )}
 
       {partsStatus === 'loaded' && parts && parts.length === 0 && (
         <p className="section-note">No CARB-exempt parts indexed for this vehicle.</p>
