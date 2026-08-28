@@ -128,6 +128,12 @@ class Repo:
     def update_work_item(self, item_id, fields):
         self.db.collection("work_items").document(item_id).set(fields, merge=True)
 
+    def failed_work_items(self):
+        """Single-field equality query (status == "failed"), no ordering --
+        no composite index needed. Feeds agents.healer.requeue_transient_failures."""
+        return [d.to_dict() | {"id": d.id} for d in
+                self.db.collection("work_items").where("status", "==", "failed").stream()]
+
     def latest_work_item(self, eo):
         """Newest work_items doc for this EO (more than one can exist across
         runs -- see batchfill.py's _resolve_work_item), ordered by created_at

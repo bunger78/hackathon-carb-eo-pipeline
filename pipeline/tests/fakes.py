@@ -132,6 +132,9 @@ class FakeRepo:
             raise KeyError(item_id)
         self.work_items[item_id] = {**self.work_items[item_id], **fields}
 
+    def failed_work_items(self):
+        return [dict(i) for i in self.work_items.values() if i.get("status") == "failed"]
+
     def latest_work_item(self, eo):
         items = [i for i in self.work_items.values() if i.get("eo_number") == eo]
         if not items:

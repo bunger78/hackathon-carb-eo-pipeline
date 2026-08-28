@@ -33,7 +33,7 @@ def test_no_work_day_reaches_summarize_with_zero_llm_calls():
     deps = _deps(llm, listings=[])
     summary = run_workflow(deps, "test")
     assert summary == {"new_eos": 0, "completed": 0, "needs_review": 0, "failed": 0,
-                        "status": "ok", "cost_usd": 0.0}
+                        "healed": 0, "status": "ok", "cost_usd": 0.0}
     assert llm.calls == []
     assert list(deps.repo.runs.values())[0]["status"] == "ok"
 
@@ -66,6 +66,23 @@ def test_escalation_path_counts_and_updates_work_item(monkeypatch):
     item = next(iter(deps.repo.work_items.values()))
     assert item["status"] == "done" and item["stage"] == "review"
     assert deps.repo.get_eo("D-9-9")["state"] == "needs_review"
+
+def test_heal_requeues_transient_failure_and_daily_run_reprocesses_it(monkeypatch):
+    monkeypatch.setattr("agents.extractor.render_pdf_to_images", lambda b: [b"png"])
+    monkeypatch.setattr("agents.auditor.random.random", lambda: 0.99)
+    llm = FakeLLM([LLMResult(GOOD, 100, 50)])
+    deps = _deps(llm, listings=[])
+    item_id = deps.repo.create_work_item("D-9-9", "priorrun")
+    deps.repo.update_work_item(item_id, {"status": "failed", "attempts": 3,
+                                          "last_error": "429 rate limited"})
+    deps.repo.upsert_eo("D-9-9", {"gcs_uri": "gs://b/pdfs/d-9-9.pdf", "state": "failed"})
+
+    summary = run_workflow(deps, "test")
+
+    assert summary["healed"] == 1
+    assert summary["completed"] == 1
+    assert deps.repo.work_items[item_id]["status"] == "done"
+    assert deps.repo.get_eo("D-9-9")["state"] == "complete"
 
 def test_budget_exceeded_releases_item_to_pending(monkeypatch):
     monkeypatch.setattr("agents.extractor.render_pdf_to_images", lambda b: [b"png"])
