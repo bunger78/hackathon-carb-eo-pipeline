@@ -68,6 +68,13 @@ class Repo:
     def update_review(self, review_id, fields):
         self.db.collection("review_queue").document(review_id).set(fields, merge=True)
 
+    def open_reviews(self):
+        """All review_queue docs with status == "open" (single-field query, no
+        composite index needed). Reason filtering happens in Python -- feeds
+        tools.requeue_reviews.requeue_open_reviews."""
+        return [d.to_dict() | {"id": d.id} for d in
+                self.db.collection("review_queue").where("status", "==", "open").stream()]
+
     # --- runs ---
     def create_run(self, trigger):
         ref = self.db.collection("runs").document()

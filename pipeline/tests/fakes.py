@@ -86,6 +86,9 @@ class FakeRepo:
                 return
         raise KeyError(review_id)
 
+    def open_reviews(self):
+        return [dict(r) for r in self.reviews if r.get("status") == "open"]
+
     # --- runs ---
     def create_run(self, trigger):
         self._run_seq += 1
