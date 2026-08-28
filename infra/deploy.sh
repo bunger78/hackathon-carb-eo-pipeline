@@ -20,6 +20,7 @@ gcloud run services add-iam-policy-binding $SERVICE --region $REGION \
 
 gcloud scheduler jobs create http carb-daily --schedule="0 6 * * *" \
   --time-zone="America/Los_Angeles" --uri="$URL/run" --http-method=POST \
+  --attempt-deadline=1800s \
   --oidc-service-account-email="sa-scheduler@$P.$SFX" --location=$REGION 2>/dev/null \
   || gcloud scheduler jobs update http carb-daily --schedule="0 6 * * *" \
      --uri="$URL/run" --location=$REGION \
