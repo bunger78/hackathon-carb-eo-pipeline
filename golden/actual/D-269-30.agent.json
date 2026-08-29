@@ -1,0 +1,969 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.98,
+  "description": "The Typhoon Intake System includes an open-element reusable air filter, heat shield (as applicable), intake system tubing, crankcase ventilation hose (as applicable, which may be silicone, and a color other than black), assorted brackets, and hardware.",
+  "device_name": "Typhoon Intake System",
+  "eo_number": "D-269-30",
+  "fitment": [
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Acura",
+      "model": "RSX",
+      "part_numbers": [
+        "69-0015TB",
+        "69-0015TP",
+        "69-0015TR",
+        "69-0015TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Acura",
+      "model": "RSX Type-S",
+      "part_numbers": [
+        "69-1009TB",
+        "69-1009TP",
+        "69-1009TR",
+        "69-1009TS",
+        "69-1009TWR"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.4,
+      "induction": "NA",
+      "make": "Acura",
+      "model": "TSX",
+      "part_numbers": [
+        "69-0025TB",
+        "69-0025TP",
+        "69-0025TR",
+        "69-0025TS"
+      ],
+      "trim_note": null,
+      "year_end": 2005,
+      "year_start": 2004
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.4,
+      "induction": "TURBO",
+      "make": "Chrysler",
+      "model": "PT Cruise GT",
+      "part_numbers": [
+        "69-2541TB",
+        "69-2541TP",
+        "69-2541TR",
+        "69-2541TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Dodge",
+      "model": "Neon",
+      "part_numbers": [
+        "69-2520TB",
+        "69-2520TP",
+        "69-2520TR",
+        "69-2520TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.4,
+      "induction": "TURBO",
+      "make": "Dodge",
+      "model": "Neon SRT-4",
+      "part_numbers": [
+        "69-2521TB",
+        "69-2521TP",
+        "69-2521TR",
+        "69-2521TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Ford",
+      "model": "Focus SVT",
+      "part_numbers": [
+        "69-3511TB",
+        "69-3511TP",
+        "69-3511TR",
+        "69-3511TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.4,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "CR-V",
+      "part_numbers": [
+        "69-0015TB",
+        "69-0015TP",
+        "69-0015TR",
+        "69-0015TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.7,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Civic EX",
+      "part_numbers": [
+        "69-1007TB",
+        "69-1007TP",
+        "69-1007TR",
+        "69-1007TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2001
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.7,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Civic EX",
+      "part_numbers": [
+        "69-1008TB",
+        "69-1008TP",
+        "69-1008TR",
+        "69-1008TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2001
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Civic Si",
+      "part_numbers": [
+        "69-1009TB",
+        "69-1009TP",
+        "69-1009TR",
+        "69-1009TS",
+        "69-1009TWR"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.6,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Civic Si",
+      "part_numbers": [
+        "69-1010TB",
+        "69-1010TP",
+        "69-1010TR",
+        "69-1010TS"
+      ],
+      "trim_note": "VTEC",
+      "year_end": 2000,
+      "year_start": 1999
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.6,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "69-1011TB",
+        "69-1011TP",
+        "69-1011TR",
+        "69-1011TS"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 1996
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.4,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Element",
+      "part_numbers": [
+        "69-1015TB",
+        "69-1015TP",
+        "69-1015TR",
+        "69-1015TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": null,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "S2000",
+      "part_numbers": [
+        "69-1040TB",
+        "69-1040TP",
+        "69-1040TR",
+        "69-1040TS",
+        "69-1040TWR"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": null,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "S2000",
+      "part_numbers": [
+        "69-1041TB",
+        "69-1041TP",
+        "69-1041TR",
+        "69-1041TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.0,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "69-1207TB",
+        "69-1207TP",
+        "69-1207TR",
+        "69-1207TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.2,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "69-1208TB",
+        "69-1208TP",
+        "69-1208TR",
+        "69-1208TS"
+      ],
+      "trim_note": null,
+      "year_end": 1997,
+      "year_start": 1994
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.2,
+      "induction": "NA",
+      "make": "Honda",
+      "model": "Prelude",
+      "part_numbers": [
+        "69-1302TB",
+        "69-1302TP",
+        "69-1302TR",
+        "69-1302TS"
+      ],
+      "trim_note": null,
+      "year_end": 2001,
+      "year_start": 1997
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.5,
+      "induction": "NA",
+      "make": "Infiniti",
+      "model": "G35 Coupe",
+      "part_numbers": [
+        "69-7080TB",
+        "69-7080TP",
+        "69-7080TR",
+        "69-7080TS",
+        "69-7080-1TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.5,
+      "induction": "NA",
+      "make": "Infiniti",
+      "model": "G35 Sedan",
+      "part_numbers": [
+        "69-7081TB",
+        "69-7081TP",
+        "69-7081TR",
+        "69-7081TS",
+        "69-7081-1TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.0,
+      "induction": "NA",
+      "make": "Lexus",
+      "model": "IS300",
+      "part_numbers": [
+        "69-8700TB",
+        "69-8700TP",
+        "69-8700TR",
+        "69-8700TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2001
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Mazda",
+      "model": "Miata",
+      "part_numbers": [
+        "69-6000TB",
+        "69-6000TP",
+        "69-6000TR",
+        "69-6000TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 1999
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.3,
+      "induction": "NA",
+      "make": "Mazda",
+      "model": "6",
+      "part_numbers": [
+        "69-6025TB",
+        "69-6025TP",
+        "69-6025TR",
+        "69-6025TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.0,
+      "induction": "NA",
+      "make": "Mazda",
+      "model": "6",
+      "part_numbers": [
+        "69-6026TB",
+        "69-6026TP",
+        "69-6026TR",
+        "69-6026TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.3,
+      "induction": "NA",
+      "make": "Mazda",
+      "model": "RX-8",
+      "part_numbers": [
+        "69-6030-1TB",
+        "69-6030-1TP",
+        "69-6030-1TR",
+        "69-6030-1TS",
+        "69-6030-1TFK"
+      ],
+      "trim_note": "Rotary",
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.6,
+      "induction": "NA",
+      "make": "Mini",
+      "model": "Cooper",
+      "part_numbers": [
+        "69-2020TB",
+        "69-2020TP",
+        "69-2020TR",
+        "69-2020TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.6,
+      "induction": "SC",
+      "make": "Mini",
+      "model": "Cooper S",
+      "part_numbers": [
+        "69-2021TB",
+        "69-2021TP",
+        "69-2021TR",
+        "69-2021TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.0,
+      "induction": "NA",
+      "make": "Mitsubishi",
+      "model": "Eclipse GT",
+      "part_numbers": [
+        "69-6501TB",
+        "69-6501TP",
+        "69-6501TR",
+        "69-6501TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.4,
+      "induction": "NA",
+      "make": "Mitsubishi",
+      "model": "Eclipse",
+      "part_numbers": [
+        "69-6506TB",
+        "69-6506TP",
+        "69-6506TR",
+        "69-6506TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Mitsubishi",
+      "model": "Lancer",
+      "part_numbers": [
+        "69-6540TB",
+        "69-6540TP",
+        "69-6540TR",
+        "69-6540TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "TURBO",
+      "make": "Mitsubishi",
+      "model": "Lancer Evo VIII",
+      "part_numbers": [
+        "69-6543TB",
+        "69-6543TP",
+        "69-6543TR",
+        "69-6543TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.5,
+      "induction": "NA",
+      "make": "Nissan",
+      "model": "Sentra SE-R, SE-R Spec V",
+      "part_numbers": [
+        "69-7000TB",
+        "69-7000TP",
+        "69-7000TR",
+        "69-7000TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.5,
+      "induction": "NA",
+      "make": "Nissan",
+      "model": "Altima",
+      "part_numbers": [
+        "69-7060TB",
+        "69-7060TP",
+        "69-7060TR",
+        "69-7060TS"
+      ],
+      "trim_note": "excluding 2004 LEV2 SULEV engine family 4NSXV02.585A",
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 3.5,
+      "induction": "NA",
+      "make": "Nissan",
+      "model": "350Z",
+      "part_numbers": [
+        "69-7070TB",
+        "69-7070TP",
+        "69-7070TR",
+        "69-7070TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Pontiac",
+      "model": "Vibe",
+      "part_numbers": [
+        "69-8600TB",
+        "69-8600TP",
+        "69-8600TR",
+        "69-8600TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Pontiac",
+      "model": "Vibe GT",
+      "part_numbers": [
+        "69-8601TB",
+        "69-8601TP",
+        "69-8601TR",
+        "69-8601TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.5,
+      "induction": "NA",
+      "make": "Scion",
+      "model": "Xb",
+      "part_numbers": [
+        "69-8605TB",
+        "69-8605TP",
+        "69-8605TR",
+        "69-8605TS"
+      ],
+      "trim_note": null,
+      "year_end": 2005,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.5,
+      "induction": "NA",
+      "make": "Scion",
+      "model": "Xa",
+      "part_numbers": [
+        "69-8606TB",
+        "69-8606TP",
+        "69-8606TR",
+        "69-8606TS"
+      ],
+      "trim_note": null,
+      "year_end": 2005,
+      "year_start": 2003
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "TURBO",
+      "make": "Subaru",
+      "model": "WRX",
+      "part_numbers": [
+        "69-8000TB",
+        "69-8000TP",
+        "69-8000TR",
+        "69-8000TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 2.0,
+      "induction": "NA",
+      "make": "Suzuki",
+      "model": "Aerio",
+      "part_numbers": [
+        "69-8400TB",
+        "69-8400TP",
+        "69-8400TR",
+        "69-8400TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Celica GT",
+      "part_numbers": [
+        "69-8520TB",
+        "69-8520TP",
+        "69-8520TR",
+        "69-8520TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Celica GT",
+      "part_numbers": [
+        "69-8521TB",
+        "69-8521TP",
+        "69-8521TR",
+        "69-8521TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Celica GT-S",
+      "part_numbers": [
+        "69-8522TB",
+        "69-8522TP",
+        "69-8522TR",
+        "69-8522TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Celica GT-S",
+      "part_numbers": [
+        "69-8523TB",
+        "69-8523TP",
+        "69-8523TR",
+        "69-8523TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Corolla",
+      "part_numbers": [
+        "69-8600TB",
+        "69-8600TP",
+        "69-8600TR",
+        "69-8600TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Matrix XR",
+      "part_numbers": [
+        "69-8600TB",
+        "69-8600TP",
+        "69-8600TR",
+        "69-8600TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": 1.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Matrix XRS",
+      "part_numbers": [
+        "69-8601TB",
+        "69-8601TP",
+        "69-8601TR",
+        "69-8601TS"
+      ],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 2002
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2005-03-14",
+  "manufacturer": "K&N Engineering",
+  "notes": null,
+  "part_numbers": [
+    "69-0015TB",
+    "69-0015TP",
+    "69-0015TR",
+    "69-0015TS",
+    "69-1009TB",
+    "69-1009TP",
+    "69-1009TR",
+    "69-1009TS",
+    "69-1009TWR",
+    "69-0025TB",
+    "69-0025TP",
+    "69-0025TR",
+    "69-0025TS",
+    "69-2541TB",
+    "69-2541TP",
+    "69-2541TR",
+    "69-2541TS",
+    "69-2520TB",
+    "69-2520TP",
+    "69-2520TR",
+    "69-2520TS",
+    "69-2521TB",
+    "69-2521TP",
+    "69-2521TR",
+    "69-2521TS",
+    "69-3511TB",
+    "69-3511TP",
+    "69-3511TR",
+    "69-3511TS",
+    "69-1007TB",
+    "69-1007TP",
+    "69-1007TR",
+    "69-1007TS",
+    "69-1008TB",
+    "69-1008TP",
+    "69-1008TR",
+    "69-1008TS",
+    "69-1010TB",
+    "69-1010TP",
+    "69-1010TR",
+    "69-1010TS",
+    "69-1011TB",
+    "69-1011TP",
+    "69-1011TR",
+    "69-1011TS",
+    "69-1015TB",
+    "69-1015TP",
+    "69-1015TR",
+    "69-1015TS",
+    "69-1040TB",
+    "69-1040TP",
+    "69-1040TR",
+    "69-1040TS",
+    "69-1040TWR",
+    "69-1041TB",
+    "69-1041TP",
+    "69-1041TR",
+    "69-1041TS",
+    "69-1207TB",
+    "69-1207TP",
+    "69-1207TR",
+    "69-1207TS",
+    "69-1208TB",
+    "69-1208TP",
+    "69-1208TR",
+    "69-1208TS",
+    "69-1302TB",
+    "69-1302TP",
+    "69-1302TR",
+    "69-1302TS",
+    "69-7080TB",
+    "69-7080TP",
+    "69-7080TR",
+    "69-7080TS",
+    "69-7080-1TS",
+    "69-7081TB",
+    "69-7081TP",
+    "69-7081TR",
+    "69-7081TS",
+    "69-7081-1TS",
+    "69-8700TB",
+    "69-8700TP",
+    "69-8700TR",
+    "69-8700TS",
+    "69-6000TB",
+    "69-6000TP",
+    "69-6000TR",
+    "69-6000TS",
+    "69-6025TB",
+    "69-6025TP",
+    "69-6025TR",
+    "69-6025TS",
+    "69-6026TB",
+    "69-6026TP",
+    "69-6026TR",
+    "69-6026TS",
+    "69-6030-1TB",
+    "69-6030-1TP",
+    "69-6030-1TR",
+    "69-6030-1TS",
+    "69-6030-1TFK",
+    "69-2020TB",
+    "69-2020TP",
+    "69-2020TR",
+    "69-2020TS",
+    "69-2021TB",
+    "69-2021TP",
+    "69-2021TR",
+    "69-2021TS",
+    "69-6501TB",
+    "69-6501TP",
+    "69-6501TR",
+    "69-6501TS",
+    "69-6506TB",
+    "69-6506TP",
+    "69-6506TR",
+    "69-6506TS",
+    "69-6540TB",
+    "69-6540TP",
+    "69-6540TR",
+    "69-6540TS",
+    "69-6543TB",
+    "69-6543TP",
+    "69-6543TR",
+    "69-6543TS",
+    "69-7000TB",
+    "69-7000TP",
+    "69-7000TR",
+    "69-7000TS",
+    "69-7060TB",
+    "69-7060TP",
+    "69-7060TR",
+    "69-7060TS",
+    "69-7070TB",
+    "69-7070TP",
+    "69-7070TR",
+    "69-7070TS",
+    "69-8600TB",
+    "69-8600TP",
+    "69-8600TR",
+    "69-8600TS",
+    "69-8601TB",
+    "69-8601TP",
+    "69-8601TR",
+    "69-8601TS",
+    "69-8605TB",
+    "69-8605TP",
+    "69-8605TR",
+    "69-8605TS",
+    "69-8606TB",
+    "69-8606TP",
+    "69-8606TR",
+    "69-8606TS",
+    "69-8000TB",
+    "69-8000TP",
+    "69-8000TR",
+    "69-8000TS",
+    "69-8400TB",
+    "69-8400TP",
+    "69-8400TR",
+    "69-8400TS",
+    "69-8520TB",
+    "69-8520TP",
+    "69-8520TR",
+    "69-8520TS",
+    "69-8521TB",
+    "69-8521TP",
+    "69-8521TR",
+    "69-8521TS",
+    "69-8522TB",
+    "69-8522TP",
+    "69-8522TR",
+    "69-8522TS",
+    "69-8523TB",
+    "69-8523TP",
+    "69-8523TR",
+    "69-8523TS"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

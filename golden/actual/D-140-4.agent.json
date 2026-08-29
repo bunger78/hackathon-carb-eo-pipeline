@@ -1,0 +1,117 @@
+{
+  "_prompt_version": "v1",
+  "category": "boost",
+  "confidence": 0.98,
+  "description": "Add-on turbocharger kit using a 0.98 A/R ratio Ishikawajima-Harima Heavy Industries turbocharger, with an optional intercooler, for Toyota 2.8L (168 CID) fuel-injected six-cylinder engines.",
+  "device_name": "Turbocharger Kit (Including an Optional Intercooler) for 2.8 Liter Toyota Supra and Cressida Vehicles",
+  "eo_number": "D-140-4",
+  "fitment": [
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Supra",
+      "part_numbers": [
+        "9898"
+      ],
+      "trim_note": null,
+      "year_end": 1982,
+      "year_start": 1982
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Supra",
+      "part_numbers": [
+        "9899"
+      ],
+      "trim_note": null,
+      "year_end": 1983,
+      "year_start": 1983
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Cressida",
+      "part_numbers": [
+        "9900"
+      ],
+      "trim_note": null,
+      "year_end": 1983,
+      "year_start": 1983
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Supra",
+      "part_numbers": [
+        "9909"
+      ],
+      "trim_note": "intercooled",
+      "year_end": 1984,
+      "year_start": 1982
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Cressida",
+      "part_numbers": [
+        "9910"
+      ],
+      "trim_note": "intercooled",
+      "year_end": 1984,
+      "year_start": 1983
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Supra",
+      "part_numbers": [
+        "9909-A"
+      ],
+      "trim_note": "intercooled",
+      "year_end": 1985,
+      "year_start": 1985
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": 2.8,
+      "induction": "NA",
+      "make": "Toyota",
+      "model": "Cressida",
+      "part_numbers": [
+        "9909-A"
+      ],
+      "trim_note": "intercooled",
+      "year_end": 1985,
+      "year_start": 1985
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "1984-11-14",
+  "manufacturer": "Spearco Performance Products, Inc.",
+  "notes": null,
+  "part_numbers": [
+    "9898",
+    "9899",
+    "9900",
+    "9909",
+    "9910",
+    "9909-A"
+  ],
+  "sections_confidence": {},
+  "supersedes": [
+    "D-140-1"
+  ]
+}

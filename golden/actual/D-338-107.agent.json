@@ -1,0 +1,290 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.95,
+  "description": "Cast aluminum intake manifold with ported intake runners for increased air flow, used in conjunction with a required Stage IV Performance Kit and specified calibration.",
+  "device_name": "Screamin\u2019 Eagle Extreme Flow 64mm EFI Intake Manifold",
+  "eo_number": "D-338-107",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 1.746,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000547B",
+        "92500062"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2019,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.746,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000824B",
+        "41000793B",
+        "92500062"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.746,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000998B",
+        "92500062"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.868,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000605",
+        "92500073"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.868,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000817B",
+        "41000787B",
+        "92500073"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.868,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000994A",
+        "92500073"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000611A",
+        "92500076"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2019,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000817B",
+        "41000787B",
+        "92500076"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000987A",
+        "92500076"
+      ],
+      "trim_note": "Oil Cooled",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.746,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000520C",
+        "92500060"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2018,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.868,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000522D",
+        "92500064",
+        "92500088"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2019,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.868,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000808C",
+        "41000784D",
+        "92500064",
+        "92500088"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.868,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41001006B",
+        "92500064",
+        "92500088"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000612A",
+        "92500064"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41000779D",
+        "92500064"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300185",
+        "41001007B",
+        "92500064"
+      ],
+      "trim_note": "Water Cooled",
+      "year_end": 2021,
+      "year_start": 2021
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2022-03-08",
+  "manufacturer": "Harley-Davidson Motor Company",
+  "notes": null,
+  "part_numbers": [
+    "27300185",
+    "41000520C",
+    "41000522D",
+    "41000547B",
+    "41000605",
+    "41000611A",
+    "41000612A",
+    "41000779D",
+    "41000784D",
+    "41000787B",
+    "41000793B",
+    "41000808C",
+    "41000817B",
+    "41000824B",
+    "41000987A",
+    "41000994A",
+    "41000998B",
+    "41001006B",
+    "41001007B",
+    "92500060",
+    "92500062",
+    "92500064",
+    "92500073",
+    "92500076",
+    "92500088"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

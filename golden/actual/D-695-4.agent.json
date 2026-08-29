@@ -1,0 +1,76 @@
+{
+  "_prompt_version": "v1",
+  "category": "boost",
+  "confidence": 0.98,
+  "description": "Supercharger System featuring a Sprintex S5-210 screw type compressor with a 69 mm diameter pulley, intake manifold, bypass valve, intercooler, sensor wire harness extensions, intake tube from the air box to the throttle body, and a reflashed ECM.",
+  "device_name": "Supercharger System",
+  "eo_number": "D-695-4",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Subaru",
+      "model": "BRZ",
+      "part_numbers": [
+        "260A1011",
+        "260A1023"
+      ],
+      "trim_note": null,
+      "year_end": 2016,
+      "year_start": 2012
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Toyota",
+      "model": "Scion FR-S",
+      "part_numbers": [
+        "260A1011",
+        "260A1023"
+      ],
+      "trim_note": null,
+      "year_end": 2016,
+      "year_start": 2012
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Subaru",
+      "model": "BRZ",
+      "part_numbers": [
+        "260A1011",
+        "260A1023"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Toyota",
+      "model": "86",
+      "part_numbers": [
+        "260A1011",
+        "260A1023"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2017
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2020-08-07",
+  "manufacturer": "Sprintex Ltd.",
+  "notes": null,
+  "part_numbers": [
+    "260A1011",
+    "260A1023"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

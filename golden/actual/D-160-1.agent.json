@@ -1,0 +1,30 @@
+{
+  "_prompt_version": "v1",
+  "category": "other",
+  "confidence": 0.95,
+  "description": "Universal Fuel Fill Pipe Restrictor for repairing damaged or missing fuel fill pipe restrictors on vehicles certified for unleaded gasoline only, allowing cold-weld installation using J-B Weld.",
+  "device_name": "Universal Fuel Fill Pipe Restrictor",
+  "eo_number": "D-160-1",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": null,
+      "model": null,
+      "part_numbers": [],
+      "trim_note": "Vehicles certified for unleaded gasoline only",
+      "year_end": null,
+      "year_start": null
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "1986-06-10",
+  "manufacturer": "Advanced Emission Technology",
+  "notes": null,
+  "part_numbers": [],
+  "sections_confidence": {},
+  "supersedes": [
+    "D-160"
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "_prompt_version": "v1",
+  "category": "other",
+  "confidence": 0.98,
+  "description": "Installation of the Modified Fuel Systems (long cut, rear entry) to replace the stock fuel tank.",
+  "device_name": "Modified Fuel Systems",
+  "eo_number": "D-835-5",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2017,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2022,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20635"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2023
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Voyager",
+      "part_numbers": [
+        "NPD-20636"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Voyager",
+      "part_numbers": [
+        "NPD-20636"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Voyager",
+      "part_numbers": [
+        "NPD-20636"
+      ],
+      "trim_note": null,
+      "year_end": 2022,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "part_numbers": [
+        "NPD-20636"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2023
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2023-04-18",
+  "manufacturer": "Driverge Vehicle Innovations, LLC",
+  "notes": null,
+  "part_numbers": [
+    "NPD-20635",
+    "NPD-20636"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

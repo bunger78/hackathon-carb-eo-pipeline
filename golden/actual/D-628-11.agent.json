@@ -1,0 +1,32 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.95,
+  "description": "F-Sport Performance Air Intake Kit consists of a modified air filter housing lid with a permanently heat-staked Toyota hydrocarbon trap, TRD flat panel air filter element, air intake tubing to the stock throttle body, and mounting hardware.",
+  "device_name": "F-Sport Performance Air Intake",
+  "eo_number": "D-628-11",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 3.5,
+      "induction": null,
+      "make": "Lexus",
+      "model": "IS350",
+      "part_numbers": [
+        "PTR03-53141"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2014
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2019-03-19",
+  "manufacturer": "F-Sport",
+  "notes": null,
+  "part_numbers": [
+    "PTR03-53141"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

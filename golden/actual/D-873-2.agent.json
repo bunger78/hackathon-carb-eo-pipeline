@@ -1,0 +1,171 @@
+{
+  "_prompt_version": "v1",
+  "category": "tune",
+  "confidence": 0.98,
+  "description": "The EAC Flash Tune is an ECU recalibration delivered via a provided EcuTek unit connected via Bluetooth to a computer. It modifies fuel and timing values, revolution limiter, knock control, engine coolant temperature fail-safe, and air-fuel ratio. Includes anti-theft and valet modes, as well as launch control and flat foot shifting for manual transmissions. Requires 91 Octane fuel.",
+  "device_name": "EAC Flash Tune",
+  "eo_number": "D-873-2",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "G37",
+      "part_numbers": [
+        "EAC-FT-G37"
+      ],
+      "trim_note": "Includes 2013 G37x",
+      "year_end": 2013,
+      "year_start": 2008
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "NISSAN",
+      "model": "370Z",
+      "part_numbers": [
+        "EAC-FT-370Z"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2009
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "M37, M37x",
+      "part_numbers": [
+        "EAC-FT-M37"
+      ],
+      "trim_note": null,
+      "year_end": 2013,
+      "year_start": 2011
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "EX37",
+      "part_numbers": [
+        "EAC-FT-EX37"
+      ],
+      "trim_note": null,
+      "year_end": 2013,
+      "year_start": 2013
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "FX37",
+      "part_numbers": [
+        "EAC-FT-FX37"
+      ],
+      "trim_note": null,
+      "year_end": 2013,
+      "year_start": 2013
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "Q50",
+      "part_numbers": [
+        "EAC-FT-Q50"
+      ],
+      "trim_note": null,
+      "year_end": 2015,
+      "year_start": 2014
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "Q60",
+      "part_numbers": [
+        "EAC-FT-Q60"
+      ],
+      "trim_note": null,
+      "year_end": 2015,
+      "year_start": 2014
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "Q70",
+      "part_numbers": [
+        "EAC-FT-Q70"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2014
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "QX70",
+      "part_numbers": [
+        "EAC-FT-Q70"
+      ],
+      "trim_note": null,
+      "year_end": 2017,
+      "year_start": 2014
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "QX50",
+      "part_numbers": [
+        "EAC-FT-QX50"
+      ],
+      "trim_note": null,
+      "year_end": 2017,
+      "year_start": 2014
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.7,
+      "induction": null,
+      "make": "INFINITI",
+      "model": "Q40",
+      "part_numbers": [
+        "EAC-FT-Q40"
+      ],
+      "trim_note": null,
+      "year_end": 2015,
+      "year_start": 2015
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2025-07-16",
+  "manufacturer": "Enthusiast Auto Care, Inc.",
+  "notes": null,
+  "part_numbers": [
+    "EAC-FT-G37",
+    "EAC-FT-370Z",
+    "EAC-FT-M37",
+    "EAC-FT-EX37",
+    "EAC-FT-FX37",
+    "EAC-FT-Q50",
+    "EAC-FT-Q60",
+    "EAC-FT-Q70",
+    "EAC-FT-QX50",
+    "EAC-FT-Q40"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

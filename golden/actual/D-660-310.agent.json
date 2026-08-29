@@ -1,0 +1,34 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.95,
+  "description": "The Redline Carbon Fiber Power Scoop consists of a carbon fiber snorkel directly connected to the original air intake box. The Engine Control Unit (ECU) is not modified, and no other modifications are required for installation.",
+  "device_name": "Redline Carbon Fiber Power Scoop",
+  "eo_number": "D-660-310",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 2.4,
+      "induction": "TURBO",
+      "make": "Subaru",
+      "model": "WRX",
+      "part_numbers": [
+        "746150",
+        "746150-RMC"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2022
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2026-04-20",
+  "manufacturer": "Cobb Tuning",
+  "notes": null,
+  "part_numbers": [
+    "746150",
+    "746150-RMC"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

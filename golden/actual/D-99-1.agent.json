@@ -1,0 +1,50 @@
+{
+  "_prompt_version": "v1",
+  "category": "boost",
+  "confidence": 0.95,
+  "description": "Installation of the Turbonetics Model No. 454 TCI-HD turbocharger system using an AiResearch TO4B turbocharger with an A/R ratio of 1.30 and an Airsensors electronic fuel injection system on 1987 and older Chevrolet/GMC 454 CID heavy-duty gasoline engines.",
+  "device_name": "Turbotronic Turbocharger System Model No. 454 TCI-HD",
+  "eo_number": "D-99-1",
+  "fitment": [
+    {
+      "cylinders": 8,
+      "displacement_l": 7.4,
+      "induction": "NA",
+      "make": "Chevrolet",
+      "model": null,
+      "part_numbers": [
+        "454 TCI-HD"
+      ],
+      "trim_note": "Heavy-duty gasoline engines originally equipped with a 4-barrel carburetor",
+      "year_end": 1987,
+      "year_start": null
+    },
+    {
+      "cylinders": 8,
+      "displacement_l": 7.4,
+      "induction": "NA",
+      "make": "GMC",
+      "model": null,
+      "part_numbers": [
+        "454 TCI-HD"
+      ],
+      "trim_note": "Heavy-duty gasoline engines originally equipped with a 4-barrel carburetor",
+      "year_end": 1987,
+      "year_start": null
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "1986-11-19",
+  "manufacturer": "Turbonetics, Inc.",
+  "notes": null,
+  "part_numbers": [
+    "454 TCI-HD",
+    "454TCI-HD",
+    "10101-5B",
+    "10350",
+    "10553",
+    "10651-005"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

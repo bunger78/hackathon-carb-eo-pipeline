@@ -1,0 +1,657 @@
+{
+  "_prompt_version": "v1",
+  "category": "cat",
+  "confidence": 0.95,
+  "description": "Aftermarket Series 12300 and 12100 three-way catalytic converters for dual exhaust systems on selected 1997-2004 Ford and Lincoln medium-duty vehicles.",
+  "device_name": "Series 12300 & 12100 Three-way Catalytic Converters",
+  "eo_number": "D-562-33",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 Econoline",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 Econoline / E-150 Club Wagon / E-250 Econoline / E-250 Strip Chassis / E-250 Cab Chassis",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150 Pickup",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD/4WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150 Pickup",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition / F-250 Pickup",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD/4WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150 Pickup",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD/4WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD/4WD",
+      "year_end": 1997,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150 / E-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1998,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1998,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition / Lincoln Navigator",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1998,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1998,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1998,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 / E-250",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition / F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition / F-150",
+      "part_numbers": [
+        "12340",
+        "12143"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "Expedition / F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2001,
+      "year_start": 2001
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2001,
+      "year_start": 2001
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2001,
+      "year_start": 2001
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2001,
+      "year_start": 2001
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 / E-250",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Lincoln / Ford",
+      "model": "Blackwood / Expedition",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford / Lincoln",
+      "model": "F-150 / Navigator",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Lincoln / Ford",
+      "model": "Blackwood / F-150 SuperCrew / F-150",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD / 4WD",
+      "year_end": 2003,
+      "year_start": 2003
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150 / F-150 SuperCrew",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD/4WD",
+      "year_end": 2003,
+      "year_start": 2003
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": "SC",
+      "make": "Ford",
+      "model": "F-150 Pickup Lightning",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD Lightning",
+      "year_end": 2003,
+      "year_start": 2003
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 Club Wagon / E-150 Econoline / E-250 Econoline / E-250 Cab Chassis / E-250 Strip Chassis",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 2003,
+      "year_start": 2003
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.2,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 Econoline",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 2003,
+      "year_start": 2003
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.6,
+      "induction": null,
+      "make": "Ford",
+      "model": "F-150 Pickup",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD/4WD Short/Long WB",
+      "year_end": 2004,
+      "year_start": 2004
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": "SC",
+      "make": "Ford",
+      "model": "F-150 Pickup Lightning",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD SC Lightning",
+      "year_end": 2004,
+      "year_start": 2004
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.4,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-150 Econoline / E-150 CW / E-250 Econoline / E-350",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.8,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-350",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 2002,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.8,
+      "induction": null,
+      "make": "Ford",
+      "model": "E-350",
+      "part_numbers": [
+        "12340",
+        "12140"
+      ],
+      "trim_note": "2WD",
+      "year_end": 2003,
+      "year_start": 2003
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2009-04-23",
+  "manufacturer": "Valina, Inc.",
+  "notes": null,
+  "part_numbers": [
+    "12100",
+    "12140",
+    "12143",
+    "12300",
+    "12301",
+    "12311",
+    "12340"
+  ],
+  "sections_confidence": {},
+  "supersedes": [
+    "D-562-15"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "_prompt_version": "v1",
+  "category": "other",
+  "confidence": 0.95,
+  "description": "The device consists of two formed screens made of fine mesh wire cloth mounted under the carburetor barrels. The upstream screen is plated with cadmium and the downstream screen with nickel.",
+  "device_name": "Safeguard Gas Booster-California Design",
+  "eo_number": "D-35-3",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": null,
+      "model": null,
+      "part_numbers": [],
+      "trim_note": null,
+      "year_end": 1974,
+      "year_start": null
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "1974-08-01",
+  "manufacturer": "Kar Automotive Manufacturing Co.",
+  "notes": "Device is identical in construction and operation to Hydro-Catalyst Corporation's Precombustion Catalyst-California Design (EO D-35).",
+  "part_numbers": [],
+  "sections_confidence": {},
+  "supersedes": []
+}

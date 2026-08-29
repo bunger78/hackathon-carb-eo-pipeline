@@ -1,0 +1,942 @@
+{
+  "_prompt_version": "v1",
+  "category": "boost",
+  "confidence": 0.98,
+  "description": "Whipple Supercharger kit with 2.9L, 3.0L, or 3.2L twin screw supercharger, intake manifold, bypass valve, air-to-liquid intercooler, heat exchanger, intercooler electric water pump, fuel injectors, fuel rails, TMAP sensor, air intake tube, air filter/box, fuel pump or voltage booster, and reflashed ECM for FCA vehicles.",
+  "device_name": "Whipple Supercharger",
+  "eo_number": "D-231-103",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3001-B"
+      ],
+      "trim_note": null,
+      "year_end": 2022,
+      "year_start": 2011
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3002-30"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3002-32"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3003-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3003-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3020-B"
+      ],
+      "trim_note": null,
+      "year_end": 2022,
+      "year_start": 2011
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3020-B-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2022,
+      "year_start": 2011
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3022-30"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3022-30-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3022-32"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3022-32-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3023-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3023-30-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3023-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Charger, Challenger, 300",
+      "part_numbers": [
+        "WK-3023-32-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango",
+      "part_numbers": [
+        "WK-3101-S1-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango",
+      "part_numbers": [
+        "WK-3101-S2-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango",
+      "part_numbers": [
+        "WK-3102-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango",
+      "part_numbers": [
+        "WK-3102-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango SRT",
+      "part_numbers": [
+        "WK-3110-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango SRT",
+      "part_numbers": [
+        "WK-3110-30-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango SRT",
+      "part_numbers": [
+        "WK-3110-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango SRT",
+      "part_numbers": [
+        "WK-3110-32-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango SRT",
+      "part_numbers": [
+        "WK-3110-S1-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Durango SRT",
+      "part_numbers": [
+        "WK-3110-S2-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee",
+      "part_numbers": [
+        "WK-3121-S1-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee",
+      "part_numbers": [
+        "WK-3121-S2-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee",
+      "part_numbers": [
+        "WK-3122-30"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee",
+      "part_numbers": [
+        "WK-3122-32"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee",
+      "part_numbers": [
+        "WK-3125-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee",
+      "part_numbers": [
+        "WK-3125-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3131-S1-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3131-S1-29-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3131-S2-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3131-S2-29-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3132-30"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3132-30-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3132-32"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Cherokee SRT",
+      "part_numbers": [
+        "WK-3132-32-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Wagoneer",
+      "part_numbers": [
+        "WK-3160-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Wagoneer",
+      "part_numbers": [
+        "WK-3160-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Wagoneer",
+      "part_numbers": [
+        "WK-3165-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Wagoneer",
+      "part_numbers": [
+        "WK-3165-30-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Wagoneer",
+      "part_numbers": [
+        "WK-3165-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Grand Wagoneer",
+      "part_numbers": [
+        "WK-3165-32-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Wrangler",
+      "part_numbers": [
+        "WK-3170-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Wrangler",
+      "part_numbers": [
+        "WK-3170-30-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Wrangler",
+      "part_numbers": [
+        "WK-3170-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Wrangler",
+      "part_numbers": [
+        "WK-3170-32-CA"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 Classic",
+      "part_numbers": [
+        "WK-3303-29"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 Classic",
+      "part_numbers": [
+        "WK-3303-30"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 Classic",
+      "part_numbers": [
+        "WK-3303-32"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500",
+      "part_numbers": [
+        "WK-3304-29"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500",
+      "part_numbers": [
+        "WK-3304-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500",
+      "part_numbers": [
+        "WK-3304-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3310-30"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3310-30-TUS"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3310-32"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3310-32-TUS"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3312-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3312-30-TUS"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3312-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.7,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 1500 E-Torque",
+      "part_numbers": [
+        "WK-3312-32-TUS"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2022
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 2500 & 3500",
+      "part_numbers": [
+        "WK-3352-29"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 2500 & 3500",
+      "part_numbers": [
+        "WK-3352-30"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.4,
+      "induction": "SC",
+      "make": null,
+      "model": "Ram 2500 & 3500",
+      "part_numbers": [
+        "WK-3352-32"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2018
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2024-05-13",
+  "manufacturer": "Whipple Industries",
+  "notes": "All part numbers with NFT and/or W added are also covered per Exhibit A footnotes.",
+  "part_numbers": [
+    "WK-3001-B",
+    "WK-3002-30",
+    "WK-3002-32",
+    "WK-3003-30",
+    "WK-3003-32",
+    "WK-3020-B",
+    "WK-3020-B-CA",
+    "WK-3022-30",
+    "WK-3022-30-CA",
+    "WK-3022-32",
+    "WK-3022-32-CA",
+    "WK-3023-30",
+    "WK-3023-30-CA",
+    "WK-3023-32",
+    "WK-3023-32-CA",
+    "WK-3101-S1-29",
+    "WK-3101-S2-29",
+    "WK-3102-30",
+    "WK-3102-32",
+    "WK-3110-30",
+    "WK-3110-30-CA",
+    "WK-3110-32",
+    "WK-3110-32-CA",
+    "WK-3110-S1-29",
+    "WK-3110-S2-29",
+    "WK-3121-S1-29",
+    "WK-3121-S2-29",
+    "WK-3122-30",
+    "WK-3122-32",
+    "WK-3125-30",
+    "WK-3125-32",
+    "WK-3131-S1-29",
+    "WK-3131-S1-29-CA",
+    "WK-3131-S2-29",
+    "WK-3131-S2-29-CA",
+    "WK-3132-30",
+    "WK-3132-30-CA",
+    "WK-3132-32",
+    "WK-3132-32-CA",
+    "WK-3160-30",
+    "WK-3160-32",
+    "WK-3165-30",
+    "WK-3165-30-CA",
+    "WK-3165-32",
+    "WK-3165-32-CA",
+    "WK-3170-30",
+    "WK-3170-30-CA",
+    "WK-3170-32",
+    "WK-3170-32-CA",
+    "WK-3303-29",
+    "WK-3303-30",
+    "WK-3303-32",
+    "WK-3304-29",
+    "WK-3304-30",
+    "WK-3304-32",
+    "WK-3310-30",
+    "WK-3310-30-TUS",
+    "WK-3310-32",
+    "WK-3310-32-TUS",
+    "WK-3312-30",
+    "WK-3312-30-TUS",
+    "WK-3312-32",
+    "WK-3312-32-TUS",
+    "WK-3352-29",
+    "WK-3352-30",
+    "WK-3352-32"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

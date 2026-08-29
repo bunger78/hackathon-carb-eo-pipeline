@@ -1,0 +1,230 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.95,
+  "description": "The Screamin' Eagle Heavy Breather Extreme Air Cleaner kit includes a replacement filter as well as applicable housing and hardware. An Electronic Control Unit (ECU) tune is included as part of this kit.",
+  "device_name": "Screamin' Eagle Heavy Breather Extreme Air Cleaner",
+  "eo_number": "D-338-147",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Road Glide / CVO Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2023,
+      "year_start": 2023
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Road Glide / Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2024,
+      "year_start": 2024
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Road Glide / CVO Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2024,
+      "year_start": 2024
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Street Glide ST",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2024,
+      "year_start": 2024
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Road Glide / Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2025,
+      "year_start": 2025
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Road Glide / CVO Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2025,
+      "year_start": 2025
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Road Glide ST",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2025,
+      "year_start": 2025
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Low Rider S / Heritage Classic / Street Bob",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2025,
+      "year_start": 2025
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Fat Boy / Breakout / Fat Boy Gray Ghost",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2025,
+      "year_start": 2025
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Road Glide / Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2026
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Street Glide",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2026
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.977,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "CVO Street Glide ST / CVO Road Glide ST",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2026
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Low Rider S / Heritage Classic / Street Bob",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2026
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Fat Boy / Breakout",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2026
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.923,
+      "induction": null,
+      "make": "Harley Davidson",
+      "model": "Road Glide 3",
+      "part_numbers": [
+        "29400518B",
+        "29400519B"
+      ],
+      "trim_note": null,
+      "year_end": 2026,
+      "year_start": 2026
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2026-04-27",
+  "manufacturer": "Harley Davidson Motor Company",
+  "notes": null,
+  "part_numbers": [
+    "29400518B",
+    "29400519B"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

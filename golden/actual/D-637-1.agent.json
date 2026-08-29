@@ -1,0 +1,351 @@
+{
+  "_prompt_version": "v1",
+  "category": "exhaust",
+  "confidence": 0.95,
+  "description": "Performance Header System manufactured out of 16 gauge stainless steel tubing. Vehicles originally equipped with a close coupled catalyst are excluded.",
+  "device_name": "Performance Header System",
+  "eo_number": "D-637-1",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": null,
+      "make": "Acura",
+      "model": "NSX",
+      "part_numbers": [
+        "220-060"
+      ],
+      "trim_note": null,
+      "year_end": 1994,
+      "year_start": 1991
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": null,
+      "make": "Acura",
+      "model": "NSX",
+      "part_numbers": [
+        "220-011"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1995
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.2,
+      "induction": null,
+      "make": "Acura",
+      "model": "NSX",
+      "part_numbers": [
+        "220-011"
+      ],
+      "trim_note": null,
+      "year_end": 1999,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": null,
+      "make": "Acura",
+      "model": "NSX",
+      "part_numbers": [
+        "220-012"
+      ],
+      "trim_note": null,
+      "year_end": 2005,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.2,
+      "induction": null,
+      "make": "Acura",
+      "model": "NSX",
+      "part_numbers": [
+        "220-012"
+      ],
+      "trim_note": null,
+      "year_end": 2005,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.6,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "210-021"
+      ],
+      "trim_note": "DX, EX",
+      "year_end": 2000,
+      "year_start": 1992
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.6,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "210-020"
+      ],
+      "trim_note": "Si",
+      "year_end": 2000,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "210-022"
+      ],
+      "trim_note": "Si",
+      "year_end": 2005,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "210-035"
+      ],
+      "trim_note": "Si",
+      "year_end": 2011,
+      "year_start": 2006
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.8,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "210-002"
+      ],
+      "trim_note": "GSR",
+      "year_end": 1999,
+      "year_start": 1994
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.8,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "210-001"
+      ],
+      "trim_note": "LS, RS, GS",
+      "year_end": 2001,
+      "year_start": 1994
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.8,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "210-001"
+      ],
+      "trim_note": "Type R",
+      "year_end": 2001,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.8,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "210-001"
+      ],
+      "trim_note": "GSR",
+      "year_end": 2001,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Honda",
+      "model": "CRV",
+      "part_numbers": [
+        "210-030"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Honda",
+      "model": "S2000",
+      "part_numbers": [
+        "210-040"
+      ],
+      "trim_note": null,
+      "year_end": 2008,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.2,
+      "induction": null,
+      "make": "Honda",
+      "model": "S2000",
+      "part_numbers": [
+        "210-040"
+      ],
+      "trim_note": null,
+      "year_end": 2008,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Acura",
+      "model": "RSX",
+      "part_numbers": [
+        "210-022"
+      ],
+      "trim_note": null,
+      "year_end": 2006,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.0,
+      "induction": null,
+      "make": "Acura",
+      "model": "RSX-S",
+      "part_numbers": [
+        "210-050"
+      ],
+      "trim_note": null,
+      "year_end": 2006,
+      "year_start": 2002
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.4,
+      "induction": null,
+      "make": "Acura",
+      "model": "TSX",
+      "part_numbers": [
+        "210-060"
+      ],
+      "trim_note": null,
+      "year_end": 2008,
+      "year_start": 2004
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.2,
+      "induction": null,
+      "make": "Acura",
+      "model": "TL",
+      "part_numbers": [
+        "220-042"
+      ],
+      "trim_note": "TL, TL-S",
+      "year_end": 2003,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.2,
+      "induction": null,
+      "make": "Acura",
+      "model": "CL",
+      "part_numbers": [
+        "220-042"
+      ],
+      "trim_note": "CL, CL-S",
+      "year_end": 2003,
+      "year_start": 2001
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": null,
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "220-042"
+      ],
+      "trim_note": "V6",
+      "year_end": 2002,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.5,
+      "induction": null,
+      "make": "Acura",
+      "model": "RL",
+      "part_numbers": [],
+      "trim_note": null,
+      "year_end": 2004,
+      "year_start": 1996
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.5,
+      "induction": null,
+      "make": "Honda",
+      "model": "Odyssey",
+      "part_numbers": [],
+      "trim_note": null,
+      "year_end": 2003,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.5,
+      "induction": null,
+      "make": "Acura",
+      "model": "Legend",
+      "part_numbers": [],
+      "trim_note": null,
+      "year_end": 1995,
+      "year_start": 1991
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2008-07-08",
+  "manufacturer": "CT-Engineering",
+  "notes": null,
+  "part_numbers": [
+    "210-001",
+    "210-002",
+    "210-020",
+    "210-021",
+    "210-022",
+    "210-030",
+    "210-035",
+    "210-040",
+    "210-050",
+    "210-060",
+    "220-011",
+    "220-012",
+    "220-042",
+    "220-060"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

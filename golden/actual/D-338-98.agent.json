@@ -1,0 +1,487 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.98,
+  "description": "Cast aluminum intake manifold that is polished internally, replacing the stock composite intake manifold on specified Harley-Davidson motorcycle engine families.",
+  "device_name": "Screamin\u2019 Eagle Extreme Flow 55mm EFI Intake Manifold",
+  "eo_number": "D-338-98",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family HHDXC1.75AED",
+      "year_end": 2017,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family HHDXC1.75AEE",
+      "year_end": 2017,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family HHDXC1.75AEG",
+      "year_end": 2017,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family HHDXC1.87AEF",
+      "year_end": 2017,
+      "year_start": 2017
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.75AED",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.75AEE",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.75AEG",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.75AEK",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.87AEH",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.87AEJ",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.92AED",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family JHDXC1.92AEF",
+      "year_end": 2018,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.75AED",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.75AEK",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.87AEE",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.87AEG",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.87AEH",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.87AEJ",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.92AED",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family KHDXC1.92AEF",
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.75AED",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.75AEK",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.87AEG",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.87AEH",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.87AEJ",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.92AED",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.92AEE",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family LHDXC1.92AEF",
+      "year_end": 2020,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.75,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.75AEK",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.87AED",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.87AEG",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.87AEH",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.87,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.87AEJ",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.92AED",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.92AEE",
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 1.92,
+      "induction": "NA",
+      "make": "Harley-Davidson",
+      "model": null,
+      "part_numbers": [
+        "27300167"
+      ],
+      "trim_note": "Engine Family MHDXC1.92AEF",
+      "year_end": 2021,
+      "year_start": 2021
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2021-10-28",
+  "manufacturer": "Harley-Davidson Motor Company",
+  "notes": null,
+  "part_numbers": [
+    "27300167"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

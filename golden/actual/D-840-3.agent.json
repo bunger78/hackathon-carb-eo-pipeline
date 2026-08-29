@@ -1,0 +1,58 @@
+{
+  "_prompt_version": "v1",
+  "category": "other",
+  "confidence": 0.95,
+  "description": "Pedal Commander accelerator pedal response modifier device.",
+  "device_name": "Pedal Commander",
+  "eo_number": "D-840-3",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": "TURBO",
+      "make": "FORD",
+      "model": "F-150",
+      "part_numbers": [
+        "PC18"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2018
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.7,
+      "induction": "TURBO",
+      "make": "FORD",
+      "model": "F-250, F-350, F-450",
+      "part_numbers": [
+        "PC18"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2011
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.2,
+      "induction": "TURBO",
+      "make": "FORD",
+      "model": "TRANSIT T-150, T-250, T-350",
+      "part_numbers": [
+        "PC18"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2019,
+      "year_start": 2015
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2022-09-07",
+  "manufacturer": "Vitalen Auto Performance Inc. DBA Pedal Commander",
+  "notes": null,
+  "part_numbers": [
+    "PC18"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

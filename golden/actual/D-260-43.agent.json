@@ -1,0 +1,734 @@
+{
+  "_prompt_version": "v1",
+  "category": "other",
+  "confidence": 1.0,
+  "description": "The In-Line Speedometer Calibrator is an inline module that connects between the CAN communication connector and the instrumentation cluster to modify CAN communication to correct the speedometer reading without reprogramming the ECU.",
+  "device_name": "In-Line Speedometer Calibrator",
+  "eo_number": "D-260-43",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "CADILLAC",
+      "model": "ESCALADE",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.5,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "COLORADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.8,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "COLORADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "COLORADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.3,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.3,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 4500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "EXPRESS 4500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.3,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.3,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.3,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SUBURBAN",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SUBURBAN",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SUBURBAN 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.3,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "TAHOE",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "TAHOE",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.5,
+      "induction": null,
+      "make": "GMC",
+      "model": "CANYON",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.8,
+      "induction": null,
+      "make": "GMC",
+      "model": "CANYON",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "CANYON",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.3,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.3,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 4500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2020,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SAVANA 4500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2021
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 4.3,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.3,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.0,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2019,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.3,
+      "induction": null,
+      "make": "GMC",
+      "model": "YUKON",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "GMC",
+      "model": "YUKON 1500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.2,
+      "induction": null,
+      "make": "GMC",
+      "model": "YUKON 1500 XL",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 5.3,
+      "induction": null,
+      "make": "GMC",
+      "model": "YUKON XL",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA 2500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 6.6,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA 3500",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2019
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.8,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "COLORADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 2.8,
+      "induction": null,
+      "make": "GMC",
+      "model": "CANYON",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": null,
+      "make": "CHEVROLET",
+      "model": "SILVERADO",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2020
+    },
+    {
+      "cylinders": null,
+      "displacement_l": 3.0,
+      "induction": null,
+      "make": "GMC",
+      "model": "SIERRA",
+      "part_numbers": [
+        "730129"
+      ],
+      "trim_note": "Diesel",
+      "year_end": 2021,
+      "year_start": 2020
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2021-08-04",
+  "manufacturer": "Hypertech Inc.",
+  "notes": null,
+  "part_numbers": [
+    "730129"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

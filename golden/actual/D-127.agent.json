@@ -1,0 +1,28 @@
+{
+  "_prompt_version": "v1",
+  "category": "other",
+  "confidence": 0.95,
+  "description": "Octameter Injection System water/alcohol vapor injection system",
+  "device_name": "Octameter Injection System",
+  "eo_number": "D-127",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": null,
+      "model": null,
+      "part_numbers": [],
+      "trim_note": "Gasoline and propane powered vehicles",
+      "year_end": 1982,
+      "year_start": null
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "1982-09-23",
+  "manufacturer": "EPM Industries, Inc.",
+  "notes": null,
+  "part_numbers": [],
+  "sections_confidence": {},
+  "supersedes": []
+}

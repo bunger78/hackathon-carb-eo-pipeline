@@ -1,16 +1,23 @@
 """Golden eval: compares agent extraction (Firestore latest) and legacy baseline
-   against hand-verified golden/expected/{eo}.json."""
+   against hand-verified golden/expected/{eo}.json.
+
+   --offline scores the committed golden/actual/ fixtures instead (see
+   tools/export_golden_actuals.py) -- no Firestore import, no credentials, no
+   network. That's what makes this eval reproducible by a third party who only
+   has the cloned repo."""
+from __future__ import annotations
+
+import argparse
 import json
 import pathlib
 
-from google.cloud import firestore
 from pydantic import ValidationError
 
 from agents.auditor import _EO_RE
-from core.db import Repo
 from schemas.extraction import Extraction
 
 GOLD = pathlib.Path(__file__).resolve().parents[2] / "golden" / "expected"
+ACTUAL = pathlib.Path(__file__).resolve().parents[2] / "golden" / "actual"
 REPORT = pathlib.Path(__file__).resolve().parents[2] / "docs" / "golden-report.md"
 MAX_RUN_READS = 50
 
@@ -86,7 +93,9 @@ def run_checkers(payload: dict) -> dict:
 
 def trajectory_events(repo: Repo, eo: str, max_run_reads: int = MAX_RUN_READS) -> list[dict] | None:
     """Scan recent runs (newest first) for events tagged with this EO, capped at
-    max_run_reads run documents. Returns None if no tagged events turned up in that budget."""
+    max_run_reads run documents. Returns None if no tagged events turned up in that budget.
+    Live-only: imports google.cloud.firestore locally so the offline path never needs it."""
+    from google.cloud import firestore
     runs = (repo.db.collection("runs").order_by("started_at", direction=firestore.Query.DESCENDING)
             .limit(max_run_reads).stream())
     events = []
@@ -123,8 +132,54 @@ def check_trajectory(repo: Repo, eo: str, eo_doc: dict | None) -> tuple[bool, st
     return False, "; ".join(reasons)
 
 
+# --- fixture loaders: golden/actual/ snapshots written by tools/export_golden_actuals.py ---
+
+def load_actual_agent(eo: str) -> dict | None:
+    """Latest extraction payload for `eo`, from the committed offline fixture."""
+    f = ACTUAL / f"{eo}.agent.json"
+    if not f.exists():
+        return None
+    doc = json.loads(f.read_text())
+    doc.pop("_prompt_version", None)
+    return doc
+
+
+def load_actual_legacy(eo: str) -> dict | None:
+    """legacy_extractions doc for `eo`, from the committed offline fixture. _doc_id
+    (the Firestore doc ID captured at export time) stands in for the live doc ID so
+    legacy_with_id can inject eo_number exactly as the live path does."""
+    f = ACTUAL / f"{eo}.legacy.json"
+    if not f.exists():
+        return None
+    doc = json.loads(f.read_text())
+    doc_id = doc.pop("_doc_id", eo)
+    return legacy_with_id(doc, doc_id)
+
+
+def fetch_pair(repo: Repo | None, eo: str) -> tuple[dict | None, dict | None]:
+    """(agent, legacy) for `eo` -- live Firestore reads if `repo` is given, otherwise
+    the committed golden/actual/ fixtures."""
+    if repo is None:
+        return load_actual_agent(eo), load_actual_legacy(eo)
+    ext = [d.to_dict() for d in repo.db.collection("extractions")
+           .where("eo_number", "==", eo).stream()]
+    agent = max(ext, key=lambda d: d.get("created_at", 0))["payload"] if ext else None
+    legacy = legacy_with_id(repo.get_legacy(eo), eo)
+    return agent, legacy
+
+
 def main():
-    repo = Repo()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--offline", action="store_true",
+                         help="score committed golden/actual/ fixtures instead of live "
+                              "Firestore -- no credentials or network needed")
+    args = parser.parse_args()
+
+    repo = None
+    if not args.offline:
+        from core.db import Repo
+        repo = Repo()
+
     lines = ["| EO | src | scalar | PN F1 | assoc F1 | coverage | fit Δ | checks | trajectory |",
               "|---|---|---|---|---|---|---|---|---|"]
     agg = {"agent": [], "legacy": []}
@@ -133,10 +188,7 @@ def main():
     for f in sorted(GOLD.glob("*.json")):
         eo = f.stem.upper()
         expected = json.loads(f.read_text())
-        ext = [d.to_dict() for d in repo.db.collection("extractions")
-               .where("eo_number", "==", eo).stream()]
-        agent = max(ext, key=lambda d: d.get("created_at", 0))["payload"] if ext else None
-        legacy = legacy_with_id(repo.get_legacy(eo), eo)
+        agent, legacy = fetch_pair(repo, eo)
         for src, got in (("agent", agent), ("legacy", legacy)):
             s = score(expected, got)
             agg[src].append(s)
@@ -145,10 +197,13 @@ def main():
                 checks = run_checkers(got)
                 n_pass = sum(checks.values())
                 checker_totals.append(n_pass)
-                traj_ok, traj_note = check_trajectory(repo, eo, repo.get_eo(eo))
-                trajectory_results.append(traj_ok)
                 checks_col = f"{n_pass}/3"
-                traj_col = f"{'pass' if traj_ok else 'fail'} ({traj_note})"
+                if repo is not None:
+                    traj_ok, traj_note = check_trajectory(repo, eo, repo.get_eo(eo))
+                    trajectory_results.append(traj_ok)
+                    traj_col = f"{'pass' if traj_ok else 'fail'} ({traj_note})"
+                else:
+                    traj_col = "n/a (offline)"
             matched, total = s["row_coverage"]
             lines.append(f"| {eo} | {src} | {s['scalar']:.2f} | {s['pn_f1']} | {s['assoc_f1']} | "
                           f"{matched}/{total} | {s['fit_delta']} | {checks_col} | {traj_col} |")

@@ -1,0 +1,32 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.95,
+  "description": "PowerPack air intake system and ECU reflash calibration kit",
+  "device_name": "PowerPack",
+  "eo_number": "D-752-18",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": 5.0,
+      "induction": null,
+      "make": "Ford",
+      "model": "Mustang",
+      "part_numbers": [
+        "M-9603-M8B"
+      ],
+      "trim_note": null,
+      "year_end": 2021,
+      "year_start": 2018
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2021-05-28",
+  "manufacturer": "Livernois Motorsports & Engineering",
+  "notes": null,
+  "part_numbers": [
+    "M-9603-M8B"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}

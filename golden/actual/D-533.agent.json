@@ -1,0 +1,298 @@
+{
+  "_prompt_version": "v1",
+  "category": "intake",
+  "confidence": 0.98,
+  "description": "The Cold Air Intake consists of a K&N style open element air filter and ducting system designed to replace the stock air filter box and air inlet ducting.",
+  "device_name": "Cold Air Intake",
+  "eo_number": "D-533",
+  "fitment": [
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic/CRX",
+      "part_numbers": [
+        "CP-400"
+      ],
+      "trim_note": null,
+      "year_end": 1991,
+      "year_start": 1988
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic/Del Sol",
+      "part_numbers": [
+        "CP-401"
+      ],
+      "trim_note": "SOHC",
+      "year_end": 1995,
+      "year_start": 1992
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "CP-402"
+      ],
+      "trim_note": null,
+      "year_end": 1993,
+      "year_start": 1990
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "CP-403"
+      ],
+      "trim_note": "Non V-Tec",
+      "year_end": 2000,
+      "year_start": 1994
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Acura",
+      "model": "Integra",
+      "part_numbers": [
+        "CP-404"
+      ],
+      "trim_note": "V-Tec",
+      "year_end": 2000,
+      "year_start": 1994
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Prelude",
+      "part_numbers": [
+        "CP-405"
+      ],
+      "trim_note": null,
+      "year_end": 1996,
+      "year_start": 1992
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Prelude",
+      "part_numbers": [
+        "CP-406"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 1997
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "CP-407"
+      ],
+      "trim_note": null,
+      "year_end": 1993,
+      "year_start": 1990
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "CP-408"
+      ],
+      "trim_note": null,
+      "year_end": 1997,
+      "year_start": 1994
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "CP-409"
+      ],
+      "trim_note": "EX",
+      "year_end": 1998,
+      "year_start": 1996
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "CP-413"
+      ],
+      "trim_note": "DX",
+      "year_end": 2000,
+      "year_start": 1996
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "CP-414"
+      ],
+      "trim_note": "EX",
+      "year_end": 2000,
+      "year_start": 1999
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "CP-415"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Accord",
+      "part_numbers": [
+        "CP-416"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 1998
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "CP-417"
+      ],
+      "trim_note": "SI DOHC",
+      "year_end": 2000,
+      "year_start": 1999
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": "NA",
+      "make": "Mitsubishi",
+      "model": "Eclipse",
+      "part_numbers": [
+        "CP-430"
+      ],
+      "trim_note": "Non-Turbo",
+      "year_end": 1999,
+      "year_start": 1995
+    },
+    {
+      "cylinders": 6,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Mitsubishi",
+      "model": "Eclipse",
+      "part_numbers": [
+        "CP-432"
+      ],
+      "trim_note": null,
+      "year_end": 2000,
+      "year_start": 2000
+    },
+    {
+      "cylinders": 4,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Mitsubishi",
+      "model": "Eclipse",
+      "part_numbers": [
+        "CP-433"
+      ],
+      "trim_note": null,
+      "year_end": 2002,
+      "year_start": 2000
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "CP-500"
+      ],
+      "trim_note": "EX, Manual trans",
+      "year_end": 2002,
+      "year_start": 2001
+    },
+    {
+      "cylinders": null,
+      "displacement_l": null,
+      "induction": null,
+      "make": "Honda",
+      "model": "Civic",
+      "part_numbers": [
+        "CP-502"
+      ],
+      "trim_note": "DX/LX, Manual trans",
+      "year_end": 2002,
+      "year_start": 2001
+    }
+  ],
+  "illegible_pages": [],
+  "issue_date": "2002-08-12",
+  "manufacturer": "CP Products",
+  "notes": null,
+  "part_numbers": [
+    "CP-400",
+    "CP-401",
+    "CP-402",
+    "CP-403",
+    "CP-404",
+    "CP-405",
+    "CP-406",
+    "CP-407",
+    "CP-408",
+    "CP-409",
+    "CP-413",
+    "CP-414",
+    "CP-415",
+    "CP-416",
+    "CP-417",
+    "CP-430",
+    "CP-432",
+    "CP-433",
+    "CP-500",
+    "CP-502"
+  ],
+  "sections_confidence": {},
+  "supersedes": []
+}
