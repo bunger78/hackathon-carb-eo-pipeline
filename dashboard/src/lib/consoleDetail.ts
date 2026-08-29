@@ -12,6 +12,7 @@ export interface EventExtras {
   gemini_resolved?: number;
   reason?: string;
   error?: string;
+  rung?: number;
 }
 
 // The extraction ladder only ever has two rungs (pipeline/agents/extractor.py:
@@ -29,6 +30,16 @@ const RUNG_LABEL: Record<number, string> = {
  */
 export function eventDetailSuffix(action: string, extras: EventExtras): string {
   switch (action) {
+    case 'reading': {
+      const { rung } = extras;
+      return typeof rung === 'number' ? `reading PDF (rung ${rung})…` : '';
+    }
+    case 'critiquing':
+      return 'second-opinion critique…';
+    case 'resolving': {
+      const { count } = extras;
+      return typeof count === 'number' ? `resolving ${count} ambiguous matches via Gemini…` : '';
+    }
     case 'extracted': {
       const { ladder_step, confidence } = extras;
       if (typeof ladder_step !== 'number' || typeof confidence !== 'number') return '';

@@ -30,6 +30,16 @@ describe('eventDetailSuffix', () => {
     expect(eventDetailSuffix('failed_both_rungs', {})).toBe('extraction failed on both rungs');
     expect(eventDetailSuffix('resolver_output_invalid', {})).toBe('resolver output rejected');
     expect(eventDetailSuffix('resolver_hallucinated_ids', {})).toBe('hallucinated ids filtered');
+    expect(eventDetailSuffix('critiquing', {})).toBe('second-opinion critique…');
+  });
+
+  it('reading includes the rung', () => {
+    expect(eventDetailSuffix('reading', { rung: 1 })).toBe('reading PDF (rung 1)…');
+    expect(eventDetailSuffix('reading', { rung: 2 })).toBe('reading PDF (rung 2)…');
+  });
+
+  it('resolving includes the unresolved count', () => {
+    expect(eventDetailSuffix('resolving', { count: 4 })).toBe('resolving 4 ambiguous matches via Gemini…');
   });
 
   it('unknown action returns empty string', () => {
@@ -42,5 +52,7 @@ describe('eventDetailSuffix', () => {
     expect(eventDetailSuffix('matched', {})).toBe('');
     expect(eventDetailSuffix('escalated', {})).toBe('');
     expect(eventDetailSuffix('discover_failed', {})).toBe('');
+    expect(eventDetailSuffix('reading', {})).toBe('');
+    expect(eventDetailSuffix('resolving', {})).toBe('');
   });
 });

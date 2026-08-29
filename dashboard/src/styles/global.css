@@ -399,6 +399,13 @@ a {
   font-style: italic;
 }
 
+.console-idle {
+  color: #6b6a64;
+  font-style: italic;
+  opacity: 0.75;
+  padding-top: 0.2rem;
+}
+
 .console-line {
   /* pre-wrap (not pre): keeps the padded fixed-width columns intact but lets a
      long detail suffix (e.g. an error message) wrap instead of overflowing. */

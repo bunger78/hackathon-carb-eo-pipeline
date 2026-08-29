@@ -36,6 +36,16 @@ const ELAPSED_TICK_MS = 1000;
 const AGENT_COL = 9;
 const ACTION_COL = 13;
 const SCROLL_BOTTOM_SLACK = 24; // px — still counts as "at bottom" within this slack
+const IDLE_THRESHOLD_S = 20; // no event for this long -> show the "still working" line
+
+// Formats a non-negative duration as "Ns" under a minute, else "Nm" (whole
+// minutes, seconds dropped) — used only by the idle-status line below, which
+// cares about "is this still moving" rather than precise elapsed time.
+function formatIdleAge(seconds: number): string {
+  const s = Math.max(0, Math.floor(seconds));
+  if (s < 60) return `${s}s`;
+  return `${Math.floor(s / 60)}m`;
+}
 
 // Pads to a fixed column width like a terminal, but always keeps at least one
 // separating space even when the value itself already reaches (or exceeds) the
@@ -132,6 +142,22 @@ export default function Console() {
       ? formatElapsed(nowMs / 1000 - run.started_at)
       : null;
 
+  // Idle/status line pinned at the bottom of the feed — tells the viewer the
+  // console isn't stuck during the long silent stretches (e.g. a multi-minute
+  // Gemini extraction call) when there's genuinely no event to show yet.
+  // Hidden once the run is no longer running.
+  const latestEvent = events.length > 0 ? events[events.length - 1] : null;
+  const latestEventTs = typeof latestEvent?.ts === 'number' ? latestEvent.ts : null;
+  const idleAgeSeconds = latestEventTs !== null ? nowMs / 1000 - latestEventTs : null;
+  let idleMessage: string | null = null;
+  if (run?.status === 'running') {
+    if (events.length === 0) {
+      idleMessage = 'run started — waiting for first agent activity…';
+    } else if (idleAgeSeconds !== null && idleAgeSeconds > IDLE_THRESHOLD_S) {
+      idleMessage = `working… last activity ${formatIdleAge(idleAgeSeconds)} ago (large documents can take minutes)`;
+    }
+  }
+
   return (
     <div className="console">
       <div className="console-titlebar">
@@ -163,20 +189,27 @@ export default function Console() {
       </div>
       <div className="console-feed" ref={scrollRef} onScroll={handleScroll}>
         {events.length === 0 ? (
-          <div className="console-empty">No events yet — waiting for the next run.</div>
+          idleMessage ? (
+            <div className="console-idle">{idleMessage}</div>
+          ) : (
+            <div className="console-empty">No events yet — waiting for the next run.</div>
+          )
         ) : (
-          events.map((e, i) => {
-            const suffix = eventDetailSuffix(e.action, e);
-            return (
-              <div className="console-line" key={eventKey(e, i)}>
-                <span className="console-ts">[{formatEventTime(e.ts)}]</span>{' '}
-                <span className={`console-agent ${AGENT_CLASS[e.agent] ?? ''}`}>{padCol(e.agent, AGENT_COL)}</span>
-                <span className="console-action">{padCol(e.action, ACTION_COL)}</span>
-                <span className="console-eo">{e.eo}</span>
-                {suffix && <span className="console-detail"> — {suffix}</span>}
-              </div>
-            );
-          })
+          <>
+            {events.map((e, i) => {
+              const suffix = eventDetailSuffix(e.action, e);
+              return (
+                <div className="console-line" key={eventKey(e, i)}>
+                  <span className="console-ts">[{formatEventTime(e.ts)}]</span>{' '}
+                  <span className={`console-agent ${AGENT_CLASS[e.agent] ?? ''}`}>{padCol(e.agent, AGENT_COL)}</span>
+                  <span className="console-action">{padCol(e.action, ACTION_COL)}</span>
+                  <span className="console-eo">{e.eo}</span>
+                  {suffix && <span className="console-detail"> — {suffix}</span>}
+                </div>
+              );
+            })}
+            {idleMessage && <div className="console-idle">{idleMessage}</div>}
+          </>
         )}
       </div>
     </div>

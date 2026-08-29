@@ -20,6 +20,7 @@ export const GET: APIRoute = async () => {
     ...(typeof e.confidence === 'number' ? { confidence: e.confidence } : {}),
     ...(typeof e.count === 'number' ? { count: e.count } : {}),
     ...(typeof e.gemini_resolved === 'number' ? { gemini_resolved: e.gemini_resolved } : {}),
+    ...(typeof e.rung === 'number' ? { rung: e.rung } : {}),
     ...(typeof e.reason === 'string' ? { reason: e.reason } : {}),
     ...(typeof e.error === 'string' ? { error: truncate(e.error, ERROR_MAX_CHARS) } : {}),
   }));
