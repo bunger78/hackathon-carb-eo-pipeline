@@ -22,7 +22,10 @@ def test_requeues_open_matching_reviews():
     assert all(w["status"] == "pending" for w in work_items)
     run_ids = {w["run_id"] for w in work_items}
     assert len(run_ids) == 1
-    assert repo.runs[next(iter(run_ids))]["trigger"] == "requeue-v2"
+    run_id = next(iter(run_ids))
+    assert repo.runs[run_id]["trigger"] == "requeue-v2"
+    assert repo.runs[run_id]["status"] == "ok"
+    assert repo.runs[run_id]["requeued"] == 2
 
 
 def test_skips_non_matching_reason_and_closed_reviews():
@@ -37,3 +40,6 @@ def test_skips_non_matching_reason_and_closed_reviews():
     assert repo.work_items == {}
     assert "D-3-3" not in repo.eos
     assert "D-4-4" not in repo.eos
+    run = next(iter(repo.runs.values()))
+    assert run["status"] == "ok"
+    assert run["requeued"] == 0

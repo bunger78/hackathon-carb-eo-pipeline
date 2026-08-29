@@ -73,6 +73,7 @@ def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> str:
               "low_confidence" if ex.confidence < settings.confidence_threshold else
               "legacy_divergence" if div > 0.4 else "qa_sample")
     uri = repo.get_eo(eo)["gcs_uri"]
+    repo.add_event(run_id, {"agent": "auditor", "eo": eo, "action": "critiquing"})
     res = llm.extract_pdf(uri, CRITIC_PROMPT + json.dumps(ex.model_dump()), CritiqueVerdict)
     usd = cost_usd(res.tok_in, res.tok_out)
     budget.add(usd)

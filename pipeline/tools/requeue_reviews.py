@@ -21,6 +21,7 @@ def requeue_open_reviews(repo, reasons) -> int:
         repo.create_work_item(eo, run_id)
         print(f"Requeued {eo} (review {review['id']}, reason={review['reason']})")
         count += 1
+    repo.finish_run(run_id, {"status": "ok", "requeued": count})
     print(f"\nTotal requeued: {count}")
     return count
 

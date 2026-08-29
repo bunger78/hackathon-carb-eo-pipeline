@@ -21,10 +21,12 @@ def _attempt(fn) -> tuple[Extraction, "LLMResult"] | None:
 
 def extract(llm, gcs, repo, budget, eo: str, run_id) -> Extraction:
     uri = repo.get_eo(eo)["gcs_uri"]
-    got = _attempt(lambda: llm.extract_pdf(uri, EXTRACTOR_PROMPT, Extraction))
     step = 1
+    repo.add_event(run_id, {"agent": "extractor", "eo": eo, "action": "reading", "rung": step})
+    got = _attempt(lambda: llm.extract_pdf(uri, EXTRACTOR_PROMPT, Extraction))
     if got is None:
         step = 2
+        repo.add_event(run_id, {"agent": "extractor", "eo": eo, "action": "reading", "rung": step})
         images = gcs.upload_page_images(eo, render_pdf_to_images(gcs.download(uri)))
         got = _attempt(lambda: llm.extract_images(images, EXTRACTOR_PROMPT, Extraction))
     if got is None:

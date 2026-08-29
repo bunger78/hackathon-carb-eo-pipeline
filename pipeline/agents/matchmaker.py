@@ -36,6 +36,7 @@ def run_matching(llm, repo, budget, eo, ex, index, run_id) -> dict:
                    "candidates": {str(i): [{"id": c["id"], "year": c["year"], "make": c["make"],
                                             "model": c["model"], "displacement_l": c.get("displacement_l")}
                                            for c in cands] for i, _, cands in unresolved}}
+        repo.add_event(run_id, {"agent": "matchmaker", "eo": eo, "action": "resolving", "count": len(unresolved)})
         res = llm.generate_json(RESOLVER_PROMPT + json.dumps(payload), ResolverBatch)
         usd = cost_usd(res.tok_in, res.tok_out)
         budget.add(usd)
