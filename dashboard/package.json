@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "gen:facets": "node scripts/generate-facets.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^9",
