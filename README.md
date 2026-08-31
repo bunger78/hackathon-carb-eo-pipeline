@@ -14,46 +14,9 @@ In California, modifying a car's emissions-related systems is illegal unless eve
 
 Daily runs execute a real [ADK 2](https://google.github.io/adk-docs/) graph workflow (`google.adk.workflow.Workflow`). The diagram below is **generated from the running code** (`py -3 tools/generate_diagram.py` introspects the Workflow object; a test asserts every node matches):
 
-```mermaid
-flowchart TD
-  %% AUTO-GENERATED -- do not hand-edit the ADK2 subgraph below.
-  %% Regenerate: $env:PYTHONPATH='.'; py -3 tools/generate_diagram.py
+![CarbLegal architecture](docs/architecture.svg)
 
-  scheduler["Cloud Scheduler (carb-daily)"]
-  api["Cloud Run carb-api (/run)"]
-  firestore[("Firestore (eos, work_items, runs)")]
-  gcs[("GCS bucket (pdfs/)")]
-  gemini["Gemini 3.7 Flash"]
-  vertex["Vertex AI batch job"]
-  batchfill["batchfill --ingest"]
-  dash["carb-dash"]
-
-  scheduler --> api
-  api --> wf_scout
-  wf_scout --> firestore
-  wf_scout --> gcs
-  wf_process -.-> gemini
-  wf_summarize --> firestore
-  gcs --> vertex
-  vertex --> batchfill
-  batchfill --> firestore
-  dash --> firestore
-  dash -- "admin" --> api
-
-  subgraph ADK2["ADK2 workflow (google.adk.workflow.Workflow)"]
-    wf_scout["scout"]
-    wf_heal["heal"]
-    wf_claim["claim"]
-    wf_process["process"]
-    wf_summarize["summarize"]
-    wf_scout --> wf_heal
-    wf_heal --> wf_claim
-    wf_claim -- "True" --> wf_process
-    wf_claim -- "False" --> wf_summarize
-    wf_process -- "loop" --> wf_claim
-    wf_process -- "budget" --> wf_summarize
-  end
-```
+*Decision flow of every run — ADK 2 node names tagged; topology auto-generated in docs/architecture.mmd and verified by test. Live version: /architecture on the dashboard.*
 
 **Four agents, one graph.** A **Scout** (function node) diffs CARB's live registry against known EOs — zero LLM calls on a quiet day. A **healer** node requeues yesterday's transiently-failed work (deterministic error classification; three strikes parks an item for a human). The **process** node runs the reasoning pipeline per EO: an **Extractor** reads the PDF with Gemini 3.7 Flash (native-PDF rung, image-render fallback rung, truncation detection via finish_reason); an **Auditor** critiques the extraction — and a **deterministic gate** (plain code, not AI) makes every final pass-or-escalate call using fixed rules: schema validation, EO-number format, required fields, a confidence threshold (0.75), and a row-count tripwire against the legacy baseline; a **Matchmaker** joins fitment rows to ~25,000 vehicles, with Gemini resolving only genuinely ambiguous applications (hallucinated IDs are filtered against the candidate set). Model output is never executed as instructions, only validated as data.
 
