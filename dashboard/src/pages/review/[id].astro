@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { eoPdfUrl, reviewDetail } from '../../lib/db';
 import { formatTimestamp } from '../../lib/format';
-import ReviewActions from '../../components/ReviewActions';
+import ReviewEditor from '../../components/ReviewEditor';
 
 const { id } = Astro.params;
 const review = id ? await reviewDetail(id) : null;
@@ -118,7 +118,7 @@ const payloadEntries: [string, unknown][] =
         {review.status !== 'open' ? (
           <p class="section-note">This review was already resolved ({review.status}).</p>
         ) : (
-          <ReviewActions client:load reviewId={id as string} initialStatus={review.status} />
+          <ReviewEditor client:load reviewId={id as string} initialStatus={review.status} payload={review.payload} />
         )}
       </>
     )

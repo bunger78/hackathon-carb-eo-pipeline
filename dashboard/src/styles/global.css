@@ -797,6 +797,105 @@ a {
   margin: 0;
 }
 
+/* --- review editor: structured corrections form (D-review-editor) ---
+   Replaces the raw-JSON textarea as the default review-resolve UI; the old
+   flow survives as the "Advanced: raw JSON" <details> (.resolved-section,
+   styled above) inside ReviewEditor.tsx. */
+
+.review-editor {
+  margin: 1rem 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.review-editor-scalars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+}
+
+.review-editor-field-wide {
+  grid-column: 1 / -1;
+}
+
+.review-editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.review-editor-field input,
+.review-editor-field select,
+.review-editor-field textarea {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.input-invalid {
+  border-color: var(--status-failed) !important;
+}
+
+.review-editor-error-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--status-failed);
+  font-size: 0.85rem;
+}
+
+.fitment-table td {
+  white-space: normal;
+  vertical-align: top;
+}
+
+.fitment-table input,
+.fitment-table select,
+.fitment-table textarea {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 100%;
+  min-width: 6rem;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.fitment-table textarea {
+  resize: vertical;
+  min-height: 1.8rem;
+}
+
+.fitment-row-delete {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--status-failed);
+  color: var(--status-failed);
+  background: var(--surface);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.fitment-add-row {
+  margin-top: 0.6rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
 /* --- vehicle picker (D7): cascading year/make/model/trim/engine selects --- */
 
 .vehicle-picker {
