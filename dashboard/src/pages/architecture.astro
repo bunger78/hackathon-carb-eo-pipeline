@@ -1,0 +1,257 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="CarbLegal — Architecture">
+  <h1>Architecture</h1>
+  <p class="section-note">
+    Daily batch pipeline: an ADK 2 workflow graph drives extraction against Gemini, a Vertex batch job backfills
+    historical PDFs, and everything lands in one Firestore that this dashboard reads.
+  </p>
+
+  <div class="arch-viewport">
+    <svg
+      viewBox="0 0 1600 900"
+      width="100%"
+      height="auto"
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="CarbLegal architecture: Cloud Scheduler triggers carb-api, which runs the ADK 2 workflow graph (scout, heal, claim, process, summarize) against Gemini, alongside a Vertex batch backfill path, all persisting to Firestore and GCS, read by carb-dash."
+    >
+      <title>CarbLegal architecture diagram</title>
+      <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+          <feMerge>
+            <feMergeNode in="blur"></feMergeNode>
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)"></path>
+        </marker>
+        <marker id="arrow-violet" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--status-matching)"></path>
+        </marker>
+        <marker id="arrow-muted" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)" opacity="0.6"></path>
+        </marker>
+      </defs>
+
+      <!-- ================= BAND BACKGROUNDS ================= -->
+      <rect x="0" y="0" width="1600" height="110" fill="var(--surface)" opacity="0.4"></rect>
+      <rect x="0" y="110" width="1600" height="350" fill="var(--bg)"></rect>
+      <rect x="0" y="460" width="1600" height="170" fill="var(--surface)" opacity="0.4"></rect>
+      <rect x="0" y="630" width="1600" height="270" fill="var(--bg)"></rect>
+      <line x1="0" y1="110" x2="1600" y2="110" stroke="var(--border)" stroke-width="1"></line>
+      <line x1="0" y1="460" x2="1600" y2="460" stroke="var(--border)" stroke-width="1"></line>
+      <line x1="0" y1="630" x2="1600" y2="630" stroke="var(--border)" stroke-width="1"></line>
+
+      <!-- ================= BAND LABELS ================= -->
+      <text x="60" y="32" class="band-label">TRIGGER</text>
+      <text x="60" y="132" class="band-label">ORCHESTRATION</text>
+      <text x="60" y="482" class="band-label">PERSISTENCE</text>
+      <text x="60" y="652" class="band-label">SURFACE</text>
+
+      <!-- ================= ORCHESTRATION FRAME ================= -->
+      <rect x="40" y="142" width="1000" height="290" rx="16" fill="var(--surface)" opacity="0.4" stroke="var(--border-strong)" stroke-width="1.5"></rect>
+      <text x="540" y="170" text-anchor="middle" class="frame-label">ADK 2 GRAPH — GOOGLE.ADK.WORKFLOW</text>
+
+      <!-- ================= BATCH LANE BOX (right side, subtle) ================= -->
+      <rect x="1050" y="155" width="510" height="345" rx="14" fill="var(--surface-2)" opacity="0.25" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"></rect>
+      <text x="1075" y="182" class="band-label" opacity="0.75">BATCH PATH</text>
+
+      <!-- ================= EDGES (drawn under nodes) ================= -->
+
+      <!-- trigger -->
+      <line x1="350" y1="72" x2="405" y2="72" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <path d="M540,96 L540,115 L155,115 L155,215" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+
+      <!-- main row -->
+      <line x1="230" y1="245" x2="265" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="420" y1="245" x2="455" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="610" y1="245" x2="645" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+
+      <!-- claim/process route arcs -->
+      <path d="M680,220 Q605,185 588,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M770,220 Q845,185 862,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M535,270 Q725,320 912,270" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+
+      <!-- process -> gemini (dashed) -->
+      <line x1="725" y1="270" x2="725" y2="347" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
+
+      <!-- down into persistence -->
+      <line x1="155" y1="270" x2="155" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="800" y1="270" x2="800" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="915" y1="270" x2="915" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <path d="M155,270 L155,445 L1290,445 L1290,495" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+
+      <!-- batch lane, subtle -->
+      <line x1="1290" y1="495" x2="1290" y2="383" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
+      <line x1="1290" y1="330" x2="1290" y2="263" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
+      <path d="M1215,234 L1060,234 L1060,470 L1015,470 L1015,495" fill="none" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></path>
+
+      <!-- surface -->
+      <line x1="555" y1="590" x2="555" y2="695" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <path d="M680,730 L1580,730 L1580,72 L675,72" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"></path>
+
+      <!-- ================= EDGE LABELS (halo text, on top of lines) ================= -->
+      <text x="627" y="233" text-anchor="middle" class="edge-label">item</text>
+      <text x="633" y="203" text-anchor="middle" class="edge-label">loop</text>
+      <text x="817" y="203" text-anchor="middle" class="edge-label">budget</text>
+      <text x="725" y="303" text-anchor="middle" class="edge-label">empty / time-cap</text>
+      <text x="1130" y="722" text-anchor="middle" class="edge-label">admin</text>
+      <text x="572" y="648" text-anchor="start" class="edge-label">reads</text>
+
+      <!-- ================= TRIGGER NODES ================= -->
+      <g filter="url(#glow)">
+        <rect x="90" y="48" width="260" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+        <text x="220" y="68" text-anchor="middle" class="node-title" fill="var(--text)">Cloud Scheduler</text>
+        <text x="220" y="86" text-anchor="middle" class="node-sub">6:00 AM daily</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="410" y="48" width="260" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+        <text x="540" y="68" text-anchor="middle" class="node-title" fill="var(--text)">Cloud Run carb-api</text>
+        <text x="540" y="86" text-anchor="middle" class="node-sub">/run</text>
+      </g>
+
+      <!-- ================= ADK2 MAIN ROW ================= -->
+      <g filter="url(#glow)">
+        <rect x="80" y="220" width="150" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
+        <text x="155" y="239" text-anchor="middle" class="node-title" fill="var(--status-discovered)">scout</text>
+        <text x="155" y="259" text-anchor="middle" class="node-sub">discover EOs</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="265" y="220" width="150" height="50" rx="10" fill="var(--surface-2)" stroke="var(--agent-healer)" stroke-width="1"></rect>
+        <text x="340" y="239" text-anchor="middle" class="node-title" fill="var(--agent-healer)">heal</text>
+        <text x="340" y="259" text-anchor="middle" class="node-sub">requeue failures</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="455" y="220" width="155" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
+        <text x="532" y="239" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">claim</text>
+        <text x="532" y="259" text-anchor="middle" class="node-sub">next work item</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="645" y="220" width="160" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1"></rect>
+        <text x="725" y="239" text-anchor="middle" class="node-title" fill="var(--status-matching)">process</text>
+        <text x="725" y="259" text-anchor="middle" class="node-sub">extract · audit · match</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="840" y="220" width="150" height="50" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
+        <text x="915" y="239" text-anchor="middle" class="node-title" fill="var(--accent)">summarize</text>
+        <text x="915" y="259" text-anchor="middle" class="node-sub">finish run</text>
+      </g>
+
+      <!-- ================= GEMINI CHIP (violet glow) ================= -->
+      <g filter="url(#glow)">
+        <rect x="630" y="347" width="190" height="48" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="725" y="367" text-anchor="middle" class="node-title" fill="var(--status-matching)">Gemini 3.7 Flash</text>
+        <text x="725" y="385" text-anchor="middle" class="node-sub">structured extraction</text>
+      </g>
+
+      <!-- ================= BATCH LANE NODES (subtle) ================= -->
+      <g opacity="0.85">
+        <rect x="1215" y="330" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+        <text x="1290" y="350" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">Vertex AI batch job</text>
+        <text x="1290" y="367" text-anchor="middle" class="node-sub">batch inference</text>
+      </g>
+      <g opacity="0.85">
+        <rect x="1215" y="210" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+        <text x="1290" y="230" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">batchfill --ingest</text>
+        <text x="1290" y="247" text-anchor="middle" class="node-sub">backfill CLI</text>
+      </g>
+
+      <!-- ================= PERSISTENCE CYLINDERS ================= -->
+      <!-- Firestore -->
+      <ellipse cx="555" cy="574" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <rect x="90" y="516" width="930" height="58" fill="var(--surface-2)"></rect>
+      <line x1="90" y1="516" x2="90" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
+      <line x1="1020" y1="516" x2="1020" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
+      <ellipse cx="555" cy="516" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <text x="555" y="540" text-anchor="middle" class="node-title" fill="var(--text)">Firestore</text>
+      <text x="555" y="559" text-anchor="middle" class="node-sub">eos · work_items · runs · matches · review_queue</text>
+
+      <!-- GCS -->
+      <ellipse cx="1290" cy="574" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <rect x="1190" y="516" width="200" height="58" fill="var(--surface-2)"></rect>
+      <line x1="1190" y1="516" x2="1190" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
+      <line x1="1390" y1="516" x2="1390" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
+      <ellipse cx="1290" cy="516" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <text x="1290" y="540" text-anchor="middle" class="node-title" fill="var(--text)">GCS bucket</text>
+      <text x="1290" y="559" text-anchor="middle" class="node-sub">pdfs/</text>
+
+      <!-- ================= SURFACE ================= -->
+      <g filter="url(#glow)">
+        <rect x="430" y="700" width="250" height="60" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
+        <text x="555" y="724" text-anchor="middle" class="node-title" fill="var(--accent)">carb-dash</text>
+        <text x="555" y="744" text-anchor="middle" class="node-sub">reads Firestore live</text>
+      </g>
+    </svg>
+  </div>
+
+  <p class="section-note">Topology mirrors pipeline/workflow_graph.py — verified by test.</p>
+</Base>
+
+<style>
+  .arch-viewport {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding: 1.5rem clamp(1rem, 4vw, 4rem) 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .arch-viewport svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .arch-viewport :global(.band-label) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    fill: var(--text-muted);
+  }
+
+  .arch-viewport :global(.frame-label) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    fill: var(--text-muted);
+  }
+
+  .arch-viewport :global(.node-title) {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .arch-viewport :global(.node-title-sm) {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .arch-viewport :global(.node-sub) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    fill: var(--text-muted);
+  }
+
+  .arch-viewport :global(.edge-label) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--text-muted);
+    stroke: var(--bg);
+    stroke-width: 6;
+    paint-order: stroke;
+    stroke-linejoin: round;
+  }
+</style>
