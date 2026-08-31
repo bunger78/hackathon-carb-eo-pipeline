@@ -139,3 +139,31 @@ def test_trim_variant_rows_are_not_duplicates():
              "part_numbers": ["AP3-SUB-007"], "cylinders": None},
         ]})
     assert "duplicate_fitment" not in deterministic_issues(ex, {"subaru"})
+
+
+def test_refined_rules_accept_real_world_shapes():
+    from agents.auditor import deterministic_issues, _pn_ok
+    from schemas.extraction import Extraction
+    assert _pn_ok("300-221 MXP") and _pn_ok("ST120001 (Gray)")
+    assert not _pn_ok("ab") and not _pn_ok("x" * 60)
+    ex = Extraction.model_validate({
+        "eo_number": "D-800-1", "manufacturer": "X", "device_name": "Y",
+        "category": "exhaust", "confidence": 1.0, "part_numbers": ["300-221 MXP"],
+        "fitment": [
+            {"model": "RZR", "make": "Polaris", "year_start": 2022, "year_end": 2024,
+             "displacement_l": None, "induction": None, "trim_note": None,
+             "part_numbers": ["300-221 MXP"], "cylinders": None},
+            {"model": "Golf", "make": "VW", "year_start": 2020, "year_end": 2022,
+             "displacement_l": 2.0, "induction": "TURBO", "trim_note": None,
+             "part_numbers": ["A1"], "cylinders": 4},
+            {"model": "Golf", "make": "VW", "year_start": 2020, "year_end": 2022,
+             "displacement_l": 2.0, "induction": "TURBO", "trim_note": None,
+             "part_numbers": ["A2 200"], "cylinders": 4},
+        ]})
+    issues = deterministic_issues(ex, {"volkswagen"})
+    assert "unknown_make" not in issues
+    assert "duplicate_fitment" not in issues
+    ex2 = ex.model_copy(update={"fitment": [ex.fitment[1], ex.fitment[1]]})
+    assert "duplicate_fitment" in deterministic_issues(ex2, {"volkswagen"})
+    ex3 = ex.model_copy(update={"fitment": [ex.fitment[0].model_copy(update={"make": "Zorblax"})]})
+    assert "unknown_make" in deterministic_issues(ex3, {"volkswagen"})

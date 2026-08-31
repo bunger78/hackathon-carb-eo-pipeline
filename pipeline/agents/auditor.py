@@ -7,8 +7,31 @@ from config import settings
 
 _EO_RE = re.compile(r"^[A-Z0-9]{1,3}(-[A-Z0-9]{1,6}){1,3}$")
 
+# The vehicle reference table covers passenger cars/trucks. CARB also exempts
+# parts for powersports vehicles -- real makes that legitimately match zero
+# table rows and must not read as hallucinations.
+_POWERSPORTS_MAKES = {
+    "harley-davidson", "polaris", "can-am", "yamaha", "kawasaki", "suzuki",
+    "ducati", "triumph", "aprilia", "victory", "indian", "ktm", "husqvarna",
+    "arctic cat", "sea-doo", "ski-doo", "moto guzzi", "royal enfield",
+}
+# Naming variants of makes the table DOES know (the ported legacy
+# normalization is not yet wired into the matcher; this is its minimal core).
+_MAKE_ALIASES = {
+    "vw": "volkswagen", "chevy": "chevrolet", "mercedes": "mercedes-benz",
+    "mercedes benz": "mercedes-benz", "gm": "chevrolet", "landrover": "land rover",
+    "mini cooper": "mini", "infinity": "infiniti", "roush": "ford",
+}
+
+def _make_known(make: str, known_makes: set[str]) -> bool:
+    m = make.casefold().strip()
+    return (m in known_makes or m in _POWERSPORTS_MAKES
+            or _MAKE_ALIASES.get(m, "") in known_makes)
+
 def _pn_ok(pn: str) -> bool:
-    return " " not in pn and len(pn) >= 3 and any(c.isdigit() for c in pn)
+    # Real printed part numbers carry spaces and annotations ("300-221 MXP",
+    # "ST120001 (Gray)") -- require substance, not a spaceless format.
+    return 3 <= len(pn) <= 48 and any(c.isdigit() for c in pn)
 
 def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
     issues = []
@@ -22,12 +45,13 @@ def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
         issues.append("bad_displacement")
     if any(not _pn_ok(p) for p in ex.part_numbers):
         issues.append("bad_part_number")
-    if any(r.make and r.make.casefold() not in known_makes for r in ex.fitment):
+    if any(r.make and not _make_known(r.make, known_makes) for r in ex.fitment):
         issues.append("unknown_make")
-    # Rows differing only by trim/induction are legitimate variants (base vs
-    # Limited, NA vs turbo); the copy-paste-duplicate signature is identity
-    # across ALL semantic fields.
-    keys = [(r.model, r.year_start, r.year_end, r.displacement_l, r.induction, r.trim_note)
+    # Rows differing only by trim/induction/part-number set are legitimate
+    # variants (base vs Limited, NA vs turbo, one row per SKU); the
+    # copy-paste-duplicate signature is identity across ALL semantic fields.
+    keys = [(r.model, r.year_start, r.year_end, r.displacement_l, r.induction,
+             r.trim_note, tuple(sorted(r.part_numbers or [])))
             for r in ex.fitment]
     if len(keys) != len(set(keys)):
         issues.append("duplicate_fitment")
