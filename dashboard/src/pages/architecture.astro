@@ -82,18 +82,23 @@ import Base from '../layouts/Base.astro';
       <path d="M528,270 Q664,312 820,270" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
 
       <!-- process (extract->audit->match) internal chain -->
-      <line x1="345" y1="395" x2="370" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="630" y1="395" x2="655" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="270" y1="395" x2="290" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="475" y1="395" x2="495" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
-      <!-- extract/audit/match -> gemini (dashed) -->
-      <line x1="215" y1="420" x2="460" y2="470" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
-      <line x1="500" y1="420" x2="500" y2="470" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
-      <line x1="785" y1="420" x2="540" y2="470" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
+      <!-- extract/audit/match -> gemini (dashed), each its own per-call edge, gemini on the right so none of these cross the escalate path -->
+      <path d="M178,420 L178,470 L765,470" fill="none" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></path>
+      <path d="M383,420 L383,486 L765,486" fill="none" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></path>
+      <path d="M588,420 L588,502 L765,502" fill="none" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></path>
+      <text x="220" y="464" text-anchor="middle" class="edge-label">read</text>
+      <text x="425" y="480" text-anchor="middle" class="edge-label">critique</text>
+      <text x="630" y="496" text-anchor="middle" class="edge-label">resolve</text>
 
-      <!-- human review loop: audit "escalate" -> review queue -> human -> "resolve/corrections" -> match -->
-      <path d="M420,420 Q320,490 250,555" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
-      <line x1="330" y1="579" x2="650" y2="579" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></line>
-      <path d="M770,555 Q790,490 785,420" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
+      <!-- human review loop: audit's bottom edge "escalate" -> review queue (bottom-left) -> human (bottom-right) -> "approve/corrections" -> match's bottom-left corner, routed under the content to clear the gemini "resolve" edge -->
+      <path d="M350,420 Q260,490 172,555" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
+      <line x1="260" y1="579" x2="520" y2="579" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></line>
+      <path d="M535,603 L535,612 L510,612 L510,420" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
+      <text x="280" y="478" text-anchor="middle" class="edge-label">escalate</text>
+      <text x="495" y="516" text-anchor="end" class="edge-label">approve / corrections</text>
 
       <!-- down into persistence -->
       <line x1="200" y1="642" x2="200" y2="705" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
@@ -110,12 +115,6 @@ import Base from '../layouts/Base.astro';
       <path d="M680,920 L1580,920 L1580,72 L675,72" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"></path>
 
       <!-- ================= EDGE LABELS (halo text, on top of lines) ================= -->
-      <text x="591" y="233" text-anchor="middle" class="edge-label">item</text>
-      <text x="591" y="203" text-anchor="middle" class="edge-label">loop</text>
-      <text x="737" y="203" text-anchor="middle" class="edge-label">budget</text>
-      <text x="664" y="295" text-anchor="middle" class="edge-label">empty · time-cap</text>
-      <text x="320" y="475" text-anchor="middle" class="edge-label">escalate</text>
-      <text x="800" y="490" text-anchor="start" class="edge-label">resolve / corrections</text>
       <text x="1130" y="912" text-anchor="middle" class="edge-label">admin</text>
       <text x="572" y="825" text-anchor="start" class="edge-label">reads</text>
 
@@ -163,6 +162,16 @@ import Base from '../layouts/Base.astro';
         <text x="820" y="259" text-anchor="middle" class="node-sub">finish run</text>
       </g>
 
+      <!-- ================= TOP ROW ROUTE LABELS (dark chip behind each, on its arrow's midpoint, drawn after the nodes so it's never clipped) ================= -->
+      <rect x="567" y="236" width="48" height="18" rx="4" fill="var(--bg)"></rect>
+      <text x="591" y="249" text-anchor="middle" class="edge-label">item</text>
+      <rect x="567" y="192" width="48" height="18" rx="4" fill="var(--bg)"></rect>
+      <text x="591" y="205" text-anchor="middle" class="edge-label">loop</text>
+      <rect x="707" y="192" width="60" height="18" rx="4" fill="var(--bg)"></rect>
+      <text x="737" y="205" text-anchor="middle" class="edge-label">budget</text>
+      <rect x="596" y="283" width="136" height="18" rx="4" fill="var(--bg)"></rect>
+      <text x="664" y="296" text-anchor="middle" class="edge-label">empty · time-cap</text>
+
       <!-- ================= HEALER CAPTION ================= -->
       <text x="329" y="286" text-anchor="middle" class="caption">transient -&gt; requeue · corrupt source -&gt; re-download · 3 strikes -&gt; human</text>
 
@@ -171,38 +180,38 @@ import Base from '../layouts/Base.astro';
       <text x="500" y="350" text-anchor="middle" class="frame-label">PROCESS (PER EO)</text>
 
       <g filter="url(#glow)">
-        <rect x="85" y="370" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
-        <text x="215" y="389" text-anchor="middle" class="node-title" fill="var(--status-discovered)">extract</text>
-        <text x="215" y="409" text-anchor="middle" class="node-sub">ladder: native PDF -&gt; image render</text>
+        <rect x="85" y="370" width="185" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
+        <text x="178" y="389" text-anchor="middle" class="node-title" fill="var(--status-discovered)">extract</text>
+        <text x="178" y="409" text-anchor="middle" class="node-sub">PDF -&gt; image ladder</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="370" y="370" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
-        <text x="500" y="389" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">audit</text>
-        <text x="500" y="409" text-anchor="middle" class="node-sub">gate + selective critic</text>
+        <rect x="290" y="370" width="185" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
+        <text x="383" y="389" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">audit</text>
+        <text x="383" y="409" text-anchor="middle" class="node-sub">gate + critic</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="655" y="370" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-complete)" stroke-width="1"></rect>
-        <text x="785" y="389" text-anchor="middle" class="node-title" fill="var(--status-complete)">match</text>
-        <text x="785" y="409" text-anchor="middle" class="node-sub">index + Gemini resolver</text>
+        <rect x="495" y="370" width="185" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-complete)" stroke-width="1"></rect>
+        <text x="588" y="389" text-anchor="middle" class="node-title" fill="var(--status-complete)">match</text>
+        <text x="588" y="409" text-anchor="middle" class="node-sub">index + resolver</text>
       </g>
 
-      <!-- ================= GEMINI CHIP (violet glow) ================= -->
+      <!-- ================= GEMINI CHIP (violet glow) — right side of the process frame, vertically centered, one edge per call ================= -->
       <g filter="url(#glow)">
-        <rect x="400" y="470" width="200" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
-        <text x="500" y="490" text-anchor="middle" class="node-title" fill="var(--status-matching)">Gemini 3.7 Flash</text>
-        <text x="500" y="508" text-anchor="middle" class="node-sub">structured extraction</text>
+        <rect x="765" y="451" width="170" height="70" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="850" y="475" text-anchor="middle" class="node-title" fill="var(--status-matching)">Gemini 3.7 Flash</text>
+        <text x="850" y="497" text-anchor="middle" class="node-sub">reasoning calls</text>
       </g>
 
       <!-- ================= HUMAN REVIEW LOOP ================= -->
       <g filter="url(#glow)">
-        <rect x="170" y="555" width="160" height="48" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
-        <text x="250" y="574" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">review queue</text>
-        <text x="250" y="592" text-anchor="middle" class="node-sub">audit escalations</text>
+        <rect x="85" y="555" width="175" height="48" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
+        <text x="172" y="574" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">review queue</text>
+        <text x="172" y="592" text-anchor="middle" class="node-sub">audit escalations</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="650" y="555" width="140" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
-        <text x="720" y="574" text-anchor="middle" class="node-title" fill="var(--text)">human</text>
-        <text x="720" y="592" text-anchor="middle" class="node-sub">manual review</text>
+        <rect x="520" y="555" width="160" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+        <text x="600" y="574" text-anchor="middle" class="node-title" fill="var(--text)">human</text>
+        <text x="600" y="592" text-anchor="middle" class="node-sub">manual review</text>
       </g>
 
       <!-- ================= BATCH LANE NODES (subtle) ================= -->
