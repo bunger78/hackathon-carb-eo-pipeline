@@ -21,17 +21,43 @@ _MAKE_ALIASES = {
     "vw": "volkswagen", "chevy": "chevrolet", "mercedes": "mercedes-benz",
     "mercedes benz": "mercedes-benz", "gm": "chevrolet", "landrover": "land rover",
     "mini cooper": "mini", "infinity": "infiniti", "roush": "ford",
+    "daimlerchrysler": "chrysler", "harley": "harley-davidson",
+    "cummins": "dodge",  # Cummins EOs apply to Dodge/Ram diesel applications
 }
 
+def _norm_make(s: str) -> str:
+    # "Harley Davidson" / "HARLEY-DAVIDSON" / "harley  davidson" -> "harley davidson"
+    return re.sub(r"[-\s]+", " ", s.casefold().strip())
+
 def _make_known(make: str, known_makes: set[str]) -> bool:
-    m = make.casefold().strip()
-    return (m in known_makes or m in _POWERSPORTS_MAKES
-            or _MAKE_ALIASES.get(m, "") in known_makes)
+    m = _norm_make(make)
+    norm_known = {_norm_make(k) for k in known_makes}
+    if m in norm_known or m in {_norm_make(k) for k in _POWERSPORTS_MAKES}:
+        return True
+    alias = _MAKE_ALIASES.get(m) or _MAKE_ALIASES.get(m.replace(" ", ""))
+    return bool(alias) and _norm_make(alias) in norm_known
 
 def _pn_ok(pn: str) -> bool:
-    # Real printed part numbers carry spaces and annotations ("300-221 MXP",
-    # "ST120001 (Gray)") -- require substance, not a spaceless format.
-    return 3 <= len(pn) <= 48 and any(c.isdigit() for c in pn)
+    # Real printed part numbers include spaced annotations ("300-221 MXP"),
+    # digit-less kit names ("GO Kit", "ORA"), and 2-char codes ("3C") -- reject
+    # only template/placeholder junk, not unfamiliar formats.
+    s = pn.strip()
+    return 2 <= len(s) <= 48 and not any(c in s for c in "<>_{}")
+
+def dedupe_exact_rows(ex: Extraction) -> Extraction:
+    """Drop fitment rows identical in EVERY field -- page-break table repeats
+    faithfully extracted twice. Lossless by construction."""
+    seen, rows = set(), []
+    for r in ex.fitment:
+        key = (r.model, r.make, r.year_start, r.year_end, r.displacement_l,
+               r.induction, r.cylinders, r.trim_note, tuple(sorted(r.part_numbers or [])))
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(r)
+    if len(rows) == len(ex.fitment):
+        return ex
+    return ex.model_copy(update={"fitment": rows})
 
 def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
     issues = []
@@ -41,7 +67,8 @@ def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
     if any(y < 1950 or y > 2035 for y in years) or any(
             r.year_start and r.year_end and r.year_start > r.year_end for r in ex.fitment):
         issues.append("bad_year")
-    if any(r.displacement_l is not None and not 0.5 <= r.displacement_l <= 9.0 for r in ex.fitment):
+    # Floor covers 49cc scooters (0.049L); ceiling covers big diesels.
+    if any(r.displacement_l is not None and not 0.04 <= r.displacement_l <= 9.0 for r in ex.fitment):
         issues.append("bad_displacement")
     if any(not _pn_ok(p) for p in ex.part_numbers):
         issues.append("bad_part_number")
@@ -105,6 +132,12 @@ def _update_extraction_payload(repo, eo, ex):
 
 def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> tuple[str, Extraction]:
     rand = random.random() if rand is None else rand
+    deduped = dedupe_exact_rows(ex)
+    if deduped is not ex:
+        _update_extraction_payload(repo, eo, deduped)
+        repo.add_event(run_id, {"agent": "auditor", "eo": eo, "action": "deduped_rows",
+                                "removed": len(ex.fitment) - len(deduped.fitment)})
+        ex = deduped
     issues = deterministic_issues(ex, known_makes)
     div = legacy_divergence(ex, repo.get_legacy(eo))
     if not needs_critique(issues, div, ex.confidence, settings.critique_qa_rate, rand):

@@ -68,7 +68,7 @@ def test_accept_verdict_cannot_override_deterministic_issues():
     repo = FakeRepo(); run = repo.create_run("t")
     repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
     llm = FakeLLM([LLMResult({"verdict": "accept", "reasons": ["looks fine to me"]}, 50, 20)])
-    ex = _ex(part_numbers=["A B"])  # bad_part_number: a real deterministic issue
+    ex = _ex(part_numbers=["BAD_<TEMPLATE>"])  # bad_part_number: template junk
     assert "bad_part_number" in deterministic_issues(ex, MAKES)
     out, audited = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
@@ -145,7 +145,7 @@ def test_refined_rules_accept_real_world_shapes():
     from agents.auditor import deterministic_issues, _pn_ok
     from schemas.extraction import Extraction
     assert _pn_ok("300-221 MXP") and _pn_ok("ST120001 (Gray)")
-    assert not _pn_ok("ab") and not _pn_ok("x" * 60)
+    assert not _pn_ok("A") and not _pn_ok("x" * 60)
     ex = Extraction.model_validate({
         "eo_number": "D-800-1", "manufacturer": "X", "device_name": "Y",
         "category": "exhaust", "confidence": 1.0, "part_numbers": ["300-221 MXP"],
@@ -167,3 +167,27 @@ def test_refined_rules_accept_real_world_shapes():
     assert "duplicate_fitment" in deterministic_issues(ex2, {"volkswagen"})
     ex3 = ex.model_copy(update={"fitment": [ex.fitment[0].model_copy(update={"make": "Zorblax"})]})
     assert "unknown_make" in deterministic_issues(ex3, {"volkswagen"})
+
+
+def test_tail_rule_refinements():
+    from agents.auditor import deterministic_issues, _pn_ok, _make_known, dedupe_exact_rows
+    from schemas.extraction import Extraction
+    # digit-less real kit names pass; template junk fails
+    assert _pn_ok("GO Kit") and _pn_ok("ORA") and _pn_ok("3C")
+    assert not _pn_ok("CJF-<filter>-EPF") and not _pn_ok("C_F-__-__") and not _pn_ok("A")
+    # make-name normalization + new aliases
+    assert _make_known("Harley Davidson", set()) and _make_known("HARLEY-DAVIDSON", set())
+    assert _make_known("DaimlerChrysler", {"chrysler"}) and _make_known("Mercedes Benz", {"mercedes benz"})
+    assert not _make_known("Zorblax Industries", {"chrysler"})
+    row = {"model": "Ninja 300", "make": "Kawasaki", "year_start": 2015, "year_end": 2017,
+           "displacement_l": 0.296, "induction": None, "trim_note": None,
+           "part_numbers": ["12-345"], "cylinders": 2}
+    ex = Extraction.model_validate({
+        "eo_number": "D-900-1", "manufacturer": "X", "device_name": "Y",
+        "category": "exhaust", "confidence": 1.0, "part_numbers": ["12-345"],
+        "fitment": [row, dict(row)]})
+    # 0.296L motorcycle passes displacement; exact-dup rows dedupe losslessly
+    deduped = dedupe_exact_rows(ex)
+    assert len(deduped.fitment) == 1
+    assert "bad_displacement" not in deterministic_issues(deduped, set())
+    assert "duplicate_fitment" not in deterministic_issues(deduped, set())
