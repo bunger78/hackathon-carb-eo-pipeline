@@ -35,7 +35,10 @@ def _make_known(make: str, known_makes: set[str]) -> bool:
     if m in norm_known or m in {_norm_make(k) for k in _POWERSPORTS_MAKES}:
         return True
     alias = _MAKE_ALIASES.get(m) or _MAKE_ALIASES.get(m.replace(" ", ""))
-    return bool(alias) and _norm_make(alias) in norm_known
+    if not alias:
+        return False
+    a = _norm_make(alias)
+    return a in norm_known or a in {_norm_make(k) for k in _POWERSPORTS_MAKES}
 
 def _pn_ok(pn: str) -> bool:
     # Real printed part numbers include spaced annotations ("300-221 MXP"),
@@ -67,21 +70,20 @@ def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
     if any(y < 1950 or y > 2035 for y in years) or any(
             r.year_start and r.year_end and r.year_start > r.year_end for r in ex.fitment):
         issues.append("bad_year")
-    # Floor covers 49cc scooters (0.049L); ceiling covers big diesels.
-    if any(r.displacement_l is not None and not 0.04 <= r.displacement_l <= 9.0 for r in ex.fitment):
+    # Floor covers 49cc scooters (0.049L); ceiling covers heavy-duty diesels
+    # (Cat C15 15.8L, Detroit Series 60 14.0L).
+    if any(r.displacement_l is not None and not 0.04 <= r.displacement_l <= 17.0 for r in ex.fitment):
         issues.append("bad_displacement")
     if any(not _pn_ok(p) for p in ex.part_numbers):
         issues.append("bad_part_number")
-    if any(r.make and not _make_known(r.make, known_makes) for r in ex.fitment):
-        issues.append("unknown_make")
-    # Rows differing only by trim/induction/part-number set are legitimate
-    # variants (base vs Limited, NA vs turbo, one row per SKU); the
-    # copy-paste-duplicate signature is identity across ALL semantic fields.
-    keys = [(r.model, r.year_start, r.year_end, r.displacement_l, r.induction,
-             r.trim_note, tuple(sorted(r.part_numbers or [])))
-            for r in ex.fitment]
-    if len(keys) != len(set(keys)):
-        issues.append("duplicate_fitment")
+    # NOTE: an unfamiliar make is NOT a gate issue. CARB regulates everything
+    # with an engine (heavy trucks, motorcycles, industrial); our vehicle table
+    # covers passenger cars. Unmatched makes simply produce zero vehicle
+    # matches -- a coverage fact, not extraction doubt. (_make_known remains
+    # for the matching layer.)
+    # Exact-duplicate rows are removed losslessly by dedupe_exact_rows before
+    # this gate runs, so no separate duplicate check remains: rows that differ
+    # in ANY field (make, cylinders, trim, PN set...) are legitimate variants.
     if ex.category is None:
         issues.append("no_category")
     return issues

@@ -20,7 +20,7 @@ def test_catches_bad_pn_and_make_and_year():
     ex = _ex(part_numbers=["A B", "x"], fitment=[FitmentRow(make="Yugo", model="GV",
              year_start=1849, year_end=2000)])
     issues = deterministic_issues(ex, MAKES)
-    assert "bad_part_number" in issues and "unknown_make" in issues and "bad_year" in issues
+    assert "bad_part_number" in issues and "bad_year" in issues  # unknown_make demoted: coverage fact, not gate issue
 
 def test_eo_number_formats():
     for good in ("D-1", "B-20", "D-269-30", "70-84-A", "IM-007-0002"):
@@ -163,10 +163,12 @@ def test_refined_rules_accept_real_world_shapes():
     issues = deterministic_issues(ex, {"volkswagen"})
     assert "unknown_make" not in issues
     assert "duplicate_fitment" not in issues
+    from agents.auditor import dedupe_exact_rows
     ex2 = ex.model_copy(update={"fitment": [ex.fitment[1], ex.fitment[1]]})
-    assert "duplicate_fitment" in deterministic_issues(ex2, {"volkswagen"})
-    ex3 = ex.model_copy(update={"fitment": [ex.fitment[0].model_copy(update={"make": "Zorblax"})]})
-    assert "unknown_make" in deterministic_issues(ex3, {"volkswagen"})
+    assert len(dedupe_exact_rows(ex2).fitment) == 1  # exact dups removed losslessly pre-gate
+    # unknown_make no longer gates (coverage fact, not extraction doubt);
+    # _make_known remains for the matching layer:
+    assert not _make_known("Zorblax", {"volkswagen"})
 
 
 def test_tail_rule_refinements():
