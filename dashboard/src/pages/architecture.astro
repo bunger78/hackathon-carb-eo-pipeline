@@ -76,10 +76,10 @@ import Base from '../layouts/Base.astro';
       <line x1="452" y1="245" x2="478" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
       <line x1="578" y1="245" x2="604" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
-      <!-- claim/process route arcs -->
-      <path d="M624,220 Q591,185 558,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <path d="M704,220 Q737,185 770,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <path d="M528,270 Q664,312 820,270" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <!-- claim/process route arcs: widened vs. the tight node gap so each visibly clears its label chip on both sides -->
+      <path d="M660,220 Q580,185 500,220" fill="none" stroke="var(--text-muted)" stroke-width="2" opacity="1" marker-end="url(#arrow)"></path>
+      <path d="M710,220 Q755,185 800,220" fill="none" stroke="var(--text-muted)" stroke-width="2" opacity="1" marker-end="url(#arrow)"></path>
+      <path d="M528,270 Q664,312 820,270" fill="none" stroke="var(--text-muted)" stroke-width="2" opacity="1" marker-end="url(#arrow)"></path>
 
       <!-- process (extract->audit->match) internal chain -->
       <line x1="270" y1="395" x2="290" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
@@ -165,10 +165,10 @@ import Base from '../layouts/Base.astro';
       <!-- ================= TOP ROW ROUTE LABELS (dark chip behind each, on its arrow's midpoint, drawn after the nodes so it's never clipped) ================= -->
       <rect x="567" y="236" width="48" height="18" rx="4" fill="var(--bg)"></rect>
       <text x="591" y="249" text-anchor="middle" class="edge-label">item</text>
-      <rect x="567" y="192" width="48" height="18" rx="4" fill="var(--bg)"></rect>
-      <text x="591" y="205" text-anchor="middle" class="edge-label">loop</text>
-      <rect x="707" y="192" width="60" height="18" rx="4" fill="var(--bg)"></rect>
-      <text x="737" y="205" text-anchor="middle" class="edge-label">budget</text>
+      <rect x="558" y="194" width="44" height="18" rx="4" fill="var(--bg)"></rect>
+      <text x="580" y="207" text-anchor="middle" class="edge-label">loop</text>
+      <rect x="730" y="194" width="50" height="18" rx="4" fill="var(--bg)"></rect>
+      <text x="755" y="207" text-anchor="middle" class="edge-label">budget</text>
       <rect x="596" y="283" width="136" height="18" rx="4" fill="var(--bg)"></rect>
       <text x="664" y="296" text-anchor="middle" class="edge-label">empty · time-cap</text>
 
