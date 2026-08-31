@@ -6,21 +6,36 @@ interface Props {
 }
 
 const { title = 'CarbLegal' } = Astro.props;
+
+const NAV = [
+  { href: '/', label: 'Overview' },
+  { href: '/eos', label: 'EOs' },
+  { href: '/vehicles', label: 'Vehicles' },
+];
+const path = Astro.url.pathname;
+function isActive(href: string): boolean {
+  return href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
+}
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
     <title>{title}</title>
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="/">CarbLegal</a>
       <nav>
-        <a href="/">Overview</a>
-        <a href="/eos">EOs</a>
-        <a href="/vehicles">Vehicles</a>
+        {
+          NAV.map((item) => (
+            <a href={item.href} class={isActive(item.href) ? 'nav-active' : ''} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
       </nav>
     </header>
     <main class="site-main">

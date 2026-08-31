@@ -29,6 +29,7 @@ const AGENT_CLASS: Record<string, string> = {
   extractor: 'agent-extractor',
   auditor: 'agent-auditor',
   matchmaker: 'agent-matchmaker',
+  healer: 'agent-healer',
 };
 
 const POLL_MS = 3000;
