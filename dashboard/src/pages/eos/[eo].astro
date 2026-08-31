@@ -61,6 +61,12 @@ function yearRange(row: { year_start?: number | null; year_end?: number | null }
   return String(year_start ?? year_end);
 }
 
+// SEC-1: pdf_url is Firestore-sourced (written by the scout scraping
+// carb.ca.gov) -- only render it as a clickable href when it's actually an
+// https:// URL, so a malformed/hostile value (e.g. `javascript:`) can never
+// execute on click. A non-https value still shows as plain (unlinked) text.
+const pdfHref = data?.pdf_url && data.pdf_url.startsWith('https://') ? data.pdf_url : null;
+
 const manufacturer = data?.manufacturer ?? payload?.manufacturer ?? null;
 const deviceName = data?.device_name ?? payload?.device_name ?? null;
 const category = data?.category ?? payload?.category ?? null;
@@ -126,10 +132,12 @@ const forwardCapped = detail?.lineage.forwardCapped ?? false;
           <div class="meta-item">
             <span class="meta-label">PDF</span>
             <span>
-              {data?.pdf_url ? (
-                <a href={data.pdf_url} target="_blank" rel="noopener noreferrer">
+              {pdfHref ? (
+                <a href={pdfHref} target="_blank" rel="noopener noreferrer">
                   View PDF ↗
                 </a>
+              ) : data?.pdf_url ? (
+                data.pdf_url
               ) : (
                 '—'
               )}

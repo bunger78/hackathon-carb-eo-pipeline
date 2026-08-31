@@ -515,6 +515,12 @@ export const OPEN_REVIEWS_PAGE_SIZE = 50;
 export interface OpenReviewsPage {
   results: ReviewDoc[];
   nextCursor: string | null;
+  // True only when a cursor was passed in but its doc no longer existed (e.g.
+  // resolved/deleted between page loads), so this page silently fell back to
+  // page 1 instead of erroring. Callers use this to reset their own cursor
+  // stack/range-label state to match what actually came back (UX-2) rather
+  // than assuming the requested page was served.
+  fellBackToPage1: boolean;
 }
 
 // `cursor` is the previous page's last review doc id (same "cursor = document
@@ -525,15 +531,20 @@ export interface OpenReviewsPage {
 // erroring.
 export async function openReviews(cursor?: string): Promise<OpenReviewsPage> {
   let ref: Query = db.collection('review_queue').where('status', '==', 'open').orderBy('created_at', 'asc');
+  let fellBackToPage1 = false;
   if (cursor) {
     const cursorSnap = await db.collection('review_queue').doc(cursor).get();
-    if (cursorSnap.exists) ref = ref.startAfter(cursorSnap);
+    if (cursorSnap.exists) {
+      ref = ref.startAfter(cursorSnap);
+    } else {
+      fellBackToPage1 = true;
+    }
   }
   ref = ref.limit(OPEN_REVIEWS_PAGE_SIZE);
   const snap = await ref.get();
   const results = snap.docs.map((d) => ({ id: d.id, ...(d.data() as ReviewDoc) }));
   const last = snap.docs.at(-1);
-  return { results, nextCursor: last ? last.id : null };
+  return { results, nextCursor: last ? last.id : null, fellBackToPage1 };
 }
 
 // True total count of open reviews — an uncapped aggregate, unlike

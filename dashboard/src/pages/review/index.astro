@@ -12,6 +12,13 @@ const cursor = cursorStack.length ? cursorStack[cursorStack.length - 1] : undefi
 const [openPage, openTotal, resolved] = await Promise.all([openReviews(cursor), openReviewCount(), resolvedReviews()]);
 const open = openPage.results;
 
+// UX-2: if the requested cursor was stale (its review doc no longer exists --
+// e.g. resolved between clicks), openReviews() silently served page 1
+// instead. Treat the visible cursor stack as reset to empty in that case too,
+// so the range label, hasPrev, and the Next link's cursor stack all agree
+// with the page that was actually served, instead of a stale "51–100 of N".
+const effectiveCursorStack = openPage.fellBackToPage1 ? [] : cursorStack;
+
 // Mirrors pipeline/core/db.py's review_queue.reason values (see agents/reviewer.py).
 const REASON_LABELS: Record<string, string> = {
   validation_failure: 'Validation failure',
@@ -42,13 +49,13 @@ function pageUrl(cursors: string[]): string {
 }
 
 const hasNext = open.length === OPEN_REVIEWS_PAGE_SIZE && !!openPage.nextCursor;
-const hasPrev = cursorStack.length > 0;
+const hasPrev = effectiveCursorStack.length > 0;
 
 // Every page before this one was necessarily full (hasNext gated the "Next"
-// link that got here), so cursorStack.length * page size is a reliable 0-based
-// offset into the true open-reviews ordering.
-const rangeStart = openTotal === 0 ? 0 : cursorStack.length * OPEN_REVIEWS_PAGE_SIZE + 1;
-const rangeEnd = cursorStack.length * OPEN_REVIEWS_PAGE_SIZE + open.length;
+// link that got here), so effectiveCursorStack.length * page size is a
+// reliable 0-based offset into the true open-reviews ordering.
+const rangeStart = openTotal === 0 ? 0 : effectiveCursorStack.length * OPEN_REVIEWS_PAGE_SIZE + 1;
+const rangeEnd = effectiveCursorStack.length * OPEN_REVIEWS_PAGE_SIZE + open.length;
 ---
 
 <Base title="CarbLegal — Review Queue">
@@ -97,8 +104,8 @@ const rangeEnd = cursorStack.length * OPEN_REVIEWS_PAGE_SIZE + open.length;
 
   {(hasPrev || hasNext) && (
     <div class="pagination">
-      {hasPrev && <a href={pageUrl(cursorStack.slice(0, -1))}>&larr; Previous</a>}
-      {hasNext && <a href={pageUrl([...cursorStack, openPage.nextCursor as string])}>Next &rarr;</a>}
+      {hasPrev && <a href={pageUrl(effectiveCursorStack.slice(0, -1))}>&larr; Previous</a>}
+      {hasNext && <a href={pageUrl([...effectiveCursorStack, openPage.nextCursor as string])}>Next &rarr;</a>}
     </div>
   )}
 

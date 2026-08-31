@@ -12,6 +12,9 @@ if (!review) {
 }
 
 const pdfUrl = review ? await eoPdfUrl(review.eo_number) : null;
+// SEC-1: same guard as eos/[eo].astro -- only render pdfUrl as a clickable
+// href when it's an https:// URL; a malformed value shows as plain text.
+const pdfHref = pdfUrl && pdfUrl.startsWith('https://') ? pdfUrl : null;
 
 // Mirrors pipeline/core/db.py's review_queue.reason values (see agents/reviewer.py).
 const REASON_LABELS: Record<string, string> = {
@@ -86,10 +89,12 @@ const payloadEntries: [string, unknown][] =
           <div class="meta-item">
             <span class="meta-label">PDF</span>
             <span>
-              {pdfUrl ? (
-                <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
+              {pdfHref ? (
+                <a href={pdfHref} target="_blank" rel="noopener noreferrer">
                   View PDF ↗
                 </a>
+              ) : pdfUrl ? (
+                pdfUrl
               ) : (
                 '—'
               )}

@@ -149,14 +149,19 @@ const hasPrev = canPage && cursorStack.length > 0;
             </tbody>
           </table>
         </div>
-
-        {(hasPrev || hasNext) && (
-          <div class="pagination">
-            {hasPrev && <a href={pageUrl(cursorStack.slice(0, -1))}>&larr; Previous</a>}
-            {hasNext && <a href={pageUrl([...cursorStack, result.nextCursor as string])}>Next &rarr;</a>}
-          </div>
-        )}
       </>
+    )
+  }
+
+  {
+    // UX-1: pagination lives outside the results conditional (mirroring
+    // review/index.astro) so Previous still renders on an exactly-full last
+    // page's empty Next click, instead of dead-ending with no way back.
+    !needsQuery && (hasPrev || hasNext) && (
+      <div class="pagination">
+        {hasPrev && <a href={pageUrl(cursorStack.slice(0, -1))}>&larr; Previous</a>}
+        {hasNext && <a href={pageUrl([...cursorStack, result.nextCursor as string])}>Next &rarr;</a>}
+      </div>
     )
   }
 </Base>
