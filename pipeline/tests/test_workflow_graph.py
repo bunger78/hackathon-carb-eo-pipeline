@@ -1,3 +1,5 @@
+import pytest
+
 from runner import Deps
 from workflow_graph import run_workflow
 from core.llm import LLMResult
@@ -104,6 +106,24 @@ class _FakeClock:
     def time(self):
         self.n += 1
         return self.start if self.n == 1 else self.start + self.cap + 1
+
+def test_unhandled_exception_finishes_run_as_error_not_stuck_running(monkeypatch):
+    """Robustness: a bug anywhere in the graph (e.g. scout's listing call
+    itself, not just per-EO download) must not leave the run doc "running"
+    forever -- it must finish as "error", and the exception must still
+    surface to the caller (e.g. /run)."""
+    llm = FakeLLM([])
+    deps = _deps(llm, listings=[])
+
+    def boom(*a, **k):
+        raise RuntimeError("carb site down")
+    monkeypatch.setattr("workflow_graph.discover", boom)
+
+    with pytest.raises(RuntimeError):
+        run_workflow(deps, "test")
+
+    run = next(iter(deps.repo.runs.values()))
+    assert run["status"] == "error"
 
 def test_time_cap_exceeded_routes_to_summarize_without_claiming(monkeypatch):
     from config import settings

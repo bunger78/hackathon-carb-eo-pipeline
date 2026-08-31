@@ -46,8 +46,9 @@ def test_audit_accepts_clean_without_llm():
     repo, run = FakeRepo(), None
     run = repo.create_run("t")
     llm = FakeLLM([])  # must not be called
-    out = audit(llm, repo, BudgetGuard(5), "D-5-5", _ex(), MAKES, run, rand=0.9)
+    out, audited = audit(llm, repo, BudgetGuard(5), "D-5-5", _ex(), MAKES, run, rand=0.9)
     assert out == "accepted"
+    assert audited.eo_number == "D-5-5"
     assert repo.get_eo("D-5-5")["state"] == "matching"
     assert llm.calls == []
 
@@ -56,10 +57,24 @@ def test_audit_escalates_on_verdict():
     repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
     llm = FakeLLM([LLMResult({"verdict": "escalate", "reasons": ["p2 table unreadable"]}, 50, 20)])
     ex = _ex(confidence=0.4)  # forces critique
-    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    out, _ = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
     assert repo.get_eo("D-5-5")["state"] == "needs_review"
     assert repo.reviews[0]["reason"] == "low_confidence"
+
+def test_accept_verdict_cannot_override_deterministic_issues():
+    """C1: a critic 'accept' is an AI opinion, not a fixed rule -- it must
+    never wave through an extraction that failed a deterministic check."""
+    repo = FakeRepo(); run = repo.create_run("t")
+    repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
+    llm = FakeLLM([LLMResult({"verdict": "accept", "reasons": ["looks fine to me"]}, 50, 20)])
+    ex = _ex(part_numbers=["A B"])  # bad_part_number: a real deterministic issue
+    assert "bad_part_number" in deterministic_issues(ex, MAKES)
+    out, audited = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    assert out == "escalated"
+    assert audited is ex
+    assert repo.get_eo("D-5-5")["state"] == "needs_review"
+    assert repo.reviews[0]["reason"] == "validation_failure"
 
 def test_supersession_marks_predecessor():
     repo = FakeRepo(); run = repo.create_run("t")
@@ -74,8 +89,9 @@ def test_fix_verdict_applies_corrections():
     repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
     llm = FakeLLM([LLMResult({"verdict": "fix", "corrections": {"category": "intake"}, "reasons": ["misread section"]}, 50, 20)])
     ex = _ex(confidence=0.4, category=None)  # forces critique, has fixable defect
-    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    out, audited = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "accepted"
+    assert audited.category == "intake"
     assert repo.get_eo("D-5-5")["category"] == "intake"
 
 def test_malformed_corrections_escalate():
@@ -83,7 +99,7 @@ def test_malformed_corrections_escalate():
     repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
     llm = FakeLLM([LLMResult({"verdict": "fix", "corrections": {"confidence": "not-a-number"}, "reasons": ["typo"]}, 50, 20)])
     ex = _ex(confidence=0.4)  # forces critique
-    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    out, _ = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
     assert repo.reviews[0]["reason"] == "validation_failure"
     assert "corrections failed validation" in repo.reviews[0]["agent_notes"]
@@ -94,7 +110,7 @@ def test_divergence_only_escalation():
     repo.legacy["D-5-5"] = {"part_numbers": ["ZZZ999"], "fitment_count": 40}  # high divergence
     llm = FakeLLM([LLMResult({"verdict": "escalate", "reasons": ["legacy mismatch"]}, 50, 20)])
     ex = _ex(confidence=0.99)  # high confidence, no deterministic issues
-    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    out, _ = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
     assert repo.reviews[0]["reason"] == "legacy_divergence"
 
@@ -103,6 +119,6 @@ def test_invalid_critique_output_escalates():
     repo.upsert_eo("D-5-5", {"gcs_uri": "gs://b/pdfs/d-5-5.pdf"})
     llm = FakeLLM([LLMResult({"garbage": 1}, 10, 5)])
     ex = _ex(confidence=0.4)  # forces critique
-    out = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
+    out, _ = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
     assert repo.reviews[0]["reason"] == "validation_failure"

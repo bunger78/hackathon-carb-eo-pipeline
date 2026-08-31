@@ -20,12 +20,12 @@ def process_work_item(item, deps, run_id) -> str:
     eo = item["eo_number"]
     try:
         ex = extract(deps.llm, deps.gcs, deps.repo, deps.budget, eo, run_id)
-        outcome = audit(deps.llm, deps.repo, deps.budget, eo, ex,
+        outcome, audited_ex = audit(deps.llm, deps.repo, deps.budget, eo, ex,
                         set(deps.index.by_make.keys()), run_id)
         if outcome == "escalated":
             deps.repo.update_work_item(item["id"], {"status": "done", "stage": "review"})
             return "needs_review"
-        run_matching(deps.llm, deps.repo, deps.budget, eo, ex, deps.index, run_id)
+        run_matching(deps.llm, deps.repo, deps.budget, eo, audited_ex, deps.index, run_id)
         deps.repo.update_work_item(item["id"], {"status": "done", "stage": "complete"})
         return "complete"
     except BudgetExceeded:

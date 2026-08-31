@@ -102,5 +102,13 @@ def run_workflow(deps, trigger: str) -> dict:
                                                            session_id=session.id)
         return dict(s.state)
 
-    state = asyncio.run(_run())
-    return state["summary"]
+    try:
+        state = asyncio.run(_run())
+        return state["summary"]
+    except Exception:
+        # An unhandled exception anywhere in the graph (scout/heal failing
+        # outright, or the graph never reaching summarize) must not leave the
+        # run doc "running" forever -- finish it as "error" and re-raise so
+        # the caller (e.g. /run) still sees the failure.
+        deps.repo.finish_run(run_id, {"status": "error"})
+        raise

@@ -62,13 +62,26 @@ def _escalate(repo, eo, ex, reason, notes, run_id):
     repo.upsert_eo(eo, {"state": "needs_review"})
     repo.add_event(run_id, {"agent": "auditor", "eo": eo, "action": "escalated", "reason": reason})
 
-def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> str:
+def _update_extraction_payload(repo, eo, ex):
+    """Persist an auditor-corrected extraction into the latest stored
+    extraction doc (written by extract() before audit ran), so the extraction
+    view and downstream readers see the corrected payload, not the pre-audit
+    original."""
+    version = repo.next_extraction_version(eo) - 1
+    if version < 1:
+        return
+    doc = repo.get_extraction(eo, version)
+    if doc is None:
+        return
+    repo.write_extraction(eo, version, {**doc, "payload": ex.model_dump()})
+
+def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> tuple[str, Extraction]:
     rand = random.random() if rand is None else rand
     issues = deterministic_issues(ex, known_makes)
     div = legacy_divergence(ex, repo.get_legacy(eo))
     if not needs_critique(issues, div, ex.confidence, settings.critique_qa_rate, rand):
         _accept(repo, eo, ex, run_id)
-        return "accepted"
+        return "accepted", ex
     reason = ("validation_failure" if issues else
               "low_confidence" if ex.confidence < settings.confidence_threshold else
               "legacy_divergence" if div > 0.4 else "qa_sample")
@@ -76,28 +89,35 @@ def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> str:
     repo.add_event(run_id, {"agent": "auditor", "eo": eo, "action": "critiquing"})
     res = llm.extract_pdf(uri, CRITIC_PROMPT + json.dumps(ex.model_dump()), CritiqueVerdict)
     usd = cost_usd(res.tok_in, res.tok_out)
-    budget.add(usd)
     repo.add_run_cost(run_id, usd, res.tok_in, res.tok_out)
+    budget.add(usd)
     try:
         verdict = CritiqueVerdict.model_validate(res.data)
     except ValidationError:
         _escalate(repo, eo, ex, "validation_failure", "critique output failed validation", run_id)
-        return "escalated"
+        return "escalated", ex
     if verdict.verdict == "fix":
         try:
             fixed = apply_corrections(ex, verdict.corrections)
         except ValidationError:
             _escalate(repo, eo, ex, "validation_failure",
                       "; ".join(verdict.reasons) + " (corrections failed validation)", run_id)
-            return "escalated"
+            return "escalated", ex
         if not deterministic_issues(fixed, known_makes):
+            _update_extraction_payload(repo, eo, fixed)
             _accept(repo, eo, fixed, run_id)
-            return "accepted"
+            return "accepted", fixed
         _escalate(repo, eo, fixed, "validation_failure",
                   "; ".join(verdict.reasons), run_id)
-        return "escalated"
+        return "escalated", fixed
     if verdict.verdict == "accept":
+        # A critic "accept" is an AI opinion, not a fixed rule -- it must never
+        # override a deterministic validation failure. Only cases the
+        # deterministic checks already passed reach an LLM-accepted outcome.
+        if issues:
+            _escalate(repo, eo, ex, reason, "; ".join(verdict.reasons), run_id)
+            return "escalated", ex
         _accept(repo, eo, ex, run_id)
-        return "accepted"
+        return "accepted", ex
     _escalate(repo, eo, ex, reason, "; ".join(verdict.reasons), run_id)
-    return "escalated"
+    return "escalated", ex

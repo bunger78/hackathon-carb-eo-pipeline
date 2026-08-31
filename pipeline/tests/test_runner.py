@@ -1,4 +1,6 @@
+from config import settings
 from runner import Deps, process_work_item, run_once
+from agents.healer import is_transient
 from core.llm import LLMResult
 from core.costs import BudgetGuard
 from matching.engine import VehicleIndex
@@ -42,6 +44,44 @@ def test_failure_retries_then_fails(monkeypatch):
     summary = run_once(deps, "test")
     assert summary["failed"] == 1
     assert deps.repo.get_eo("D-9-9")["state"] == "failed"
+
+def test_fix_verdict_corrections_reach_matching_and_stored_extraction(monkeypatch):
+    """M2: an auditor 'fix' correction must be (i) what run_matching receives
+    and (ii) what the stored extraction doc holds -- not the pre-audit
+    original the extractor wrote."""
+    monkeypatch.setattr("agents.extractor.render_pdf_to_images", lambda b: [b"png"])
+    extracted = GOOD | {"confidence": 0.4}  # forces critique (below threshold)
+    fix_response = {"verdict": "fix", "corrections": {"category": "intake"},
+                     "reasons": ["misread section"]}
+    llm = FakeLLM([LLMResult(extracted, 100, 50), LLMResult(fix_response, 50, 20)])
+    deps = _deps(llm)
+
+    summary = run_once(deps, "test")
+
+    assert summary["completed"] == 1
+    assert deps.repo.get_eo("D-9-9")["category"] == "intake"
+    stored = deps.repo.get_extraction("D-9-9", 1)
+    assert stored["payload"]["category"] == "intake"
+    matches = deps.repo.matches["D-9-9"]
+    assert matches and matches[0]["category"] == "intake"
+
+def test_extraction_api_error_reaches_healer_as_transient(monkeypatch):
+    """M1: an API error surfaced during extraction must survive as the
+    work_item's last_error text so the healer can classify it transient."""
+    monkeypatch.setattr("agents.extractor.render_pdf_to_images", lambda b: [b"png"])
+    api_error = RuntimeError("429 RESOURCE_EXHAUSTED. quota exceeded")
+    deps = _deps(FakeLLM([api_error, api_error]))
+    run_id = deps.repo.create_run("test")
+    deps.repo.upsert_eo("D-9-9", {"gcs_uri": "gs://b/pdfs/d-9-9.pdf", "state": "discovered"})
+    item_id = deps.repo.create_work_item("D-9-9", run_id)
+    item = dict(deps.repo.work_items[item_id])
+
+    outcome = process_work_item(item, deps, run_id)
+
+    assert outcome == "retry"
+    last_error = deps.repo.work_items[item_id]["last_error"]
+    assert "429" in last_error
+    assert is_transient(last_error)
 
 class _FakeClock:
     """First call returns `start`; every later call jumps far past the cap."""

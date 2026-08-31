@@ -239,6 +239,10 @@ def ingest_line(line: dict, work_item: dict, deps, run_id) -> str:
     # core/costs.py for the online (full-price) equivalent.
     usd = (tok_in * settings.price_in_per_mtok / 2 / 1e6
            + tok_out * settings.price_out_per_mtok / 2 / 1e6)
+    # Record the cost into the run BEFORE the budget check: if this call trips
+    # the budget, it must still be metered -- the exception below stops the
+    # NEXT call, not this one (see core/costs.py BudgetGuard.add).
+    deps.repo.add_run_cost(run_id, usd, tok_in, tok_out)
     try:
         deps.budget.add(usd)
     except BudgetExceeded:
@@ -250,19 +254,18 @@ def ingest_line(line: dict, work_item: dict, deps, run_id) -> str:
         "eo_number": eo, "payload": ex.model_dump(), "prompt_version": PROMPT_VERSION,
         "ladder_step": 1, "finish_reason": "STOP", "tok_in": tok_in, "tok_out": tok_out,
         "cost_usd": usd, "created_at": time.time()})
-    deps.repo.add_run_cost(run_id, usd, tok_in, tok_out)
     deps.repo.add_event(run_id, {"agent": "batchfill", "eo": eo, "action": "extracted",
                                  "ladder_step": 1, "confidence": ex.confidence})
 
     # Extraction + cost are committed as of here -- see _already_done. Anything
     # below is the "risky", online-network-call tail.
     try:
-        outcome = audit(deps.llm, deps.repo, deps.budget, eo, ex,
+        outcome, audited_ex = audit(deps.llm, deps.repo, deps.budget, eo, ex,
                         set(deps.index.by_make.keys()), run_id)
         if outcome == "escalated":
             deps.repo.update_work_item(work_item["id"], {"status": "done", "stage": "review"})
             return "needs_review"
-        run_matching(deps.llm, deps.repo, deps.budget, eo, ex, deps.index, run_id)
+        run_matching(deps.llm, deps.repo, deps.budget, eo, audited_ex, deps.index, run_id)
         deps.repo.update_work_item(work_item["id"], {"status": "done", "stage": "complete"})
         return "complete"
     except BudgetExceeded:

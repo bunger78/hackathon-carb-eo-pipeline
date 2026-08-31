@@ -196,7 +196,8 @@ def test_ingest_line_budget_exceeded_bounces_and_raises(monkeypatch):
     run_id = deps.repo.create_run("batch-backfill")
     item_id = deps.repo.create_work_item("D-9-9", run_id)
     work_item = dict(deps.repo.work_items[item_id])
-    line = _line("gs://b/pdfs/d-9-9.pdf", GOOD)
+    tok_in, tok_out = 1000, 200
+    line = _line("gs://b/pdfs/d-9-9.pdf", GOOD, tok_in=tok_in, tok_out=tok_out)
 
     try:
         batchfill.ingest_line(line, work_item, deps, run_id)
@@ -205,6 +206,10 @@ def test_ingest_line_budget_exceeded_bounces_and_raises(monkeypatch):
         pass
     assert deps.repo.work_items[item_id]["status"] == "pending"
     assert deps.repo.extractions == {}
+    # The call that tripped the budget is still metered into the run record
+    # (cost recording happens before the raise -- see batchfill.ingest_line).
+    expected = tok_in * settings.price_in_per_mtok / 2 / 1e6 + tok_out * settings.price_out_per_mtok / 2 / 1e6
+    assert deps.repo.runs[run_id]["cost_usd"] == expected
 
 
 def test_ingest_line_leases_work_item_at_start():
