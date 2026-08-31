@@ -26,10 +26,14 @@ const STATE_LABELS: Record<string, string> = {
   <section class="receipt">
     <p class="receipt-line">
       ≈<span class="num">{formatCount(states.complete ?? 0)}</span> EOs ·{' '}
-      <span class="num">{formatCount(extractionsCount)}</span> extractions ·{' '}
-      <span class="num">{formatCost(totalCostUsd)}</span> total Gemini spend
+      <span class="num">{formatCount(extractionsCount)}</span> extractions
     </p>
-    <p class="receipt-sub">Gemini 3.7 Flash · {formatCount(totalEos)} EOs tracked overall</p>
+    <p class="receipt-sub">
+      Gemini 3.7 Flash · {formatCount(totalEos)} EOs tracked overall
+      {extractionsCount > 0 && totalCostUsd > 0
+        ? ` · ≈${Math.round((totalCostUsd / extractionsCount) * 100)}¢ metered per document`
+        : ''}
+    </p>
   </section>
 
   <div class="tiles">
