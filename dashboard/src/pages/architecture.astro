@@ -10,292 +10,252 @@ import Base from '../layouts/Base.astro';
   </p>
 
   <div class="arch-viewport">
-    <svg
-      viewBox="0 0 1600 1164"
-      width="100%"
-      height="auto"
-      preserveAspectRatio="xMidYMid meet"
-      role="img"
-      aria-label="CarbLegal architecture: Cloud Scheduler (or a manual admin run) triggers carb-api, which runs the ADK 2 workflow graph. Scout, heal, and refetch each write into a shared leased work queue (Firestore work_items); claim reads the oldest pending item from that queue and hands it to process, which either loops back to claim or, on budget exhaustion, to summarize; a retried item is written back into the queue. Dotted gray connectors separately show the run order scout, heal, refetch, claim, process, summarize. Process expands into extract, audit, and match, all backed by Gemini 3.7 Flash; accepting a match marks the predecessor EO superseded. Audit's escalate route feeds a human review loop -- humans act through the carb-dash review UI -- whose corrections flow back into match. A one-time bulk backfill lane (batchfill --prepare / Vertex batch / --ingest) loads historical PDFs at batch pricing, running the same audit and matching gate online before committing, never bypassing it. Everything persists to Firestore and GCS, read by carb-dash."
-    >
-      <title>CarbLegal architecture diagram</title>
+    <svg viewBox="0 0 1100 100" width="100%" height="auto" preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="Cloud Scheduler triggers Cloud Run carb-api at 6:00 AM daily, or an admin can trigger it manually.">
       <defs>
-        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
-          <feMerge>
-            <feMergeNode in="blur"></feMergeNode>
-            <feMergeNode in="SourceGraphic"></feMergeNode>
-          </feMerge>
-        </filter>
-        <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <marker id="tarrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)"></path>
         </marker>
-        <marker id="arrow-violet" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="var(--status-matching)"></path>
-        </marker>
-        <marker id="arrow-muted" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)" opacity="0.6"></path>
-        </marker>
-        <marker id="arrow-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="var(--status-needs_review)"></path>
-        </marker>
       </defs>
-
-      <!-- ================= BAND BACKGROUNDS ================= -->
-      <rect x="0" y="0" width="1600" height="110" fill="var(--surface)" opacity="0.4"></rect>
-      <rect x="0" y="110" width="1600" height="624" fill="var(--bg)"></rect>
-      <rect x="0" y="734" width="1600" height="150" fill="var(--surface)" opacity="0.4"></rect>
-      <rect x="0" y="884" width="1600" height="280" fill="var(--bg)"></rect>
-      <line x1="0" y1="110" x2="1600" y2="110" stroke="var(--border)" stroke-width="1"></line>
-      <line x1="0" y1="734" x2="1600" y2="734" stroke="var(--border)" stroke-width="1"></line>
-      <line x1="0" y1="884" x2="1600" y2="884" stroke="var(--border)" stroke-width="1"></line>
-
-      <!-- ================= BAND LABELS ================= -->
-      <text x="60" y="32" class="band-label">TRIGGER</text>
-      <text x="60" y="132" class="band-label">ORCHESTRATION</text>
-      <text x="60" y="756" class="band-label">PERSISTENCE</text>
-      <text x="60" y="906" class="band-label">SURFACE</text>
-
-      <!-- ================= ORCHESTRATION FRAME ================= -->
-      <rect x="40" y="142" width="920" height="564" rx="16" fill="var(--surface)" opacity="0.4" stroke="var(--border-strong)" stroke-width="1.5"></rect>
-      <text x="500" y="170" text-anchor="middle" class="frame-label">ADK 2 GRAPH — GOOGLE.ADK.WORKFLOW</text>
-
-      <!-- legend: distinguishes the three arrow languages used in this band -->
-      <text x="955" y="188" text-anchor="end" class="caption">solid = data · dotted = run order · dashed violet = Gemini call</text>
-
-      <!-- ================= BULK BACKFILL LANE (right side, subtle) — a ONE-TIME historical load, not a second daily path ================= -->
-      <rect x="980" y="155" width="560" height="345" rx="14" fill="var(--surface-2)" opacity="0.25" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"></rect>
-      <text x="1005" y="182" class="band-label" opacity="0.75">BULK BACKFILL</text>
-      <text x="1005" y="197" class="caption" opacity="0.75">one-time historical load (6,000 PDFs, batch pricing)</text>
-
-      <!-- ================= EDGES (drawn under nodes) ================= -->
-
-      <!-- trigger -->
-      <line x1="350" y1="72" x2="405" y2="72" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M540,96 L540,115 L125,115 L125,215" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="377" y="104" text-anchor="middle" class="caption">+ manual run / admin</text>
-
-      <!-- execution order (temporal run sequence, NOT data flow): thin dotted gray, distinct from the solid queue arrows below -->
-      <line x1="125" y1="205" x2="820" y2="205" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6" marker-end="url(#arrow-muted)"></line>
-      <line x1="125" y1="205" x2="125" y2="220" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6"></line>
-      <line x1="256" y1="205" x2="256" y2="220" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6"></line>
-      <line x1="392" y1="205" x2="392" y2="220" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6"></line>
-      <line x1="528" y1="205" x2="528" y2="220" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6"></line>
-      <line x1="664" y1="205" x2="664" y2="220" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6"></line>
-      <line x1="820" y1="205" x2="820" y2="220" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="1.5,4" opacity="0.6"></line>
-
-      <!-- claim -> process stays a direct, solid data hand-off ("item") -->
-      <line x1="578" y1="245" x2="604" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-
-      <!-- summarize route arcs: process "budget", claim "empty · time-cap". (process->claim "loop" arc removed: the loop is now honestly represented by claim's queue read + process's retry-into-queue + the dotted execution order, not a direct edge.) -->
-      <path d="M710,220 Q755,185 800,220" fill="none" stroke="var(--text-muted)" stroke-width="2" opacity="1" marker-end="url(#arrow)"></path>
-      <path d="M555,270 Q664,312 820,270" fill="none" stroke="var(--text-muted)" stroke-width="2" opacity="1" marker-end="url(#arrow)"></path>
-
-      <!-- work queue data arrows: scout/heal/refetch write in, claim reads out, process writes retries back in -->
-      <line x1="125" y1="270" x2="125" y2="298" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="256" y1="270" x2="256" y2="298" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="392" y1="270" x2="392" y2="298" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="520" y1="298" x2="520" y2="270" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M614,270 L614,316 L578,316" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="125" y="288" text-anchor="middle" class="edge-label">new EOs</text>
-      <text x="256" y="288" text-anchor="middle" class="edge-label">failed→pending</text>
-      <text x="392" y="288" text-anchor="middle" class="edge-label">refetched→pending</text>
-      <text x="520" y="288" text-anchor="middle" class="edge-label">oldest pending</text>
-      <text x="596" y="310" text-anchor="middle" class="edge-label">retry</text>
-
-      <!-- process (extract->audit->match) internal chain -->
-      <line x1="270" y1="459" x2="290" y2="459" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="475" y1="459" x2="495" y2="459" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-
-      <!-- extract/audit/match -> gemini (dashed), each its own per-call edge, gemini on the right so none of these cross the escalate path -->
-      <path d="M178,484 L178,534 L765,534" fill="none" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></path>
-      <path d="M383,484 L383,550 L765,550" fill="none" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></path>
-      <path d="M588,484 L588,566 L765,566" fill="none" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></path>
-      <text x="220" y="528" text-anchor="middle" class="edge-label">read</text>
-      <text x="425" y="544" text-anchor="middle" class="edge-label">critique</text>
-      <text x="630" y="560" text-anchor="middle" class="edge-label">resolve</text>
-
-      <!-- human review loop: audit's bottom edge "escalate" -> review queue (bottom-left) -> human (bottom-right) -> "approve/corrections" -> match's bottom-left corner, routed under the content to clear the gemini "resolve" edge -->
-      <path d="M350,484 Q260,554 172,619" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
-      <line x1="260" y1="643" x2="520" y2="643" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></line>
-      <path d="M535,667 L535,676 L510,676 L510,484" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
-      <text x="280" y="542" text-anchor="middle" class="edge-label">escalate</text>
-      <text x="495" y="580" text-anchor="end" class="edge-label">approve / corrections</text>
-
-      <!-- down into persistence -->
-      <line x1="200" y1="706" x2="200" y2="769" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="850" y1="706" x2="850" y2="769" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M125,706 L125,726 L1260,726 L1260,769" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-
-      <!-- bulk backfill lane, subtle: work queue -> prepare -> (JSONL via GCS) -> vertex batch -> ingest -> shared gate -> Firestore -->
-      <path d="M578,316 L900,316 L900,209 L1185,209" fill="none" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></path>
-      <text x="940" y="200" text-anchor="middle" class="caption" opacity="0.8">pending + failed</text>
-      <line x1="1260" y1="233" x2="1260" y2="265" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
-      <text x="1345" y="255" text-anchor="start" class="caption" opacity="0.8">JSONL → GCS</text>
-      <line x1="1260" y1="769" x2="1260" y2="323" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
-      <line x1="1260" y1="318" x2="1260" y2="350" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
-      <line x1="1180" y1="410" x2="1000" y2="410" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-muted)"></line>
-      <text x="1090" y="402" text-anchor="middle" class="edge-label">same gate + matching as daily path</text>
-      <path d="M1185,379 L1030,379 L1030,716 L1015,716 L1015,769" fill="none" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></path>
-
-      <!-- surface -->
-      <line x1="555" y1="869" x2="555" y2="949" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M680,984 L1580,984 L1580,72 L675,72" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"></path>
-
-      <!-- humans work through carb-dash, not directly on the queue: routed along the left margin so it doesn't cut across the Firestore cylinder -->
-      <path d="M430,984 L30,984 L30,690 L600,690 L600,667" fill="none" stroke="var(--status-needs_review)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.8" marker-end="url(#arrow-amber)"></path>
-      <text x="445" y="972" text-anchor="start" class="edge-label">surfaces to human</text>
-
-      <!-- ================= EDGE LABELS (halo text, on top of lines) ================= -->
-      <text x="1130" y="976" text-anchor="middle" class="edge-label">admin</text>
-      <text x="572" y="889" text-anchor="start" class="edge-label">reads</text>
-
-      <!-- ================= TRIGGER NODES ================= -->
-      <g filter="url(#glow)">
-        <rect x="90" y="48" width="260" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
-        <text x="220" y="68" text-anchor="middle" class="node-title" fill="var(--text)">Cloud Scheduler</text>
-        <text x="220" y="86" text-anchor="middle" class="node-sub">6:00 AM daily</text>
+      <line x1="340" y1="50" x2="755" y2="50" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#tarrow)"></line>
+      <text x="547" y="40" text-anchor="middle" class="caption">+ manual / admin</text>
+      <g>
+        <rect x="60" y="25" width="280" height="50" rx="8" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+        <text x="200" y="46" text-anchor="middle" class="a-text" fill="var(--text)">Cloud Scheduler</text>
+        <text x="200" y="64" text-anchor="middle" class="node-sub">6:00 AM daily</text>
       </g>
-      <g filter="url(#glow)">
-        <rect x="410" y="48" width="260" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
-        <text x="540" y="68" text-anchor="middle" class="node-title" fill="var(--text)">Cloud Run carb-api</text>
-        <text x="540" y="86" text-anchor="middle" class="node-sub">/run</text>
-      </g>
-
-      <!-- ================= ADK2 MAIN ROW ================= -->
-      <g filter="url(#glow)">
-        <rect x="70" y="220" width="110" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
-        <text x="125" y="239" text-anchor="middle" class="node-title" fill="var(--status-discovered)">scout</text>
-        <text x="125" y="259" text-anchor="middle" class="node-sub">discover EOs</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="206" y="220" width="100" height="50" rx="10" fill="var(--surface-2)" stroke="var(--agent-healer)" stroke-width="1"></rect>
-        <text x="256" y="239" text-anchor="middle" class="node-title" fill="var(--agent-healer)">heal</text>
-        <text x="256" y="259" text-anchor="middle" class="node-sub">requeue transient</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="332" y="220" width="120" height="50" rx="10" fill="var(--surface-2)" stroke="var(--agent-healer)" stroke-width="1"></rect>
-        <text x="392" y="239" text-anchor="middle" class="node-title" fill="var(--agent-healer)">refetch</text>
-        <text x="392" y="259" text-anchor="middle" class="node-sub">re-download source</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="478" y="220" width="100" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
-        <text x="528" y="239" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">claim</text>
-        <text x="528" y="259" text-anchor="middle" class="node-sub">next item</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="604" y="220" width="120" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1"></rect>
-        <text x="664" y="239" text-anchor="middle" class="node-title" fill="var(--status-matching)">process</text>
-        <text x="664" y="259" text-anchor="middle" class="node-sub">per-EO (below)</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="750" y="220" width="140" height="50" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
-        <text x="820" y="239" text-anchor="middle" class="node-title" fill="var(--accent)">summarize</text>
-        <text x="820" y="259" text-anchor="middle" class="node-sub">finish run</text>
-      </g>
-
-      <!-- ================= WORK QUEUE (the shared checkpoint layer scout/heal/refetch/claim all interact with) ================= -->
-      <rect x="70" y="298" width="508" height="36" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="324" y="317" text-anchor="middle" class="node-title" fill="var(--text)">work queue</text>
-      <text x="324" y="331" text-anchor="middle" class="node-sub">Firestore work_items (leased, checkpointed)</text>
-
-      <!-- ================= TOP ROW ROUTE LABELS (dark chip behind each, on its arrow's midpoint, drawn after the nodes so it's never clipped) ================= -->
-      <rect x="567" y="236" width="48" height="18" rx="4" fill="var(--bg)"></rect>
-      <text x="591" y="249" text-anchor="middle" class="edge-label">item</text>
-      <rect x="730" y="194" width="50" height="18" rx="4" fill="var(--bg)"></rect>
-      <text x="755" y="207" text-anchor="middle" class="edge-label">budget</text>
-      <rect x="596" y="283" width="136" height="18" rx="4" fill="var(--bg)"></rect>
-      <text x="664" y="296" text-anchor="middle" class="edge-label">empty · time-cap</text>
-
-      <!-- ================= HEALER CAPTION ================= -->
-      <text x="329" y="350" text-anchor="middle" class="caption">transient -&gt; requeue · corrupt source -&gt; re-download · 3 strikes -&gt; human</text>
-
-      <!-- ================= PROCESS (PER EO) SUB-FRAME ================= -->
-      <rect x="55" y="389" width="890" height="300" rx="14" fill="var(--surface-2)" opacity="0.35" stroke="var(--status-matching)" stroke-width="1.5"></rect>
-      <text x="500" y="414" text-anchor="middle" class="frame-label">PROCESS (PER EO)</text>
-
-      <g filter="url(#glow)">
-        <rect x="85" y="434" width="185" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
-        <text x="178" y="453" text-anchor="middle" class="node-title" fill="var(--status-discovered)">extract</text>
-        <text x="178" y="473" text-anchor="middle" class="node-sub">PDF (GCS) -&gt; image ladder</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="290" y="434" width="185" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
-        <text x="383" y="453" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">audit</text>
-        <text x="383" y="473" text-anchor="middle" class="node-sub">gate + critic</text>
-      </g>
-      <text x="383" y="500" text-anchor="middle" class="caption">accept -&gt; predecessor superseded</text>
-      <g filter="url(#glow)">
-        <rect x="495" y="434" width="185" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-complete)" stroke-width="1"></rect>
-        <text x="588" y="453" text-anchor="middle" class="node-title" fill="var(--status-complete)">match</text>
-        <text x="588" y="473" text-anchor="middle" class="node-sub">index + resolver</text>
-      </g>
-
-      <!-- ================= GEMINI CHIP (violet glow) — right side of the process frame, vertically centered, one edge per call ================= -->
-      <g filter="url(#glow)">
-        <rect x="765" y="515" width="170" height="70" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
-        <text x="850" y="539" text-anchor="middle" class="node-title" fill="var(--status-matching)">Gemini 3.7 Flash</text>
-        <text x="850" y="561" text-anchor="middle" class="node-sub">reasoning calls</text>
-      </g>
-
-      <!-- ================= HUMAN REVIEW LOOP ================= -->
-      <g filter="url(#glow)">
-        <rect x="85" y="619" width="175" height="48" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
-        <text x="172" y="638" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">review queue</text>
-        <text x="172" y="656" text-anchor="middle" class="node-sub">audit escalations</text>
-      </g>
-      <g filter="url(#glow)">
-        <rect x="520" y="619" width="160" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
-        <text x="600" y="638" text-anchor="middle" class="node-title" fill="var(--text)">human</text>
-        <text x="600" y="656" text-anchor="middle" class="node-sub">via carb-dash review UI</text>
-      </g>
-
-      <!-- ================= BULK BACKFILL LANE NODES (subtle) — prepare -> vertex batch -> ingest, in real execution order ================= -->
-      <g opacity="0.85">
-        <rect x="1185" y="185" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-        <text x="1260" y="205" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">batchfill --prepare</text>
-        <text x="1260" y="222" text-anchor="middle" class="node-sub">reads queue, no LLM spend</text>
-      </g>
-      <g opacity="0.85">
-        <rect x="1185" y="270" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-        <text x="1260" y="290" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">Vertex AI batch job</text>
-        <text x="1260" y="307" text-anchor="middle" class="node-sub">Gemini 3.7 Flash · half price</text>
-      </g>
-      <g opacity="0.85">
-        <rect x="1185" y="355" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-        <text x="1260" y="375" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">batchfill --ingest</text>
-        <text x="1260" y="392" text-anchor="middle" class="node-sub">streams results online</text>
-      </g>
-
-      <!-- ================= PERSISTENCE CYLINDERS ================= -->
-      <!-- Firestore -->
-      <ellipse cx="555" cy="848" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <rect x="90" y="790" width="930" height="58" fill="var(--surface-2)"></rect>
-      <line x1="90" y1="790" x2="90" y2="848" stroke="var(--border-strong)" stroke-width="1"></line>
-      <line x1="1020" y1="790" x2="1020" y2="848" stroke="var(--border-strong)" stroke-width="1"></line>
-      <ellipse cx="555" cy="790" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <text x="555" y="814" text-anchor="middle" class="node-title" fill="var(--text)">Firestore</text>
-      <text x="555" y="833" text-anchor="middle" class="node-sub">eos · work_items · runs · matches · review_queue</text>
-
-      <!-- GCS -->
-      <ellipse cx="1260" cy="848" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <rect x="1160" y="790" width="200" height="58" fill="var(--surface-2)"></rect>
-      <line x1="1160" y1="790" x2="1160" y2="848" stroke="var(--border-strong)" stroke-width="1"></line>
-      <line x1="1360" y1="790" x2="1360" y2="848" stroke="var(--border-strong)" stroke-width="1"></line>
-      <ellipse cx="1260" cy="790" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <text x="1260" y="814" text-anchor="middle" class="node-title" fill="var(--text)">GCS bucket</text>
-      <text x="1260" y="833" text-anchor="middle" class="node-sub">pdfs/</text>
-
-      <!-- ================= SURFACE ================= -->
-      <g filter="url(#glow)">
-        <rect x="430" y="954" width="250" height="60" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
-        <text x="555" y="978" text-anchor="middle" class="node-title" fill="var(--accent)">carb-dash</text>
-        <text x="555" y="998" text-anchor="middle" class="node-sub">reads Firestore live</text>
+      <g>
+        <rect x="760" y="25" width="280" height="50" rx="8" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+        <text x="900" y="46" text-anchor="middle" class="a-text" fill="var(--text)">Cloud Run carb-api</text>
+        <text x="900" y="64" text-anchor="middle" class="node-sub">/run</text>
       </g>
     </svg>
   </div>
 
-  <p class="section-note">Topology mirrors pipeline/workflow_graph.py — verified by test.</p>
+  <h2>The decision logic (every run)</h2>
+
+  <div class="arch-viewport">
+    <svg
+      viewBox="0 0 1100 2780"
+      width="100%"
+      height="auto"
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Decision flowchart: on wake, check failed work from last time (transient errors requeue via heal, corrupt source files re-download via refetch, three-strike items park for a human); then check for new EOs (scout downloads and enqueues them); then loop while there is queued work and time/budget remain (claim takes the oldest item); for each item, extract with a native-PDF to rendered-image fallback ladder, run a deterministic audit gate plus a Gemini critic with human-review fallback, resolve ambiguous vehicle matches, mark superseded predecessors, write matches, and loop back to claim the next item; when the queue empties or the run runs out of time or budget, write the run summary and sleep until tomorrow."
+    >
+      <title>CarbLegal decision flowchart</title>
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)"></path>
+        </marker>
+        <marker id="arrow-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--status-complete)"></path>
+        </marker>
+        <marker id="arrow-red" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--status-failed)"></path>
+        </marker>
+      </defs>
+
+      <!-- ============ START ============ -->
+      <rect x="370" y="20" width="260" height="44" rx="22" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"></rect>
+      <text x="500" y="47" text-anchor="middle" class="a-text" fill="var(--accent)">6:00 AM — Scheduler rings</text>
+      <line x1="500" y1="64" x2="500" y2="110" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+
+      <!-- ============ STEP 2: failed work? ============ -->
+      <polygon points="500,110 670,180 500,250 330,180" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="175" text-anchor="middle" class="q-text">failed work from</text>
+      <text x="500" y="193" text-anchor="middle" class="q-text">last time?</text>
+
+      <path d="M330,180 L60,180 L60,650 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <text x="65" y="172" text-anchor="start" class="no-label">no</text>
+      <line x1="500" y1="250" x2="500" y2="310" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="514" y="285" text-anchor="start" class="yes-label">yes</text>
+
+      <!-- why did it fail? -->
+      <polygon points="500,310 640,375 500,440 360,375" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="371" text-anchor="middle" class="q-text">why did</text>
+      <text x="500" y="389" text-anchor="middle" class="q-text">it fail?</text>
+
+      <path d="M360,375 L150,495" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <line x1="500" y1="440" x2="500" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <path d="M640,375 L850,495" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+
+      <rect x="20" y="495" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="150" y="517" text-anchor="middle" class="a-text">quota blip →</text>
+      <text x="150" y="534" text-anchor="middle" class="a-text">requeue</text>
+      <text x="290" y="524" text-anchor="start" class="tag">(heal)</text>
+
+      <rect x="310" y="495" width="380" height="50" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="500" y="517" text-anchor="middle" class="a-text">bad file → re-download from CARB,</text>
+      <text x="500" y="534" text-anchor="middle" class="a-text">requeue</text>
+      <text x="700" y="524" text-anchor="start" class="tag">(refetch)</text>
+
+      <rect x="720" y="495" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="850" y="517" text-anchor="middle" class="a-text">3rd strike → leave</text>
+      <text x="850" y="534" text-anchor="middle" class="a-text">for a human</text>
+
+      <path d="M150,545 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M500,545 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M850,545 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+
+      <!-- ============ STEP 3: new EOs? ============ -->
+      <polygon points="500,650 670,720 500,790 330,720" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="715" text-anchor="middle" class="q-text">new EOs in the</text>
+      <text x="500" y="733" text-anchor="middle" class="q-text">state registry?</text>
+
+      <line x1="670" y1="720" x2="700" y2="720" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="678" y="705" text-anchor="start" class="yes-label">yes</text>
+      <rect x="700" y="693" width="300" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="850" y="714" text-anchor="middle" class="a-text">download PDFs,</text>
+      <text x="850" y="731" text-anchor="middle" class="a-text">add to queue</text>
+      <text x="1010" y="723" text-anchor="start" class="tag">(scout)</text>
+
+      <path d="M850,747 L500,870" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <line x1="500" y1="790" x2="500" y2="870" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="464" y="820" text-anchor="end" class="step-label">both</text>
+
+      <!-- ============ STEP 4: work in queue? time/budget left? ============ -->
+      <polygon points="500,870 670,940 500,1010 330,940" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="925" text-anchor="middle" class="q-text">work in queue?</text>
+      <text x="500" y="943" text-anchor="middle" class="q-text">time &amp; budget left?</text>
+
+      <path d="M330,940 L150,940 L150,990" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <text x="200" y="932" text-anchor="middle" class="no-label">no</text>
+      <rect x="20" y="990" width="300" height="60" rx="10" fill="var(--status-complete-bg)" stroke="var(--accent)" stroke-width="1.5"></rect>
+      <text x="170" y="1014" text-anchor="middle" class="a-text">write run summary —</text>
+      <text x="170" y="1031" text-anchor="middle" class="a-text">sleep until tomorrow</text>
+      <text x="330" y="1023" text-anchor="start" class="tag">(summarize)</text>
+
+      <line x1="500" y1="1010" x2="500" y2="1070" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="514" y="1044" text-anchor="start" class="yes-label">yes</text>
+      <rect x="360" y="1070" width="280" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="500" y="1103" text-anchor="middle" class="a-text">claim oldest item</text>
+      <text x="650" y="1103" text-anchor="start" class="tag">(claim)</text>
+
+      <line x1="500" y1="1124" x2="500" y2="1194" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="700" y="1180" text-anchor="middle" class="tag">(process) — per claimed item, steps below</text>
+
+      <!-- ============ STEP 5: Gemini read PDF natively? ============ -->
+      <polygon points="500,1194 670,1264 500,1334 330,1264" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="1259" text-anchor="middle" class="q-text">can Gemini read the</text>
+      <text x="500" y="1277" text-anchor="middle" class="q-text">PDF natively?</text>
+
+      <line x1="330" y1="1264" x2="320" y2="1264" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="200" y="1249" text-anchor="middle" class="no-label">no</text>
+      <rect x="20" y="1237" width="300" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="170" y="1258" text-anchor="middle" class="a-text">re-render pages as</text>
+      <text x="170" y="1275" text-anchor="middle" class="a-text">images, retry</text>
+
+      <line x1="170" y1="1291" x2="170" y2="1341" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <polygon points="170,1341 310,1406 170,1471 30,1406" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="170" y="1411" text-anchor="middle" class="q-text">readable now?</text>
+
+      <line x1="170" y1="1471" x2="170" y2="1521" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="200" y="1500" text-anchor="middle" class="no-label">no</text>
+      <rect x="20" y="1521" width="300" height="60" rx="10" fill="var(--status-failed-bg)" stroke="var(--status-failed)" stroke-width="1.5"></rect>
+      <text x="170" y="1545" text-anchor="middle" class="a-text">mark failed — tomorrow's</text>
+      <text x="170" y="1562" text-anchor="middle" class="a-text">run decides</text>
+
+      <path d="M310,1406 L500,1611" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <text x="330" y="1395" text-anchor="start" class="yes-label">yes</text>
+      <line x1="500" y1="1334" x2="500" y2="1611" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="514" y="1360" text-anchor="start" class="yes-label">yes</text>
+
+      <!-- ============ STEP 6: extraction ============ -->
+      <rect x="320" y="1611" width="360" height="54" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+      <text x="500" y="1644" text-anchor="middle" class="a-text">structured extraction (Gemini 3.7 Flash)</text>
+      <line x1="500" y1="1665" x2="500" y2="1735" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+
+      <!-- ============ STEP 7: header EO matches identity? ============ -->
+      <polygon points="500,1735 670,1805 500,1875 330,1805" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="1800" text-anchor="middle" class="q-text">header EO number matches</text>
+      <text x="500" y="1818" text-anchor="middle" class="q-text">the file's identity?</text>
+
+      <line x1="330" y1="1805" x2="310" y2="1805" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="200" y="1790" text-anchor="middle" class="no-label">no</text>
+      <rect x="30" y="1781" width="280" height="48" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="170" y="1800" text-anchor="middle" class="a-text">trust the file,</text>
+      <text x="170" y="1817" text-anchor="middle" class="a-text">log the misread</text>
+
+      <path d="M170,1829 L500,1935" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <line x1="500" y1="1875" x2="500" y2="1935" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="514" y="1905" text-anchor="start" class="yes-label">yes</text>
+
+      <!-- ============ STEP 8: deterministic gate + critic ============ -->
+      <polygon points="500,1935 690,2020 500,2105 310,2020" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="2000" text-anchor="middle" class="q-text">deterministic gate:</text>
+      <text x="500" y="2018" text-anchor="middle" class="q-text">rules + baseline</text>
+      <text x="500" y="2036" text-anchor="middle" class="q-text-sm">(dates real · formats sane ·</text>
+      <text x="500" y="2050" text-anchor="middle" class="q-text-sm">physics possible · vs. legacy)</text>
+      <text x="650" y="2020" text-anchor="start" class="tag">(audit)</text>
+
+      <line x1="310" y1="2020" x2="290" y2="2020" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="200" y="2005" text-anchor="middle" class="no-label">fail</text>
+      <rect x="10" y="1993" width="280" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="150" y="2014" text-anchor="middle" class="a-text">critic re-reads the</text>
+      <text x="150" y="2031" text-anchor="middle" class="a-text">document (Gemini)</text>
+
+      <line x1="150" y1="2047" x2="150" y2="2097" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <polygon points="150,2097 290,2162 150,2227 10,2162" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="150" y="2168" text-anchor="middle" class="q-text">resolved?</text>
+
+      <path d="M150,2227 L220,2277" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <text x="170" y="2260" text-anchor="middle" class="no-label">no</text>
+      <rect x="30" y="2277" width="380" height="80" rx="10" fill="var(--status-needs_review-bg)" stroke="var(--status-needs_review)" stroke-width="1.5"></rect>
+      <text x="220" y="2303" text-anchor="middle" class="a-text">human review queue (via carb-dash)</text>
+      <text x="220" y="2320" text-anchor="middle" class="a-text">→ approve / correct</text>
+      <text x="220" y="2337" text-anchor="middle" class="a-text">→ re-match</text>
+
+      <path d="M290,2162 L500,2280" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <text x="320" y="2150" text-anchor="start" class="yes-label">yes</text>
+      <line x1="500" y1="2105" x2="500" y2="2280" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="514" y="2145" text-anchor="start" class="yes-label">pass</text>
+
+      <!-- ============ STEP 9: ambiguous vehicle rows? ============ -->
+      <polygon points="500,2280 670,2350 500,2420 330,2350" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="2345" text-anchor="middle" class="q-text">any ambiguous</text>
+      <text x="500" y="2363" text-anchor="middle" class="q-text">vehicle rows?</text>
+
+      <line x1="670" y1="2350" x2="700" y2="2350" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="678" y="2335" text-anchor="start" class="yes-label">yes</text>
+      <rect x="700" y="2320" width="220" height="60" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="810" y="2344" text-anchor="middle" class="a-text">Gemini resolves →</text>
+      <text x="810" y="2361" text-anchor="middle" class="a-text">fake IDs filtered</text>
+
+      <path d="M810,2380 L500,2470" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <line x1="500" y1="2420" x2="500" y2="2470" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="464" y="2450" text-anchor="end" class="no-label">no</text>
+
+      <!-- ============ STEP 10: supersedes and cancels? ============ -->
+      <polygon points="500,2470 670,2540 500,2610 330,2540" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
+      <text x="500" y="2535" text-anchor="middle" class="q-text">document says</text>
+      <text x="500" y="2553" text-anchor="middle" class="q-text">"supersedes and cancels"?</text>
+
+      <line x1="670" y1="2540" x2="700" y2="2540" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="678" y="2525" text-anchor="start" class="yes-label">yes</text>
+      <rect x="700" y="2510" width="220" height="60" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="810" y="2534" text-anchor="middle" class="a-text">mark old EO superseded</text>
+      <text x="810" y="2551" text-anchor="middle" class="a-text">— link the chain</text>
+
+      <path d="M810,2570 L500,2660" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <line x1="500" y1="2610" x2="500" y2="2660" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <text x="464" y="2640" text-anchor="end" class="no-label">no</text>
+
+      <!-- ============ STEP 11: write matches + loop back ============ -->
+      <rect x="320" y="2660" width="360" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+      <text x="500" y="2693" text-anchor="middle" class="a-text">write part-to-vehicle matches</text>
+
+      <path d="M680,2687 L980,2687 L980,940 L670,940" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <text x="990" y="960" text-anchor="start" class="step-label">next item</text>
+    </svg>
+  </div>
+
+  <p class="section-note">
+    Runs on: Cloud Run · Firestore (leased work queue = the checkpoint) · GCS · Vertex AI. Historical bulk
+    backfill used Vertex batch pricing through the same gate.
+  </p>
+
+  <p class="section-note">The gate logic mirrors pipeline/workflow_graph.py and agents/* — node names tagged in (parens); verified by test.</p>
 </Base>
 
 <style>
@@ -313,35 +273,36 @@ import Base from '../layouts/Base.astro';
   .arch-viewport svg {
     display: block;
     width: 100%;
+    max-width: 900px;
     height: auto;
+    margin: 0 auto;
   }
 
-  .arch-viewport :global(.band-label) {
+  h2 {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .arch-viewport :global(.q-text) {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    fill: var(--text);
+  }
+
+  .arch-viewport :global(.q-text-sm) {
     font-family: var(--font-sans);
     font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-weight: 500;
     fill: var(--text-muted);
   }
 
-  .arch-viewport :global(.frame-label) {
+  .arch-viewport :global(.a-text) {
     font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    fill: var(--text-muted);
-  }
-
-  .arch-viewport :global(.node-title) {
-    font-family: var(--font-mono);
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  .arch-viewport :global(.node-title-sm) {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 600;
+    fill: var(--text);
   }
 
   .arch-viewport :global(.node-sub) {
@@ -350,20 +311,49 @@ import Base from '../layouts/Base.astro';
     fill: var(--text-muted);
   }
 
-  .arch-viewport :global(.edge-label) {
+  .arch-viewport :global(.tag) {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--text-muted);
+  }
+
+  .arch-viewport :global(.yes-label) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--status-complete);
+    stroke: var(--bg);
+    stroke-width: 5;
+    paint-order: stroke;
+    stroke-linejoin: round;
+  }
+
+  .arch-viewport :global(.no-label) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--status-failed);
+    stroke: var(--bg);
+    stroke-width: 5;
+    paint-order: stroke;
+    stroke-linejoin: round;
+  }
+
+  .arch-viewport :global(.step-label) {
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 600;
     fill: var(--text-muted);
     stroke: var(--bg);
-    stroke-width: 6;
+    stroke-width: 5;
     paint-order: stroke;
     stroke-linejoin: round;
   }
 
   .arch-viewport :global(.caption) {
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 14px;
     font-style: italic;
     fill: var(--text-muted);
   }

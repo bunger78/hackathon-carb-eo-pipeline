@@ -17,7 +17,7 @@ describe('architecture page', () => {
   });
 
   it('names the shared checkpoint layer and the truths added after owner review', () => {
-    for (const name of ['work queue', 'BACKFILL', 'superseded']) {
+    for (const name of ['work queue', 'backfill', 'superseded']) {
       expect(source).toContain(name);
     }
   });
