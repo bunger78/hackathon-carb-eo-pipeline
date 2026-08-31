@@ -33,9 +33,13 @@ export default function RunNow() {
     setMessage(null);
     setSummary(null);
     try {
+      // Content-Type is load-bearing: Astro's CSRF check 403s a POST that
+      // carries neither a form content-type nor an explicit one (never reaches
+      // the route). Every /api caller must send application/json.
       const res = await fetch('/api/run-now', {
         method: 'POST',
-        headers: { 'X-Admin-Token': token },
+        headers: { 'X-Admin-Token': token, 'Content-Type': 'application/json' },
+        body: '{}',
       });
       if (res.status === 401) {
         setStatus('error');
