@@ -5,3 +5,4 @@ __pycache__/
 spike_*.json
 pipeline/.env
 local/
+pipeline/holdback/
