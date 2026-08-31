@@ -66,13 +66,15 @@ def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
     issues = []
     if not _EO_RE.match(ex.eo_number or ""):
         issues.append("bad_eo_number")
+    # Floor 1900: universal retrofit parts genuinely cover vintage vehicles
+    # ("1928 and later" -- D-540). Inverted ranges are still impossible.
     years = [y for r in ex.fitment for y in (r.year_start, r.year_end) if y is not None]
-    if any(y < 1950 or y > 2035 for y in years) or any(
+    if any(y < 1900 or y > 2035 for y in years) or any(
             r.year_start and r.year_end and r.year_start > r.year_end for r in ex.fitment):
         issues.append("bad_year")
-    # Floor covers 49cc scooters (0.049L); ceiling covers heavy-duty diesels
-    # (Cat C15 15.8L, Detroit Series 60 14.0L).
-    if any(r.displacement_l is not None and not 0.04 <= r.displacement_l <= 17.0 for r in ex.fitment):
+    # Floor covers 49cc scooters (0.049L); ceiling covers industrial/off-road
+    # engines CARB certifies (Cat 3512E well-service V12 = 58.6L) with margin.
+    if any(r.displacement_l is not None and not 0.04 <= r.displacement_l <= 120.0 for r in ex.fitment):
         issues.append("bad_displacement")
     if any(not _pn_ok(p) for p in ex.part_numbers):
         issues.append("bad_part_number")
