@@ -12,12 +12,24 @@ import { vehicleCascade } from '../../lib/db';
 // `vehicles` is a one-time-seeded reference table, so an hour of client caching
 // is safe — unlike vehicle-parts.ts, which reads live `matches` data.
 let gzipped: Buffer | null = null;
-try {
-  const raw = readFileSync(
-    fileURLToPath(new URL('../../../public/vehicle-facets.json', import.meta.url)));
-  gzipped = gzipSync(raw, { level: 9 });
-} catch {
-  gzipped = null; // fall back to live cascade per-request
+{
+  // In the BUILT server, public/ assets live at dist/client/ (cwd-relative in
+  // the Cloud Run container); the source-tree path only exists in dev.
+  const candidates = [
+    `${process.cwd()}/dist/client/vehicle-facets.json`,
+    `${process.cwd()}/public/vehicle-facets.json`,
+  ];
+  try {
+    candidates.push(
+      fileURLToPath(new URL('../../../public/vehicle-facets.json', import.meta.url)));
+  } catch { /* bundled URL base may be opaque */ }
+  for (const p of candidates) {
+    try {
+      gzipped = gzipSync(readFileSync(p), { level: 9 });
+      break;
+    } catch { /* try next */ }
+  }
+  if (!gzipped) console.error('vehicle-facets: no static file found; serving live cascade');
 }
 
 export const GET: APIRoute = async () => {
