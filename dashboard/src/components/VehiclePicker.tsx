@@ -28,7 +28,7 @@ export default function VehiclePicker() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/vehicle-facets.json')
+    fetch('/api/vehicle-facets') // pre-gzipped in-memory copy; raw static file is 4.8MB uncompressed
       .then((res) => {
         if (!res.ok) throw new Error(String(res.status));
         return res.json();
