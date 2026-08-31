@@ -194,3 +194,16 @@ def test_tail_rule_refinements():
     assert len(deduped.fitment) == 1
     assert "bad_displacement" not in deterministic_issues(deduped, set())
     assert "duplicate_fitment" not in deterministic_issues(deduped, set())
+
+
+def test_eo_number_falls_back_to_document_identity():
+    from agents.auditor import audit
+    from tests.fakes import FakeRepo, FakeLLM
+    from core.costs import BudgetGuard
+    repo = FakeRepo()
+    repo.eos["D-69"] = {"state": "auditing", "gcs_uri": "gs://b/pdfs/d-69.pdf"}
+    ex = _ex(eo_number="D�69")  # garbled model read of the header
+    out, audited = audit(FakeLLM([]), repo, BudgetGuard(5), "D-69", ex,
+                         MAKES, repo.create_run("t"), rand=0.9)
+    assert audited.eo_number == "D-69"
+    assert out == "accepted"

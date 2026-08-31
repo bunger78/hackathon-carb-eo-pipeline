@@ -134,6 +134,15 @@ def _update_extraction_payload(repo, eo, ex):
 
 def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> tuple[str, Extraction]:
     rand = random.random() if rand is None else rand
+    # The document's identity IS a datapoint: this extraction was made FOR `eo`
+    # (registry-keyed, filename-fetched). A garbled model read of the header
+    # never outranks that -- correct it and note the discrepancy.
+    if ex.eo_number != eo:
+        repo.add_event(run_id, {"agent": "auditor", "eo": eo,
+                                "action": "eo_number_corrected_from_identity",
+                                "model_read": ex.eo_number})
+        ex = ex.model_copy(update={"eo_number": eo})
+        _update_extraction_payload(repo, eo, ex)
     deduped = dedupe_exact_rows(ex)
     if deduped is not ex:
         _update_extraction_payload(repo, eo, deduped)
