@@ -172,7 +172,9 @@ def _eo_from_request(request: dict) -> str:
     pdfs/<eo>.pdf naming convention as core/gcs.GCSStore.pdf_uri and
     backfill.py's bootstrap()."""
     for part in request["contents"][0]["parts"]:
-        uri = part.get("fileData", {}).get("fileUri")
+        # Vertex's echoed requests serialize absent unions as explicit nulls,
+        # so "fileData" can be present-but-None (and so can "parts" entries).
+        uri = ((part or {}).get("fileData") or {}).get("fileUri")
         if uri:
             return uri.rsplit("/", 1)[-1].removesuffix(".pdf").upper()
     raise ValueError("echoed request has no file_data part")
