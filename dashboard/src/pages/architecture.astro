@@ -11,12 +11,12 @@ import Base from '../layouts/Base.astro';
 
   <div class="arch-viewport">
     <svg
-      viewBox="0 0 1600 900"
+      viewBox="0 0 1600 1100"
       width="100%"
       height="auto"
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="CarbLegal architecture: Cloud Scheduler triggers carb-api, which runs the ADK 2 workflow graph (scout, heal, claim, process, summarize) against Gemini, alongside a Vertex batch backfill path, all persisting to Firestore and GCS, read by carb-dash."
+      aria-label="CarbLegal architecture: Cloud Scheduler triggers carb-api, which runs the ADK 2 workflow graph -- scout, heal, refetch, claim, process, summarize. Claim routes to process (item) or summarize (empty / time-cap); process routes back to claim (loop) or to summarize (budget). Process expands into extract, audit, and match, all backed by Gemini 3.7 Flash; audit's escalate route feeds a human review loop whose corrections flow back into match. A Vertex batch backfill path runs alongside. Everything persists to Firestore and GCS, read by carb-dash."
     >
       <title>CarbLegal architecture diagram</title>
       <defs>
@@ -36,72 +36,88 @@ import Base from '../layouts/Base.astro';
         <marker id="arrow-muted" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)" opacity="0.6"></path>
         </marker>
+        <marker id="arrow-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--status-needs_review)"></path>
+        </marker>
       </defs>
 
       <!-- ================= BAND BACKGROUNDS ================= -->
       <rect x="0" y="0" width="1600" height="110" fill="var(--surface)" opacity="0.4"></rect>
-      <rect x="0" y="110" width="1600" height="350" fill="var(--bg)"></rect>
-      <rect x="0" y="460" width="1600" height="170" fill="var(--surface)" opacity="0.4"></rect>
-      <rect x="0" y="630" width="1600" height="270" fill="var(--bg)"></rect>
+      <rect x="0" y="110" width="1600" height="560" fill="var(--bg)"></rect>
+      <rect x="0" y="670" width="1600" height="150" fill="var(--surface)" opacity="0.4"></rect>
+      <rect x="0" y="820" width="1600" height="280" fill="var(--bg)"></rect>
       <line x1="0" y1="110" x2="1600" y2="110" stroke="var(--border)" stroke-width="1"></line>
-      <line x1="0" y1="460" x2="1600" y2="460" stroke="var(--border)" stroke-width="1"></line>
-      <line x1="0" y1="630" x2="1600" y2="630" stroke="var(--border)" stroke-width="1"></line>
+      <line x1="0" y1="670" x2="1600" y2="670" stroke="var(--border)" stroke-width="1"></line>
+      <line x1="0" y1="820" x2="1600" y2="820" stroke="var(--border)" stroke-width="1"></line>
 
       <!-- ================= BAND LABELS ================= -->
       <text x="60" y="32" class="band-label">TRIGGER</text>
       <text x="60" y="132" class="band-label">ORCHESTRATION</text>
-      <text x="60" y="482" class="band-label">PERSISTENCE</text>
-      <text x="60" y="652" class="band-label">SURFACE</text>
+      <text x="60" y="692" class="band-label">PERSISTENCE</text>
+      <text x="60" y="842" class="band-label">SURFACE</text>
 
       <!-- ================= ORCHESTRATION FRAME ================= -->
-      <rect x="40" y="142" width="1000" height="290" rx="16" fill="var(--surface)" opacity="0.4" stroke="var(--border-strong)" stroke-width="1.5"></rect>
-      <text x="540" y="170" text-anchor="middle" class="frame-label">ADK 2 GRAPH — GOOGLE.ADK.WORKFLOW</text>
+      <rect x="40" y="142" width="920" height="500" rx="16" fill="var(--surface)" opacity="0.4" stroke="var(--border-strong)" stroke-width="1.5"></rect>
+      <text x="500" y="170" text-anchor="middle" class="frame-label">ADK 2 GRAPH — GOOGLE.ADK.WORKFLOW</text>
 
       <!-- ================= BATCH LANE BOX (right side, subtle) ================= -->
-      <rect x="1050" y="155" width="510" height="345" rx="14" fill="var(--surface-2)" opacity="0.25" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"></rect>
-      <text x="1075" y="182" class="band-label" opacity="0.75">BATCH PATH</text>
+      <rect x="980" y="155" width="560" height="345" rx="14" fill="var(--surface-2)" opacity="0.25" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"></rect>
+      <text x="1005" y="182" class="band-label" opacity="0.75">BATCH PATH</text>
 
       <!-- ================= EDGES (drawn under nodes) ================= -->
 
       <!-- trigger -->
       <line x1="350" y1="72" x2="405" y2="72" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M540,96 L540,115 L155,115 L155,215" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M540,96 L540,115 L125,115 L125,215" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
 
-      <!-- main row -->
-      <line x1="230" y1="245" x2="265" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="420" y1="245" x2="455" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="610" y1="245" x2="645" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <!-- main row: scout -> heal -> refetch -> claim -> process ("item") -->
+      <line x1="180" y1="245" x2="206" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="306" y1="245" x2="332" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="452" y1="245" x2="478" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="578" y1="245" x2="604" y2="245" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
       <!-- claim/process route arcs -->
-      <path d="M680,220 Q605,185 588,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <path d="M770,220 Q845,185 862,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <path d="M535,270 Q725,320 912,270" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M624,220 Q591,185 558,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M704,220 Q737,185 770,220" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <path d="M528,270 Q664,312 820,270" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
 
-      <!-- process -> gemini (dashed) -->
-      <line x1="725" y1="270" x2="725" y2="347" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
+      <!-- process (extract->audit->match) internal chain -->
+      <line x1="345" y1="395" x2="370" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="630" y1="395" x2="655" y2="395" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+
+      <!-- extract/audit/match -> gemini (dashed) -->
+      <line x1="215" y1="420" x2="460" y2="470" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
+      <line x1="500" y1="420" x2="500" y2="470" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
+      <line x1="785" y1="420" x2="540" y2="470" stroke="var(--status-matching)" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrow-violet)"></line>
+
+      <!-- human review loop: audit "escalate" -> review queue -> human -> "resolve/corrections" -> match -->
+      <path d="M420,420 Q320,490 250,555" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
+      <line x1="330" y1="579" x2="650" y2="579" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></line>
+      <path d="M770,555 Q790,490 785,420" fill="none" stroke="var(--status-needs_review)" stroke-width="2" marker-end="url(#arrow-amber)"></path>
 
       <!-- down into persistence -->
-      <line x1="155" y1="270" x2="155" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="800" y1="270" x2="800" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <line x1="915" y1="270" x2="915" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M155,270 L155,445 L1290,445 L1290,495" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+      <line x1="200" y1="642" x2="200" y2="705" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <line x1="850" y1="642" x2="850" y2="705" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <path d="M125,642 L125,662 L1260,662 L1260,705" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
 
       <!-- batch lane, subtle -->
-      <line x1="1290" y1="495" x2="1290" y2="383" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
-      <line x1="1290" y1="330" x2="1290" y2="263" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
-      <path d="M1215,234 L1060,234 L1060,470 L1015,470 L1015,495" fill="none" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></path>
+      <line x1="1260" y1="705" x2="1260" y2="383" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
+      <line x1="1260" y1="330" x2="1260" y2="263" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></line>
+      <path d="M1185,234 L1030,234 L1030,650 L1015,650 L1015,705" fill="none" stroke="var(--text-muted)" stroke-width="1.5" opacity="0.65" marker-end="url(#arrow-muted)"></path>
 
       <!-- surface -->
-      <line x1="555" y1="590" x2="555" y2="695" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M680,730 L1580,730 L1580,72 L675,72" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"></path>
+      <line x1="555" y1="805" x2="555" y2="885" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <path d="M680,920 L1580,920 L1580,72 L675,72" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"></path>
 
       <!-- ================= EDGE LABELS (halo text, on top of lines) ================= -->
-      <text x="627" y="233" text-anchor="middle" class="edge-label">item</text>
-      <text x="633" y="203" text-anchor="middle" class="edge-label">loop</text>
-      <text x="817" y="203" text-anchor="middle" class="edge-label">budget</text>
-      <text x="725" y="303" text-anchor="middle" class="edge-label">empty / time-cap</text>
-      <text x="1130" y="722" text-anchor="middle" class="edge-label">admin</text>
-      <text x="572" y="648" text-anchor="start" class="edge-label">reads</text>
+      <text x="591" y="233" text-anchor="middle" class="edge-label">item</text>
+      <text x="591" y="203" text-anchor="middle" class="edge-label">loop</text>
+      <text x="737" y="203" text-anchor="middle" class="edge-label">budget</text>
+      <text x="664" y="295" text-anchor="middle" class="edge-label">empty · time-cap</text>
+      <text x="320" y="475" text-anchor="middle" class="edge-label">escalate</text>
+      <text x="800" y="490" text-anchor="start" class="edge-label">resolve / corrections</text>
+      <text x="1130" y="912" text-anchor="middle" class="edge-label">admin</text>
+      <text x="572" y="825" text-anchor="start" class="edge-label">reads</text>
 
       <!-- ================= TRIGGER NODES ================= -->
       <g filter="url(#glow)">
@@ -117,74 +133,114 @@ import Base from '../layouts/Base.astro';
 
       <!-- ================= ADK2 MAIN ROW ================= -->
       <g filter="url(#glow)">
-        <rect x="80" y="220" width="150" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
-        <text x="155" y="239" text-anchor="middle" class="node-title" fill="var(--status-discovered)">scout</text>
-        <text x="155" y="259" text-anchor="middle" class="node-sub">discover EOs</text>
+        <rect x="70" y="220" width="110" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
+        <text x="125" y="239" text-anchor="middle" class="node-title" fill="var(--status-discovered)">scout</text>
+        <text x="125" y="259" text-anchor="middle" class="node-sub">discover EOs</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="265" y="220" width="150" height="50" rx="10" fill="var(--surface-2)" stroke="var(--agent-healer)" stroke-width="1"></rect>
-        <text x="340" y="239" text-anchor="middle" class="node-title" fill="var(--agent-healer)">heal</text>
-        <text x="340" y="259" text-anchor="middle" class="node-sub">requeue failures</text>
+        <rect x="206" y="220" width="100" height="50" rx="10" fill="var(--surface-2)" stroke="var(--agent-healer)" stroke-width="1"></rect>
+        <text x="256" y="239" text-anchor="middle" class="node-title" fill="var(--agent-healer)">heal</text>
+        <text x="256" y="259" text-anchor="middle" class="node-sub">requeue transient</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="455" y="220" width="155" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
-        <text x="532" y="239" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">claim</text>
-        <text x="532" y="259" text-anchor="middle" class="node-sub">next work item</text>
+        <rect x="332" y="220" width="120" height="50" rx="10" fill="var(--surface-2)" stroke="var(--agent-healer)" stroke-width="1"></rect>
+        <text x="392" y="239" text-anchor="middle" class="node-title" fill="var(--agent-healer)">refetch</text>
+        <text x="392" y="259" text-anchor="middle" class="node-sub">re-download source</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="645" y="220" width="160" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1"></rect>
-        <text x="725" y="239" text-anchor="middle" class="node-title" fill="var(--status-matching)">process</text>
-        <text x="725" y="259" text-anchor="middle" class="node-sub">extract · audit · match</text>
+        <rect x="478" y="220" width="100" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
+        <text x="528" y="239" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">claim</text>
+        <text x="528" y="259" text-anchor="middle" class="node-sub">next item</text>
       </g>
       <g filter="url(#glow)">
-        <rect x="840" y="220" width="150" height="50" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
-        <text x="915" y="239" text-anchor="middle" class="node-title" fill="var(--accent)">summarize</text>
-        <text x="915" y="259" text-anchor="middle" class="node-sub">finish run</text>
+        <rect x="604" y="220" width="120" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1"></rect>
+        <text x="664" y="239" text-anchor="middle" class="node-title" fill="var(--status-matching)">process</text>
+        <text x="664" y="259" text-anchor="middle" class="node-sub">per-EO (below)</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="750" y="220" width="140" height="50" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
+        <text x="820" y="239" text-anchor="middle" class="node-title" fill="var(--accent)">summarize</text>
+        <text x="820" y="259" text-anchor="middle" class="node-sub">finish run</text>
+      </g>
+
+      <!-- ================= HEALER CAPTION ================= -->
+      <text x="329" y="286" text-anchor="middle" class="caption">transient -&gt; requeue · corrupt source -&gt; re-download · 3 strikes -&gt; human</text>
+
+      <!-- ================= PROCESS (PER EO) SUB-FRAME ================= -->
+      <rect x="55" y="325" width="890" height="300" rx="14" fill="var(--surface-2)" opacity="0.35" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+      <text x="500" y="350" text-anchor="middle" class="frame-label">PROCESS (PER EO)</text>
+
+      <g filter="url(#glow)">
+        <rect x="85" y="370" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1"></rect>
+        <text x="215" y="389" text-anchor="middle" class="node-title" fill="var(--status-discovered)">extract</text>
+        <text x="215" y="409" text-anchor="middle" class="node-sub">ladder: native PDF -&gt; image render</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="370" y="370" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
+        <text x="500" y="389" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">audit</text>
+        <text x="500" y="409" text-anchor="middle" class="node-sub">gate + selective critic</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="655" y="370" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-complete)" stroke-width="1"></rect>
+        <text x="785" y="389" text-anchor="middle" class="node-title" fill="var(--status-complete)">match</text>
+        <text x="785" y="409" text-anchor="middle" class="node-sub">index + Gemini resolver</text>
       </g>
 
       <!-- ================= GEMINI CHIP (violet glow) ================= -->
       <g filter="url(#glow)">
-        <rect x="630" y="347" width="190" height="48" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
-        <text x="725" y="367" text-anchor="middle" class="node-title" fill="var(--status-matching)">Gemini 3.7 Flash</text>
-        <text x="725" y="385" text-anchor="middle" class="node-sub">structured extraction</text>
+        <rect x="400" y="470" width="200" height="50" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="500" y="490" text-anchor="middle" class="node-title" fill="var(--status-matching)">Gemini 3.7 Flash</text>
+        <text x="500" y="508" text-anchor="middle" class="node-sub">structured extraction</text>
+      </g>
+
+      <!-- ================= HUMAN REVIEW LOOP ================= -->
+      <g filter="url(#glow)">
+        <rect x="170" y="555" width="160" height="48" rx="10" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="1"></rect>
+        <text x="250" y="574" text-anchor="middle" class="node-title" fill="var(--status-needs_review)">review queue</text>
+        <text x="250" y="592" text-anchor="middle" class="node-sub">audit escalations</text>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="650" y="555" width="140" height="48" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+        <text x="720" y="574" text-anchor="middle" class="node-title" fill="var(--text)">human</text>
+        <text x="720" y="592" text-anchor="middle" class="node-sub">manual review</text>
       </g>
 
       <!-- ================= BATCH LANE NODES (subtle) ================= -->
       <g opacity="0.85">
-        <rect x="1215" y="330" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-        <text x="1290" y="350" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">Vertex AI batch job</text>
-        <text x="1290" y="367" text-anchor="middle" class="node-sub">batch inference</text>
+        <rect x="1185" y="330" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+        <text x="1260" y="350" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">Vertex AI batch job</text>
+        <text x="1260" y="367" text-anchor="middle" class="node-sub">batch inference</text>
       </g>
       <g opacity="0.85">
-        <rect x="1215" y="210" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-        <text x="1290" y="230" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">batchfill --ingest</text>
-        <text x="1290" y="247" text-anchor="middle" class="node-sub">backfill CLI</text>
+        <rect x="1185" y="210" width="150" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
+        <text x="1260" y="230" text-anchor="middle" class="node-title-sm" fill="var(--text-muted)">batchfill --ingest</text>
+        <text x="1260" y="247" text-anchor="middle" class="node-sub">backfill CLI</text>
       </g>
 
       <!-- ================= PERSISTENCE CYLINDERS ================= -->
       <!-- Firestore -->
-      <ellipse cx="555" cy="574" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <rect x="90" y="516" width="930" height="58" fill="var(--surface-2)"></rect>
-      <line x1="90" y1="516" x2="90" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
-      <line x1="1020" y1="516" x2="1020" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
-      <ellipse cx="555" cy="516" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <text x="555" y="540" text-anchor="middle" class="node-title" fill="var(--text)">Firestore</text>
-      <text x="555" y="559" text-anchor="middle" class="node-sub">eos · work_items · runs · matches · review_queue</text>
+      <ellipse cx="555" cy="784" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <rect x="90" y="726" width="930" height="58" fill="var(--surface-2)"></rect>
+      <line x1="90" y1="726" x2="90" y2="784" stroke="var(--border-strong)" stroke-width="1"></line>
+      <line x1="1020" y1="726" x2="1020" y2="784" stroke="var(--border-strong)" stroke-width="1"></line>
+      <ellipse cx="555" cy="726" rx="465" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <text x="555" y="750" text-anchor="middle" class="node-title" fill="var(--text)">Firestore</text>
+      <text x="555" y="769" text-anchor="middle" class="node-sub">eos · work_items · runs · matches · review_queue</text>
 
       <!-- GCS -->
-      <ellipse cx="1290" cy="574" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <rect x="1190" y="516" width="200" height="58" fill="var(--surface-2)"></rect>
-      <line x1="1190" y1="516" x2="1190" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
-      <line x1="1390" y1="516" x2="1390" y2="574" stroke="var(--border-strong)" stroke-width="1"></line>
-      <ellipse cx="1290" cy="516" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
-      <text x="1290" y="540" text-anchor="middle" class="node-title" fill="var(--text)">GCS bucket</text>
-      <text x="1290" y="559" text-anchor="middle" class="node-sub">pdfs/</text>
+      <ellipse cx="1260" cy="784" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <rect x="1160" y="726" width="200" height="58" fill="var(--surface-2)"></rect>
+      <line x1="1160" y1="726" x2="1160" y2="784" stroke="var(--border-strong)" stroke-width="1"></line>
+      <line x1="1360" y1="726" x2="1360" y2="784" stroke="var(--border-strong)" stroke-width="1"></line>
+      <ellipse cx="1260" cy="726" rx="100" ry="16" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></ellipse>
+      <text x="1260" y="750" text-anchor="middle" class="node-title" fill="var(--text)">GCS bucket</text>
+      <text x="1260" y="769" text-anchor="middle" class="node-sub">pdfs/</text>
 
       <!-- ================= SURFACE ================= -->
       <g filter="url(#glow)">
-        <rect x="430" y="700" width="250" height="60" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
-        <text x="555" y="724" text-anchor="middle" class="node-title" fill="var(--accent)">carb-dash</text>
-        <text x="555" y="744" text-anchor="middle" class="node-sub">reads Firestore live</text>
+        <rect x="430" y="890" width="250" height="60" rx="10" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1"></rect>
+        <text x="555" y="914" text-anchor="middle" class="node-title" fill="var(--accent)">carb-dash</text>
+        <text x="555" y="934" text-anchor="middle" class="node-sub">reads Firestore live</text>
       </g>
     </svg>
   </div>
@@ -253,5 +309,12 @@ import Base from '../layouts/Base.astro';
     stroke-width: 6;
     paint-order: stroke;
     stroke-linejoin: round;
+  }
+
+  .arch-viewport :global(.caption) {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-style: italic;
+    fill: var(--text-muted);
   }
 </style>

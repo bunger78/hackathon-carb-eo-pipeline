@@ -10,7 +10,8 @@ const source = readFileSync(fileURLToPath(new URL('./architecture.astro', import
 
 describe('architecture page', () => {
   it('names every ADK 2 workflow node exactly as in pipeline/workflow_graph.py', () => {
-    for (const nodeName of ['scout', 'heal', 'claim', 'process', 'summarize']) {
+    for (const nodeName of ['scout', 'heal', 'refetch', 'claim', 'process', 'summarize',
+                             'extract', 'audit', 'match', 'review']) {
       expect(source).toContain(nodeName);
     }
   });
