@@ -22,6 +22,8 @@ class FakeCarb:
     def download_pdf(self, url): return b"%PDF-fake"
 
 class FakeGCS:
+    def cached_pdf(self, eo): return None
+    def pdf_uri(self, eo): return f"gs://b/pdfs/{eo.lower()}.pdf"
     def upload_pdf(self, eo, data): return f"gs://b/pdfs/{eo.lower()}.pdf"
     def download(self, uri): return b"%PDF-fake"
     def upload_page_images(self, eo, images): return ["gs://b/p/0.png"]

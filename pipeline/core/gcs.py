@@ -26,6 +26,16 @@ class GCSStore:
     def pdf_uri(self, eo: str) -> str:
         return f"gs://{self.name}/pdfs/{eo.lower()}.pdf"
 
+    def cached_pdf(self, eo: str) -> bytes | None:
+        """Bytes already in the bucket for this EO, or None. Only a payload
+        with the %PDF magic counts -- an empty or garbage object (e.g. a WAF
+        error body stored by an earlier fetch) must not satisfy the cache."""
+        blob = self.bucket.blob(f"pdfs/{eo.lower()}.pdf")
+        if not blob.exists():
+            return None
+        data = blob.download_as_bytes()
+        return data if data.startswith(b"%PDF") else None
+
     def download(self, gs_uri: str) -> bytes:
         path = gs_uri.split(f"gs://{self.name}/", 1)[1]
         return self.bucket.blob(path).download_as_bytes()
