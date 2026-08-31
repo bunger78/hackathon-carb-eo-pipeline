@@ -122,3 +122,20 @@ def test_invalid_critique_output_escalates():
     out, _ = audit(llm, repo, BudgetGuard(5), "D-5-5", ex, MAKES, run, rand=0.9)
     assert out == "escalated"
     assert repo.reviews[0]["reason"] == "validation_failure"
+
+
+def test_trim_variant_rows_are_not_duplicates():
+    from agents.auditor import deterministic_issues
+    from schemas.extraction import Extraction
+    ex = Extraction.model_validate({
+        "eo_number": "D-660-256", "manufacturer": "Cobb", "device_name": "Tune",
+        "category": "tune", "confidence": 1.0, "part_numbers": ["AP3-SUB-007"],
+        "fitment": [
+            {"model": "Ascent", "make": "Subaru", "year_start": 2023, "year_end": 2025,
+             "displacement_l": 2.4, "induction": "TURBO", "trim_note": "Limited / Touring",
+             "part_numbers": ["AP3-SUB-007"], "cylinders": None},
+            {"model": "Ascent", "make": "Subaru", "year_start": 2023, "year_end": 2025,
+             "displacement_l": 2.4, "induction": "TURBO", "trim_note": None,
+             "part_numbers": ["AP3-SUB-007"], "cylinders": None},
+        ]})
+    assert "duplicate_fitment" not in deterministic_issues(ex, {"subaru"})

@@ -24,7 +24,11 @@ def deterministic_issues(ex: Extraction, known_makes: set[str]) -> list[str]:
         issues.append("bad_part_number")
     if any(r.make and r.make.casefold() not in known_makes for r in ex.fitment):
         issues.append("unknown_make")
-    keys = [(r.model, r.year_start, r.year_end, r.displacement_l) for r in ex.fitment]
+    # Rows differing only by trim/induction are legitimate variants (base vs
+    # Limited, NA vs turbo); the copy-paste-duplicate signature is identity
+    # across ALL semantic fields.
+    keys = [(r.model, r.year_start, r.year_end, r.displacement_l, r.induction, r.trim_note)
+            for r in ex.fitment]
     if len(keys) != len(set(keys)):
         issues.append("duplicate_fitment")
     if ex.category is None:
@@ -115,7 +119,10 @@ def audit(llm, repo, budget, eo, ex, known_makes, run_id, rand=None) -> tuple[st
         # override a deterministic validation failure. Only cases the
         # deterministic checks already passed reach an LLM-accepted outcome.
         if issues:
-            _escalate(repo, eo, ex, reason, "; ".join(verdict.reasons), run_id)
+            # Name the tripped rules first — the reviewer must see WHY the
+            # gate escalated, not only the critic's (possibly positive) notes.
+            _escalate(repo, eo, ex, reason,
+                      f"gate: {', '.join(issues)}; critic: " + "; ".join(verdict.reasons), run_id)
             return "escalated", ex
         _accept(repo, eo, ex, run_id)
         return "accepted", ex
