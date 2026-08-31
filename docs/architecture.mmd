@@ -26,11 +26,13 @@ flowchart TD
   subgraph ADK2["ADK2 workflow (google.adk.workflow.Workflow)"]
     wf_scout["scout"]
     wf_heal["heal"]
+    wf_refetch["refetch"]
     wf_claim["claim"]
     wf_process["process"]
     wf_summarize["summarize"]
     wf_scout --> wf_heal
-    wf_heal --> wf_claim
+    wf_heal --> wf_refetch
+    wf_refetch --> wf_claim
     wf_claim -- "True" --> wf_process
     wf_claim -- "False" --> wf_summarize
     wf_process -- "loop" --> wf_claim

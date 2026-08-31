@@ -35,7 +35,8 @@ def test_no_work_day_reaches_summarize_with_zero_llm_calls():
     deps = _deps(llm, listings=[])
     summary = run_workflow(deps, "test")
     assert summary == {"new_eos": 0, "completed": 0, "needs_review": 0, "failed": 0,
-                        "healed": 0, "status": "ok", "time_capped": False, "cost_usd": 0.0}
+                        "healed": 0, "refetched": 0, "status": "ok", "time_capped": False,
+                        "cost_usd": 0.0}
     assert llm.calls == []
     assert list(deps.repo.runs.values())[0]["status"] == "ok"
 
@@ -82,6 +83,25 @@ def test_heal_requeues_transient_failure_and_daily_run_reprocesses_it(monkeypatc
     summary = run_workflow(deps, "test")
 
     assert summary["healed"] == 1
+    assert summary["completed"] == 1
+    assert deps.repo.work_items[item_id]["status"] == "done"
+    assert deps.repo.get_eo("D-9-9")["state"] == "complete"
+
+def test_refetch_requeues_corrupt_source_and_daily_run_reprocesses_it(monkeypatch):
+    monkeypatch.setattr("agents.extractor.render_pdf_to_images", lambda b: [b"png"])
+    monkeypatch.setattr("agents.auditor.random.random", lambda: 0.99)
+    llm = FakeLLM([LLMResult(GOOD, 100, 50)])
+    deps = _deps(llm, listings=[])
+    item_id = deps.repo.create_work_item("D-9-9", "priorrun")
+    deps.repo.update_work_item(item_id, {"status": "failed", "attempts": 3,
+                                          "last_error": "Failed to load document (PDFium: Data format error)"})
+    deps.repo.upsert_eo("D-9-9", {"gcs_uri": "gs://b/pdfs/d-9-9.pdf", "pdf_url": "http://x/d-9-9.pdf",
+                                   "state": "failed"})
+
+    summary = run_workflow(deps, "test")
+
+    assert summary["refetched"] == 1
+    assert summary["healed"] == 0
     assert summary["completed"] == 1
     assert deps.repo.work_items[item_id]["status"] == "done"
     assert deps.repo.get_eo("D-9-9")["state"] == "complete"

@@ -17,7 +17,7 @@ from google.adk.workflow import START, Workflow, node
 from google.adk.runners import InMemoryRunner
 from google.genai import types as gt
 
-from agents.healer import requeue_transient_failures
+from agents.healer import requeue_corrupt_sources, requeue_transient_failures
 from agents.scout import discover
 from config import settings
 from core.costs import BudgetExceeded
@@ -40,6 +40,10 @@ def build_workflow(deps, run_id) -> Workflow:
     @node
     def heal(ctx):
         ctx.state["healed"] = requeue_transient_failures(deps.repo, run_id)
+
+    @node
+    def refetch(ctx):
+        ctx.state["refetched"] = requeue_corrupt_sources(deps.repo, deps.carb, deps.gcs, run_id)
 
     @node
     def claim(ctx):
@@ -70,9 +74,9 @@ def build_workflow(deps, run_id) -> Workflow:
         ctx.route = "loop"
 
     @node
-    def summarize(ctx, new_eos, completed, needs_review, failed, healed, status, time_capped):
+    def summarize(ctx, new_eos, completed, needs_review, failed, healed, refetched, status, time_capped):
         summary = {"new_eos": new_eos, "completed": completed, "needs_review": needs_review,
-                   "failed": failed, "healed": healed, "status": status,
+                   "failed": failed, "healed": healed, "refetched": refetched, "status": status,
                    "time_capped": time_capped,
                    "cost_usd": round(deps.budget.spent, 4)}
         deps.repo.finish_run(run_id, summary)
@@ -81,7 +85,8 @@ def build_workflow(deps, run_id) -> Workflow:
     return Workflow(name="carblegal_daily", edges=[
         (START, scout),
         (scout, heal),
-        (heal, claim),
+        (heal, refetch),
+        (refetch, claim),
         (claim, {True: process, False: summarize}),
         (process, {"loop": claim, "budget": summarize}),
     ])
