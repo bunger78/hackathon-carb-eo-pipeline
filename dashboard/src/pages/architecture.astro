@@ -13,19 +13,26 @@ import Base from '../layouts/Base.astro';
     <svg viewBox="0 0 1100 100" width="100%" height="auto" preserveAspectRatio="xMidYMid meet" role="img"
       aria-label="Cloud Scheduler triggers Cloud Run carb-api at 6:00 AM daily, or an admin can trigger it manually.">
       <defs>
+        <filter id="glow-trigger" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+          <feMerge>
+            <feMergeNode in="blur"></feMergeNode>
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
         <marker id="tarrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)"></path>
         </marker>
       </defs>
       <line x1="340" y1="50" x2="755" y2="50" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#tarrow)"></line>
       <text x="547" y="40" text-anchor="middle" class="caption">+ manual / admin</text>
-      <g>
-        <rect x="60" y="25" width="280" height="50" rx="8" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+      <g filter="url(#glow-trigger)">
+        <rect x="60" y="25" width="280" height="50" rx="10" fill="var(--surface)" stroke="var(--text-muted)" stroke-width="1.5"></rect>
         <text x="200" y="46" text-anchor="middle" class="a-text" fill="var(--text)">Cloud Scheduler</text>
         <text x="200" y="64" text-anchor="middle" class="node-sub">6:00 AM daily</text>
       </g>
-      <g>
-        <rect x="760" y="25" width="280" height="50" rx="8" fill="var(--surface-2)" stroke="var(--text-muted)" stroke-width="1"></rect>
+      <g filter="url(#glow-trigger)">
+        <rect x="760" y="25" width="280" height="50" rx="10" fill="var(--surface)" stroke="var(--text-muted)" stroke-width="1.5"></rect>
         <text x="900" y="46" text-anchor="middle" class="a-text" fill="var(--text)">Cloud Run carb-api</text>
         <text x="900" y="64" text-anchor="middle" class="node-sub">/run</text>
       </g>
@@ -36,7 +43,7 @@ import Base from '../layouts/Base.astro';
 
   <div class="arch-viewport">
     <svg
-      viewBox="0 0 1100 2780"
+      viewBox="0 0 1100 2760"
       width="100%"
       height="auto"
       preserveAspectRatio="xMidYMid meet"
@@ -45,6 +52,13 @@ import Base from '../layouts/Base.astro';
     >
       <title>CarbLegal decision flowchart</title>
       <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+          <feMerge>
+            <feMergeNode in="blur"></feMergeNode>
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
         <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)"></path>
         </marker>
@@ -54,199 +68,287 @@ import Base from '../layouts/Base.astro';
         <marker id="arrow-red" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--status-failed)"></path>
         </marker>
+        <path id="hexgate" d="M -119.3,-11.9 L -95.7,-38.1 Q -85,-50 -69,-50 L 69,-50 Q 85,-50 95.7,-38.1 L 119.3,-11.9 Q 130,0 119.3,11.9 L 95.7,38.1 Q 85,50 69,50 L -69,50 Q -85,50 -95.7,38.1 L -119.3,11.9 Q -130,0 -119.3,-11.9 Z"></path>
       </defs>
 
-      <!-- ============ START ============ -->
-      <rect x="370" y="20" width="260" height="44" rx="22" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"></rect>
-      <text x="500" y="47" text-anchor="middle" class="a-text" fill="var(--accent)">6:00 AM — Scheduler rings</text>
-      <line x1="500" y1="64" x2="500" y2="110" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <!-- ================= SECTION BANDS ================= -->
+      <rect x="0" y="0" width="1100" height="950" fill="var(--surface)" opacity="0.35"></rect>
+      <line x1="0" y1="950" x2="1100" y2="950" stroke="var(--border)" stroke-width="1"></line>
+      <rect x="10" y="965" width="1080" height="1756" rx="18" fill="none" stroke="var(--border-strong)" stroke-width="1.5"></rect>
+      <rect x="25" y="815" width="290" height="132" rx="14" fill="var(--surface-2)" opacity="0.3" stroke="var(--accent)" stroke-width="1" stroke-dasharray="5,4"></rect>
 
-      <!-- ============ STEP 2: failed work? ============ -->
-      <polygon points="500,110 670,180 500,250 330,180" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="175" text-anchor="middle" class="q-text">failed work from</text>
-      <text x="500" y="193" text-anchor="middle" class="q-text">last time?</text>
+      <!-- section title chips -->
+      <rect x="30" y="18" width="150" height="30" rx="15" fill="var(--surface-2)" stroke="var(--status-discovered)" stroke-width="1.5"></rect>
+      <text x="105" y="38" text-anchor="middle" class="band-chip" fill="var(--status-discovered)">WAKE-UP</text>
+      <rect x="35" y="803" width="80" height="26" rx="13" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"></rect>
+      <text x="75" y="820" text-anchor="middle" class="band-chip" fill="var(--accent)">REST</text>
+      <rect x="30" y="978" width="212" height="30" rx="15" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+      <text x="136" y="998" text-anchor="middle" class="band-chip" fill="var(--status-matching)">PER DOCUMENT</text>
 
-      <path d="M330,180 L60,180 L60,650 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="65" y="172" text-anchor="start" class="no-label">no</text>
-      <line x1="500" y1="250" x2="500" y2="310" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="514" y="285" text-anchor="start" class="yes-label">yes</text>
+      <!-- ================= EDGES (drawn under nodes) ================= -->
+      <g fill="none" stroke-linejoin="round" stroke-linecap="round">
+        <line x1="500" y1="66" x2="500" y2="146" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
-      <!-- why did it fail? -->
-      <polygon points="500,310 640,375 500,440 360,375" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="371" text-anchor="middle" class="q-text">why did</text>
-      <text x="500" y="389" text-anchor="middle" class="q-text">it fail?</text>
+        <!-- failed-work? -->
+        <line x1="500" y1="246" x2="500" y2="326" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
+        <polyline points="370,196 50,196 50,692 370,692" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></polyline>
 
-      <path d="M360,375 L150,495" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <line x1="500" y1="440" x2="500" y2="495" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <path d="M640,375 L850,495" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+        <!-- why fail -> 3 branches -->
+        <polyline points="430,426 430,466 170,466 170,506" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+        <line x1="500" y1="426" x2="500" y2="506" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+        <polyline points="570,426 570,466 850,466 850,506" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
 
-      <rect x="20" y="495" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="150" y="517" text-anchor="middle" class="a-text">quota blip →</text>
-      <text x="150" y="534" text-anchor="middle" class="a-text">requeue</text>
-      <text x="290" y="524" text-anchor="start" class="tag">(heal)</text>
+        <!-- 3 branches -> new EOs? -->
+        <polyline points="170,562 170,602 430,602 430,642" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+        <line x1="500" y1="562" x2="500" y2="642" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+        <polyline points="850,562 850,602 570,602 570,642" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
 
-      <rect x="310" y="495" width="380" height="50" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="500" y="517" text-anchor="middle" class="a-text">bad file → re-download from CARB,</text>
-      <text x="500" y="534" text-anchor="middle" class="a-text">requeue</text>
-      <text x="700" y="524" text-anchor="start" class="tag">(refetch)</text>
+        <!-- new EOs? -->
+        <line x1="630" y1="692" x2="700" y2="692" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
+        <polyline points="850,720 850,822 500,822" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+        <line x1="500" y1="742" x2="500" y2="822" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
-      <rect x="720" y="495" width="260" height="50" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="850" y="517" text-anchor="middle" class="a-text">3rd strike → leave</text>
-      <text x="850" y="534" text-anchor="middle" class="a-text">for a human</text>
+        <!-- hub: work in queue? -->
+        <line x1="370" y1="872" x2="300" y2="872" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
+        <line x1="500" y1="922" x2="500" y2="1002" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
+        <line x1="500" y1="1058" x2="500" y2="1138" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
-      <path d="M150,545 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <path d="M500,545 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <path d="M850,545 L500,650" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
+        <!-- Gemini native read? -->
+        <line x1="370" y1="1188" x2="300" y2="1188" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
+        <line x1="170" y1="1216" x2="170" y2="1296" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+        <line x1="170" y1="1396" x2="170" y2="1476" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
+        <polyline points="300,1346 500,1346 500,1476" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></polyline>
+        <line x1="500" y1="1238" x2="500" y2="1476" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
+        <line x1="500" y1="1532" x2="500" y2="1612" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
 
-      <!-- ============ STEP 3: new EOs? ============ -->
-      <polygon points="500,650 670,720 500,790 330,720" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="715" text-anchor="middle" class="q-text">new EOs in the</text>
-      <text x="500" y="733" text-anchor="middle" class="q-text">state registry?</text>
+        <!-- header identity check -->
+        <line x1="370" y1="1662" x2="300" y2="1662" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
+        <polyline points="170,1690 170,1792 500,1792" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+        <line x1="500" y1="1712" x2="500" y2="1792" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
 
-      <line x1="670" y1="720" x2="700" y2="720" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="678" y="705" text-anchor="start" class="yes-label">yes</text>
-      <rect x="700" y="693" width="300" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="850" y="714" text-anchor="middle" class="a-text">download PDFs,</text>
-      <text x="850" y="731" text-anchor="middle" class="a-text">add to queue</text>
-      <text x="1010" y="723" text-anchor="start" class="tag">(scout)</text>
+        <!-- deterministic gate -->
+        <polyline points="370,1842 170,1842 170,1974" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></polyline>
+        <line x1="170" y1="2030" x2="170" y2="2110" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+        <line x1="170" y1="2210" x2="170" y2="2290" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
+        <polyline points="300,2160 500,2160 500,2290" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></polyline>
+        <line x1="500" y1="1892" x2="500" y2="2290" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
 
-      <path d="M850,747 L500,870" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <line x1="500" y1="790" x2="500" y2="870" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="464" y="820" text-anchor="end" class="step-label">both</text>
+        <!-- ambiguous rows -->
+        <line x1="630" y1="2340" x2="700" y2="2340" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
+        <polyline points="850,2368 850,2470 500,2470" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+        <line x1="500" y1="2390" x2="500" y2="2470" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
 
-      <!-- ============ STEP 4: work in queue? time/budget left? ============ -->
-      <polygon points="500,870 670,940 500,1010 330,940" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="925" text-anchor="middle" class="q-text">work in queue?</text>
-      <text x="500" y="943" text-anchor="middle" class="q-text">time &amp; budget left?</text>
+        <!-- supersedes -->
+        <line x1="630" y1="2520" x2="700" y2="2520" stroke="var(--status-complete)" stroke-width="2" marker-end="url(#arrow-green)"></line>
+        <polyline points="850,2548 850,2650 500,2650" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+        <line x1="500" y1="2570" x2="500" y2="2650" stroke="var(--status-failed)" stroke-width="2" marker-end="url(#arrow-red)"></line>
 
-      <path d="M330,940 L150,940 L150,990" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="200" y="932" text-anchor="middle" class="no-label">no</text>
-      <rect x="20" y="990" width="300" height="60" rx="10" fill="var(--status-complete-bg)" stroke="var(--accent)" stroke-width="1.5"></rect>
-      <text x="170" y="1014" text-anchor="middle" class="a-text">write run summary —</text>
-      <text x="170" y="1031" text-anchor="middle" class="a-text">sleep until tomorrow</text>
-      <text x="330" y="1023" text-anchor="start" class="tag">(summarize)</text>
+        <!-- loop back -->
+        <polyline points="680,2678 1040,2678 1040,872 630,872" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></polyline>
+      </g>
 
-      <line x1="500" y1="1010" x2="500" y2="1070" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="514" y="1044" text-anchor="start" class="yes-label">yes</text>
-      <rect x="360" y="1070" width="280" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="500" y="1103" text-anchor="middle" class="a-text">claim oldest item</text>
-      <text x="650" y="1103" text-anchor="start" class="tag">(claim)</text>
+      <!-- ================= YES / NO / PASS / FAIL CHIPS ================= -->
+      <g class="chip-yes"><rect x="483" y="277" width="34" height="18" rx="9"></rect><text x="500" y="290">YES</text></g>
+      <g class="chip-no"><rect x="150" y="187" width="32" height="18" rx="9"></rect><text x="166" y="200">NO</text></g>
+      <g class="chip-yes"><rect x="648" y="669" width="34" height="18" rx="9"></rect><text x="665" y="682">YES</text></g>
+      <g class="chip-no"><rect x="319" y="853" width="32" height="18" rx="9"></rect><text x="335" y="866">NO</text></g>
+      <g class="chip-yes"><rect x="483" y="953" width="34" height="18" rx="9"></rect><text x="500" y="966">YES</text></g>
+      <g class="chip-no"><rect x="319" y="1169" width="32" height="18" rx="9"></rect><text x="335" y="1182">NO</text></g>
+      <g class="chip-no"><rect x="184" y="1418" width="32" height="18" rx="9"></rect><text x="200" y="1431">NO</text></g>
+      <g class="chip-yes"><rect x="383" y="1313" width="34" height="18" rx="9"></rect><text x="400" y="1326">YES</text></g>
+      <g class="chip-yes"><rect x="497" y="1281" width="34" height="18" rx="9"></rect><text x="514" y="1294">YES</text></g>
+      <g class="chip-no"><rect x="319" y="1643" width="32" height="18" rx="9"></rect><text x="335" y="1656">NO</text></g>
+      <g class="chip-yes"><rect x="497" y="1743" width="34" height="18" rx="9"></rect><text x="514" y="1756">YES</text></g>
+      <g class="chip-fail"><rect x="242" y="1819" width="36" height="18" rx="9"></rect><text x="260" y="1832">FAIL</text></g>
+      <g class="chip-yes"><rect x="383" y="2137" width="34" height="18" rx="9"></rect><text x="400" y="2150">YES</text></g>
+      <g class="chip-pass"><rect x="494" y="2081" width="40" height="18" rx="9"></rect><text x="514" y="2094">PASS</text></g>
+      <g class="chip-yes"><rect x="648" y="2317" width="34" height="18" rx="9"></rect><text x="665" y="2330">YES</text></g>
+      <g class="chip-no"><rect x="497" y="2421" width="32" height="18" rx="9"></rect><text x="514" y="2434">NO</text></g>
+      <g class="chip-yes"><rect x="648" y="2497" width="34" height="18" rx="9"></rect><text x="665" y="2510">YES</text></g>
+      <g class="chip-no"><rect x="497" y="2601" width="32" height="18" rx="9"></rect><text x="514" y="2614">NO</text></g>
 
-      <line x1="500" y1="1124" x2="500" y2="1194" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="700" y="1180" text-anchor="middle" class="tag">(process) — per claimed item, steps below</text>
+      <text x="1030" y="1000" text-anchor="end" class="step-label">next item</text>
+      <text x="700" y="1102" text-anchor="start" class="step-label">(process) — per claimed item, steps below</text>
 
-      <!-- ============ STEP 5: Gemini read PDF natively? ============ -->
-      <polygon points="500,1194 670,1264 500,1334 330,1264" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="1259" text-anchor="middle" class="q-text">can Gemini read the</text>
-      <text x="500" y="1277" text-anchor="middle" class="q-text">PDF natively?</text>
+      <!-- ================= START ================= -->
+      <g filter="url(#glow)">
+        <rect x="370" y="20" width="260" height="46" rx="23" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="500" y="47" text-anchor="middle" class="a-text" fill="var(--accent)">6:00 AM — Scheduler rings</text>
+      </g>
 
-      <line x1="330" y1="1264" x2="320" y2="1264" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="200" y="1249" text-anchor="middle" class="no-label">no</text>
-      <rect x="20" y="1237" width="300" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="170" y="1258" text-anchor="middle" class="a-text">re-render pages as</text>
-      <text x="170" y="1275" text-anchor="middle" class="a-text">images, retry</text>
+      <!-- ============ STEP: failed work? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,196)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="190" text-anchor="middle" class="q-text">failed work from</text>
+        <text x="500" y="208" text-anchor="middle" class="q-text">last time?</text>
+      </g>
 
-      <line x1="170" y1="1291" x2="170" y2="1341" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <polygon points="170,1341 310,1406 170,1471 30,1406" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="170" y="1411" text-anchor="middle" class="q-text">readable now?</text>
+      <!-- ============ STEP: why did it fail? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,376)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="370" text-anchor="middle" class="q-text">why did</text>
+        <text x="500" y="388" text-anchor="middle" class="q-text">it fail?</text>
+      </g>
 
-      <line x1="170" y1="1471" x2="170" y2="1521" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="200" y="1500" text-anchor="middle" class="no-label">no</text>
-      <rect x="20" y="1521" width="300" height="60" rx="10" fill="var(--status-failed-bg)" stroke="var(--status-failed)" stroke-width="1.5"></rect>
-      <text x="170" y="1545" text-anchor="middle" class="a-text">mark failed — tomorrow's</text>
-      <text x="170" y="1562" text-anchor="middle" class="a-text">run decides</text>
+      <!-- ============ heal / refetch / human row ============ -->
+      <g filter="url(#glow)">
+        <rect x="40" y="506" width="260" height="56" rx="10" fill="var(--surface)" stroke="var(--agent-healer)" stroke-width="1.5"></rect>
+        <text x="170" y="528" text-anchor="middle" class="a-text">quota blip →</text>
+        <text x="170" y="546" text-anchor="middle" class="a-text">requeue</text>
+      </g>
+      <text x="310" y="538" text-anchor="start" class="tag">(heal)</text>
 
-      <path d="M310,1406 L500,1611" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="330" y="1395" text-anchor="start" class="yes-label">yes</text>
-      <line x1="500" y1="1334" x2="500" y2="1611" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="514" y="1360" text-anchor="start" class="yes-label">yes</text>
+      <g filter="url(#glow)">
+        <rect x="310" y="506" width="380" height="56" rx="10" fill="var(--surface)" stroke="var(--agent-healer)" stroke-width="1.5"></rect>
+        <text x="500" y="528" text-anchor="middle" class="a-text">bad file → re-download from CARB,</text>
+        <text x="500" y="546" text-anchor="middle" class="a-text">requeue</text>
+      </g>
+      <text x="700" y="538" text-anchor="start" class="tag">(refetch)</text>
 
-      <!-- ============ STEP 6: extraction ============ -->
-      <rect x="320" y="1611" width="360" height="54" rx="10" fill="var(--surface-2)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
-      <text x="500" y="1644" text-anchor="middle" class="a-text">structured extraction (Gemini 3.7 Flash)</text>
-      <line x1="500" y1="1665" x2="500" y2="1735" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
+      <g filter="url(#glow)">
+        <rect x="700" y="506" width="300" height="56" rx="10" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="1.5"></rect>
+        <text x="850" y="528" text-anchor="middle" class="a-text">3rd strike → leave</text>
+        <text x="850" y="546" text-anchor="middle" class="a-text">for a human</text>
+      </g>
 
-      <!-- ============ STEP 7: header EO matches identity? ============ -->
-      <polygon points="500,1735 670,1805 500,1875 330,1805" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="1800" text-anchor="middle" class="q-text">header EO number matches</text>
-      <text x="500" y="1818" text-anchor="middle" class="q-text">the file's identity?</text>
+      <!-- ============ STEP: new EOs? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,692)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="686" text-anchor="middle" class="q-text">new EOs in the</text>
+        <text x="500" y="704" text-anchor="middle" class="q-text">state registry?</text>
+      </g>
 
-      <line x1="330" y1="1805" x2="310" y2="1805" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="200" y="1790" text-anchor="middle" class="no-label">no</text>
-      <rect x="30" y="1781" width="280" height="48" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="170" y="1800" text-anchor="middle" class="a-text">trust the file,</text>
-      <text x="170" y="1817" text-anchor="middle" class="a-text">log the misread</text>
+      <g filter="url(#glow)">
+        <rect x="700" y="664" width="300" height="56" rx="10" fill="var(--surface)" stroke="var(--status-discovered)" stroke-width="1.5"></rect>
+        <text x="850" y="686" text-anchor="middle" class="a-text">download PDFs,</text>
+        <text x="850" y="704" text-anchor="middle" class="a-text">add to queue</text>
+      </g>
+      <text x="1010" y="694" text-anchor="start" class="tag">(scout)</text>
 
-      <path d="M170,1829 L500,1935" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <line x1="500" y1="1875" x2="500" y2="1935" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="514" y="1905" text-anchor="start" class="yes-label">yes</text>
+      <!-- ============ HUB: work in queue? time/budget left? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,872)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="866" text-anchor="middle" class="q-text">work in queue?</text>
+        <text x="500" y="884" text-anchor="middle" class="q-text">time &amp; budget left?</text>
+      </g>
 
-      <!-- ============ STEP 8: deterministic gate + critic ============ -->
-      <polygon points="500,1935 690,2020 500,2105 310,2020" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="2000" text-anchor="middle" class="q-text">deterministic gate:</text>
-      <text x="500" y="2018" text-anchor="middle" class="q-text">rules + baseline</text>
-      <text x="500" y="2036" text-anchor="middle" class="q-text-sm">(dates real · formats sane ·</text>
-      <text x="500" y="2050" text-anchor="middle" class="q-text-sm">physics possible · vs. legacy)</text>
-      <text x="650" y="2020" text-anchor="start" class="tag">(audit)</text>
+      <!-- ============ REST: sleep terminal ============ -->
+      <g filter="url(#glow)">
+        <rect x="40" y="837" width="260" height="70" rx="10" fill="var(--status-complete-bg)" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="170" y="866" text-anchor="middle" class="a-text" fill="var(--accent)">write run summary —</text>
+        <text x="170" y="884" text-anchor="middle" class="a-text" fill="var(--accent)">sleep until tomorrow</text>
+      </g>
+      <text x="170" y="922" text-anchor="middle" class="tag">(summarize)</text>
 
-      <line x1="310" y1="2020" x2="290" y2="2020" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="200" y="2005" text-anchor="middle" class="no-label">fail</text>
-      <rect x="10" y="1993" width="280" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="150" y="2014" text-anchor="middle" class="a-text">critic re-reads the</text>
-      <text x="150" y="2031" text-anchor="middle" class="a-text">document (Gemini)</text>
+      <!-- ============ claim ============ -->
+      <g filter="url(#glow)">
+        <rect x="370" y="1002" width="260" height="56" rx="10" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="1.5"></rect>
+        <text x="500" y="1034" text-anchor="middle" class="a-text">claim oldest item</text>
+      </g>
+      <text x="650" y="1034" text-anchor="start" class="tag">(claim)</text>
 
-      <line x1="150" y1="2047" x2="150" y2="2097" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <polygon points="150,2097 290,2162 150,2227 10,2162" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="150" y="2168" text-anchor="middle" class="q-text">resolved?</text>
+      <!-- ============ STEP: Gemini read PDF natively? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,1188)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="1182" text-anchor="middle" class="q-text">can Gemini read the</text>
+        <text x="500" y="1200" text-anchor="middle" class="q-text">PDF natively?</text>
+      </g>
 
-      <path d="M150,2227 L220,2277" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="170" y="2260" text-anchor="middle" class="no-label">no</text>
-      <rect x="30" y="2277" width="380" height="80" rx="10" fill="var(--status-needs_review-bg)" stroke="var(--status-needs_review)" stroke-width="1.5"></rect>
-      <text x="220" y="2303" text-anchor="middle" class="a-text">human review queue (via carb-dash)</text>
-      <text x="220" y="2320" text-anchor="middle" class="a-text">→ approve / correct</text>
-      <text x="220" y="2337" text-anchor="middle" class="a-text">→ re-match</text>
+      <g filter="url(#glow)">
+        <rect x="40" y="1160" width="260" height="56" rx="10" fill="var(--surface)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="170" y="1182" text-anchor="middle" class="a-text">re-render pages as</text>
+        <text x="170" y="1200" text-anchor="middle" class="a-text">images, retry</text>
+      </g>
 
-      <path d="M290,2162 L500,2280" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="320" y="2150" text-anchor="start" class="yes-label">yes</text>
-      <line x1="500" y1="2105" x2="500" y2="2280" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="514" y="2145" text-anchor="start" class="yes-label">pass</text>
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(170,1346)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="170" y="1351" text-anchor="middle" class="q-text">readable now?</text>
+      </g>
 
-      <!-- ============ STEP 9: ambiguous vehicle rows? ============ -->
-      <polygon points="500,2280 670,2350 500,2420 330,2350" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="2345" text-anchor="middle" class="q-text">any ambiguous</text>
-      <text x="500" y="2363" text-anchor="middle" class="q-text">vehicle rows?</text>
+      <g filter="url(#glow)">
+        <rect x="40" y="1476" width="260" height="70" rx="10" fill="var(--status-failed-bg)" stroke="var(--status-failed)" stroke-width="1.5"></rect>
+        <text x="170" y="1505" text-anchor="middle" class="a-text">mark failed — tomorrow's</text>
+        <text x="170" y="1523" text-anchor="middle" class="a-text">run decides</text>
+      </g>
 
-      <line x1="670" y1="2350" x2="700" y2="2350" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="678" y="2335" text-anchor="start" class="yes-label">yes</text>
-      <rect x="700" y="2320" width="220" height="60" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="810" y="2344" text-anchor="middle" class="a-text">Gemini resolves →</text>
-      <text x="810" y="2361" text-anchor="middle" class="a-text">fake IDs filtered</text>
+      <!-- ============ extraction ============ -->
+      <g filter="url(#glow)">
+        <rect x="320" y="1476" width="360" height="56" rx="10" fill="var(--surface)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="500" y="1508" text-anchor="middle" class="a-text">structured extraction (Gemini 3.7 Flash)</text>
+      </g>
 
-      <path d="M810,2380 L500,2470" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <line x1="500" y1="2420" x2="500" y2="2470" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="464" y="2450" text-anchor="end" class="no-label">no</text>
+      <!-- ============ STEP: header EO matches identity? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,1662)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="1656" text-anchor="middle" class="q-text">header EO number matches</text>
+        <text x="500" y="1674" text-anchor="middle" class="q-text">the file's identity?</text>
+      </g>
 
-      <!-- ============ STEP 10: supersedes and cancels? ============ -->
-      <polygon points="500,2470 670,2540 500,2610 330,2540" fill="var(--surface-2)" stroke="var(--status-needs_review)" stroke-width="2"></polygon>
-      <text x="500" y="2535" text-anchor="middle" class="q-text">document says</text>
-      <text x="500" y="2553" text-anchor="middle" class="q-text">"supersedes and cancels"?</text>
+      <g filter="url(#glow)">
+        <rect x="40" y="1634" width="260" height="56" rx="10" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"></rect>
+        <text x="170" y="1656" text-anchor="middle" class="a-text">trust the file,</text>
+        <text x="170" y="1674" text-anchor="middle" class="a-text">log the misread</text>
+      </g>
 
-      <line x1="670" y1="2540" x2="700" y2="2540" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="678" y="2525" text-anchor="start" class="yes-label">yes</text>
-      <rect x="700" y="2510" width="220" height="60" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="810" y="2534" text-anchor="middle" class="a-text">mark old EO superseded</text>
-      <text x="810" y="2551" text-anchor="middle" class="a-text">— link the chain</text>
+      <!-- ============ STEP: deterministic gate + critic ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,1842)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="1836" text-anchor="middle" class="q-text">deterministic gate:</text>
+        <text x="500" y="1854" text-anchor="middle" class="q-text">rules + baseline</text>
+      </g>
+      <text x="650" y="1846" text-anchor="start" class="tag">(audit)</text>
+      <text x="500" y="1905" text-anchor="middle" class="q-text-sm">(dates real · formats sane ·</text>
+      <text x="500" y="1922" text-anchor="middle" class="q-text-sm">physics possible · vs. legacy)</text>
 
-      <path d="M810,2570 L500,2660" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <line x1="500" y1="2610" x2="500" y2="2660" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></line>
-      <text x="464" y="2640" text-anchor="end" class="no-label">no</text>
+      <g filter="url(#glow)">
+        <rect x="40" y="1974" width="260" height="56" rx="10" fill="var(--surface)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="170" y="1996" text-anchor="middle" class="a-text">critic re-reads the</text>
+        <text x="170" y="2014" text-anchor="middle" class="a-text">document (Gemini)</text>
+      </g>
 
-      <!-- ============ STEP 11: write matches + loop back ============ -->
-      <rect x="320" y="2660" width="360" height="54" rx="10" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"></rect>
-      <text x="500" y="2693" text-anchor="middle" class="a-text">write part-to-vehicle matches</text>
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(170,2160)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="170" y="2165" text-anchor="middle" class="q-text">resolved?</text>
+      </g>
 
-      <path d="M680,2687 L980,2687 L980,940 L670,940" fill="none" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"></path>
-      <text x="990" y="960" text-anchor="start" class="step-label">next item</text>
+      <g filter="url(#glow)">
+        <rect x="10" y="2290" width="320" height="100" rx="10" fill="var(--status-needs_review-bg)" stroke="var(--status-needs_review)" stroke-width="1.5"></rect>
+        <text x="170" y="2322" text-anchor="middle" class="a-text">human review queue (via carb-dash)</text>
+        <text x="170" y="2340" text-anchor="middle" class="a-text">→ approve / correct</text>
+        <text x="170" y="2358" text-anchor="middle" class="a-text">→ re-match</text>
+      </g>
+
+      <!-- ============ STEP: ambiguous vehicle rows? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,2340)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="2334" text-anchor="middle" class="q-text">any ambiguous</text>
+        <text x="500" y="2352" text-anchor="middle" class="q-text">vehicle rows?</text>
+      </g>
+
+      <g filter="url(#glow)">
+        <rect x="700" y="2312" width="300" height="56" rx="10" fill="var(--surface)" stroke="var(--status-matching)" stroke-width="1.5"></rect>
+        <text x="850" y="2334" text-anchor="middle" class="a-text">Gemini resolves →</text>
+        <text x="850" y="2352" text-anchor="middle" class="a-text">fake IDs filtered</text>
+      </g>
+
+      <!-- ============ STEP: supersedes and cancels? ============ -->
+      <g filter="url(#glow)">
+        <use href="#hexgate" transform="translate(500,2520)" fill="var(--surface)" stroke="var(--status-needs_review)" stroke-width="2"></use>
+        <text x="500" y="2514" text-anchor="middle" class="q-text">document says</text>
+        <text x="500" y="2532" text-anchor="middle" class="q-text">"supersedes and cancels"?</text>
+      </g>
+
+      <g filter="url(#glow)">
+        <rect x="700" y="2492" width="300" height="56" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="850" y="2514" text-anchor="middle" class="a-text">mark old EO superseded</text>
+        <text x="850" y="2532" text-anchor="middle" class="a-text">— link the chain</text>
+      </g>
+
+      <!-- ============ write matches + loop back ============ -->
+      <g filter="url(#glow)">
+        <rect x="320" y="2650" width="360" height="56" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="500" y="2682" text-anchor="middle" class="a-text">write part-to-vehicle matches</text>
+      </g>
     </svg>
   </div>
 
@@ -299,9 +401,9 @@ import Base from '../layouts/Base.astro';
   }
 
   .arch-viewport :global(.a-text) {
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     fill: var(--text);
   }
 
@@ -316,28 +418,6 @@ import Base from '../layouts/Base.astro';
     font-size: 14px;
     font-weight: 600;
     fill: var(--text-muted);
-  }
-
-  .arch-viewport :global(.yes-label) {
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 700;
-    fill: var(--status-complete);
-    stroke: var(--bg);
-    stroke-width: 5;
-    paint-order: stroke;
-    stroke-linejoin: round;
-  }
-
-  .arch-viewport :global(.no-label) {
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 700;
-    fill: var(--status-failed);
-    stroke: var(--bg);
-    stroke-width: 5;
-    paint-order: stroke;
-    stroke-linejoin: round;
   }
 
   .arch-viewport :global(.step-label) {
@@ -356,5 +436,47 @@ import Base from '../layouts/Base.astro';
     font-size: 14px;
     font-style: italic;
     fill: var(--text-muted);
+  }
+
+  .arch-viewport :global(.band-chip) {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .arch-viewport :global(.chip-yes rect),
+  .arch-viewport :global(.chip-pass rect) {
+    fill: var(--status-complete-bg);
+    stroke: var(--status-complete);
+    stroke-width: 1;
+  }
+
+  .arch-viewport :global(.chip-no rect),
+  .arch-viewport :global(.chip-fail rect) {
+    fill: var(--status-failed-bg);
+    stroke: var(--status-failed);
+    stroke-width: 1;
+  }
+
+  .arch-viewport :global(.chip-yes text),
+  .arch-viewport :global(.chip-pass text) {
+    fill: var(--status-complete);
+  }
+
+  .arch-viewport :global(.chip-no text),
+  .arch-viewport :global(.chip-fail text) {
+    fill: var(--status-failed);
+  }
+
+  .arch-viewport :global(.chip-yes text),
+  .arch-viewport :global(.chip-no text),
+  .arch-viewport :global(.chip-pass text),
+  .arch-viewport :global(.chip-fail text) {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-anchor: middle;
   }
 </style>
