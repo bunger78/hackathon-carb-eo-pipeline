@@ -1,5 +1,5 @@
 // Pure helpers for the vehicle-parts results list: category display
-// order/labels and confidence-badge tier mapping. No Firestore import (see
+// order/labels and tier-dot color mapping. No Firestore import (see
 // vehicleCascade.ts's rationale) so this stays shareable with the
 // browser-side VehiclePicker.tsx island.
 

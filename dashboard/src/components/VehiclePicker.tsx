@@ -216,13 +216,15 @@ export default function VehiclePicker() {
                       <th>Manufacturer</th>
                       <th>EO</th>
                       <th>Part numbers</th>
-                      <th>Confidence</th>
                     </tr>
                   </thead>
                   <tbody>
                     {section.parts.map((p, i) => (
                       <tr key={`${p.eo_number}-${i}`}>
-                        <td>{p.device_name ?? '—'}</td>
+                        <td className="wrap-cell">
+                          <span className={`tier-dot tier-${tierBadge(p.tier)}`} title={tierLabel(p.tier)}></span>
+                          {p.device_name ?? '—'}
+                        </td>
                         <td>{p.manufacturer ?? '—'}</td>
                         <td>
                           <a href={`/eos/${encodeURIComponent(p.eo_number)}`}>{p.eo_number}</a>
@@ -235,11 +237,6 @@ export default function VehiclePicker() {
                               </span>
                             ))}
                           </div>
-                        </td>
-                        <td>
-                          <span className={`confidence-badge confidence-${tierBadge(p.tier)}`} title={tierLabel(p.tier)}>
-                            {tierLabel(p.tier)}
-                          </span>
                         </td>
                       </tr>
                     ))}

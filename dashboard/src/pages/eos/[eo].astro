@@ -269,8 +269,8 @@ const forwardCapped = detail?.lineage.forwardCapped ?? false;
                     <td>{yearRange(row)}</td>
                     <td>{row.make ?? '—'}</td>
                     <td>{row.model ?? '—'}</td>
-                    <td>{row.trim_note ?? '—'}</td>
-                    <td>{engineLabel(row)}</td>
+                    <td class="wrap-cell">{row.trim_note ?? '—'}</td>
+                    <td class="wrap-cell">{engineLabel(row)}</td>
                     <td>
                       <div class="pn-pills">
                         {row.part_numbers.map((pn) => (

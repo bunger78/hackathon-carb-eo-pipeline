@@ -721,6 +721,14 @@ h3 {
   white-space: nowrap;
 }
 
+/* Opt-in override for cells whose content is unbounded free text (device
+   names, trim notes, engine descriptions) -- wraps instead of forcing the
+   column (and therefore the whole table) wider than the viewport. */
+.data-table td.wrap-cell {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
 .data-table th {
   position: sticky;
   top: 0;
@@ -1138,7 +1146,7 @@ a.lineage-node:hover {
   cursor: not-allowed;
 }
 
-/* --- vehicle parts results: category sections (cards) + confidence badge --- */
+/* --- vehicle parts results: category sections (cards) + tier dot --- */
 
 .parts-sections {
   display: flex;
@@ -1161,29 +1169,26 @@ a.lineage-node:hover {
   color: var(--text);
 }
 
-.confidence-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
+/* Compact match-tier indicator (replaces the old wide confidence-badge
+   column): a small dot inline with the device name, full value in title=. */
+.tier-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 0.55em;
+  vertical-align: middle;
+  flex: none;
 }
 
-.confidence-green {
-  background: var(--status-complete-bg);
-  color: var(--status-complete);
+.tier-green {
+  background: var(--status-complete);
 }
 
-.confidence-amber {
-  background: var(--status-needs_review-bg);
-  color: var(--status-needs_review);
+.tier-amber {
+  background: var(--status-needs_review);
 }
 
-.confidence-red {
-  background: var(--status-failed-bg);
-  color: var(--status-failed);
+.tier-red {
+  background: var(--status-failed);
 }
