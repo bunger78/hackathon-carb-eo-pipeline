@@ -168,7 +168,8 @@ def test_refined_rules_accept_real_world_shapes():
     assert len(dedupe_exact_rows(ex2).fitment) == 1  # exact dups removed losslessly pre-gate
     # unknown_make no longer gates (coverage fact, not extraction doubt);
     # _make_known remains for the matching layer:
-    assert not _make_known("Zorblax", {"volkswagen"})
+    from agents.auditor import _make_known as mk
+    assert not mk("Zorblax", {"volkswagen"})
 
 
 def test_tail_rule_refinements():
