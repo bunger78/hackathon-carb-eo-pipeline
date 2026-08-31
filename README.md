@@ -16,7 +16,9 @@ Daily runs execute a real [ADK 2](https://google.github.io/adk-docs/) graph work
 
 ```mermaid
 flowchart TD
-  %% AUTO-GENERATED ADK2 subgraph -- regenerate via pipeline/tools/generate_diagram.py
+  %% AUTO-GENERATED -- do not hand-edit the ADK2 subgraph below.
+  %% Regenerate: $env:PYTHONPATH='.'; py -3 tools/generate_diagram.py
+
   scheduler["Cloud Scheduler (carb-daily)"]
   api["Cloud Run carb-api (/run)"]
   firestore[("Firestore (eos, work_items, runs)")]
@@ -25,6 +27,7 @@ flowchart TD
   vertex["Vertex AI batch job"]
   batchfill["batchfill --ingest"]
   dash["carb-dash"]
+
   scheduler --> api
   api --> wf_scout
   wf_scout --> firestore
@@ -36,6 +39,7 @@ flowchart TD
   batchfill --> firestore
   dash --> firestore
   dash -- "admin" --> api
+
   subgraph ADK2["ADK2 workflow (google.adk.workflow.Workflow)"]
     wf_scout["scout"]
     wf_heal["heal"]
@@ -44,9 +48,10 @@ flowchart TD
     wf_summarize["summarize"]
     wf_scout --> wf_heal
     wf_heal --> wf_claim
-    wf_claim -- "item" --> wf_process
-    wf_claim -- "empty/time-cap" --> wf_summarize
-    wf_process --> wf_claim
+    wf_claim -- "True" --> wf_process
+    wf_claim -- "False" --> wf_summarize
+    wf_process -- "loop" --> wf_claim
+    wf_process -- "budget" --> wf_summarize
   end
 ```
 
@@ -54,7 +59,7 @@ flowchart TD
 
 **State is the decision-maker.** What the registry diff finds decides what runs. Supersession links extracted from document text mark predecessors superseded (530+ real chains found). Human corrections in the review queue write new extraction versions and re-trigger matching — the pipeline resumes mid-stream.
 
-**Built for dying.** Work items live in a leased Firestore queue: a killed instance's leases expire and the next run picks up exactly where it stopped. HTTP-invoked runs end gracefully at a time cap inside the scheduler's deadline. Every run is budget-capped (`BudgetGuard` raises before an LLM call would exceed it) and every Gemini call's tokens and cost are metered into the run record. A scheduler drives the loop because an LLM can't be its own alarm clock.
+**Built for dying.** Work items live in a leased Firestore queue: a killed instance's leases expire and the next run picks up exactly where it stopped. HTTP-invoked runs end gracefully at a time cap inside the scheduler's deadline. Every run is budget-capped (`BudgetGuard` stops the run the moment a call's metered cost crosses the cap) and every Gemini call's tokens and cost are metered into the run record. A scheduler drives the loop because an LLM can't be its own alarm clock.
 
 **Why Firestore:** the access pattern is key-value by EO number plus a handful of indexed queries (vehicle → matches, status → work items), written by many workers under transactions (the lease claim is a CAS). Serverless, scales to zero with the rest of the stack, and the composite indexes are committed in `infra/firestore.indexes.json`.
 
@@ -68,20 +73,26 @@ Cloud Run (2 services + jobs) · Cloud Scheduler · Firestore · Cloud Storage �
 # Tests + offline evaluation — no Google credentials needed:
 cd pipeline
 pip install -r requirements.txt
-py -3 -m pytest -q          # 158 tests; includes offline golden eval over committed fixtures
+py -3 -m pytest -q          # 164 tests; includes offline golden eval over committed fixtures
 
 # Full deployment (your own GCP project):
 bash infra/setup.sh  <PROJECT_ID>   # APIs, Firestore, bucket, SAs, IAM, secret, indexes
 bash infra/deploy.sh <PROJECT_ID>   # carb-api, carb-dash, scheduler
-py -3 seed/seed_vehicles.py && py -3 seed/seed_legacy.py   # reference data (see Provenance)
+py -3 seed/seed_vehicles.py && py -3 seed/seed_legacy.py   # optional; see note below
 py -3 backfill.py --bootstrap                              # register corpus
 ```
+
+The seed scripts read from the author's pre-hackathon legacy SQLite corpus (not included in
+this repo — see Provenance), so they aren't runnable as-is by anyone else. They're optional:
+skipping them just means an empty `vehicles`/`legacy_extractions` registry, and the pipeline
+still discovers, extracts, and matches EOs from scratch against it — it only loses the legacy
+baseline the audit tripwire compares against.
 
 The **evaluation** is the source of every accuracy claim: a hand-verified golden set (`golden/expected/`) scored against agent and legacy-baseline extractions (`golden/actual/` fixtures committed for offline reproduction; `pytest -m golden` re-runs live). Scoring is deliberately honest: association F1 counts missed rows as zeros, a row-coverage column separates extraction misses from key mismatches, and the legacy baseline gets its EO numbers credited from document IDs. We use deterministic checkers and golden comparison rather than LLM-as-judge — an LLM grading an LLM adds its own nondeterministic error. See `docs/golden-report.md`.
 
 ## Provenance (pre-existing artifacts, disclosed)
 
-This project rebuilds the data pipeline behind the author's prior site (SmogLegal). Reused from before the hackathon window, as **data and baseline only**: the legacy regex pipeline's SQLite output (seeded to `legacy_extractions` — it is the *baseline the agent is measured against* and the audit tripwire's reference), the deterministic vehicle-matching normalization tables (ported verbatim, byte-verified, in `pipeline/matching/`), and the ~25k-vehicle reference table. **Every agentic component — the ADK2 graph, all four agents, the healer, the extraction ladder, the eval harness, the dashboard — was designed and built during the hackathon window.** AI coding assistants (Claude Code) were used throughout the build.
+This project rebuilds the data pipeline behind the author's prior site (SmogLegal). Reused from before the hackathon window, as **data and baseline only**: the legacy regex pipeline's SQLite output (seeded to `legacy_extractions` — it is the *baseline the agent is measured against* and the audit tripwire's reference), the deterministic vehicle-matching normalization tables (ported and preserved in `pipeline/matching/`, not yet wired into the current exact-match engine), and the ~25k-vehicle reference table. **Every agentic component — the ADK2 graph, all four agents, the healer, the extraction ladder, the eval harness, the dashboard — was designed and built during the hackathon window.** AI coding assistants (Claude Code) were used throughout the build.
 
 ## Repo map
 
@@ -92,7 +103,7 @@ pipeline/            the agent system (Python 3.12)
   core/              Gemini gateway (+ cost metering), Firestore repo (leased queue), GCS
   matching/          deterministic vehicle-matching engine (ported legacy logic)
   tools/             golden_eval, generate_diagram, stage_holdback, batch/backfill ops
-  tests/             158 tests, all runnable without credentials
+  tests/             164 tests, all runnable without credentials
   batchfill.py       half-price Vertex batch backfill (prepare/submit/ingest, resumable)
 golden/              hand-verified answer key (expected/) + committed fixtures (actual/)
 dashboard/           Astro SSR dashboard (carb-dash): live agent console, run traces,
