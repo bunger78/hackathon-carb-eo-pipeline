@@ -16,6 +16,12 @@ describe('architecture page', () => {
     }
   });
 
+  it('names the shared checkpoint layer and the truths added after owner review', () => {
+    for (const name of ['work queue', 'BACKFILL', 'superseded']) {
+      expect(source).toContain(name);
+    }
+  });
+
   it('names every service in the topology', () => {
     for (const serviceName of ['Cloud Scheduler', 'carb-api', 'Firestore', 'Gemini 3.7 Flash', 'carb-dash']) {
       expect(source).toContain(serviceName);
