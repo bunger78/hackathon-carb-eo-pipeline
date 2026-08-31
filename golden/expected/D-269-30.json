@@ -479,8 +479,8 @@
       "year_start": 2003,
       "year_end": 2004,
       "make": "Chrysler",
-      "model": "PT Cruiser GT",
-      "trim_note": null,
+      "model": "PT Cruise GT",
+      "trim_note": "printed 'PT Cruise GT' (sic — Chrysler's actual trim is PT Cruiser GT)",
       "displacement_l": 2.4,
       "induction": "TURBO",
       "cylinders": null
@@ -492,8 +492,8 @@
       "year_start": 2003,
       "year_end": 2004,
       "make": "Chrysler",
-      "model": "PT Cruiser GT",
-      "trim_note": null,
+      "model": "PT Cruise GT",
+      "trim_note": "printed 'PT Cruise GT' (sic — Chrysler's actual trim is PT Cruiser GT)",
       "displacement_l": 2.4,
       "induction": "TURBO",
       "cylinders": null
@@ -505,8 +505,8 @@
       "year_start": 2003,
       "year_end": 2004,
       "make": "Chrysler",
-      "model": "PT Cruiser GT",
-      "trim_note": null,
+      "model": "PT Cruise GT",
+      "trim_note": "printed 'PT Cruise GT' (sic — Chrysler's actual trim is PT Cruiser GT)",
       "displacement_l": 2.4,
       "induction": "TURBO",
       "cylinders": null
@@ -518,8 +518,8 @@
       "year_start": 2003,
       "year_end": 2004,
       "make": "Chrysler",
-      "model": "PT Cruiser GT",
-      "trim_note": null,
+      "model": "PT Cruise GT",
+      "trim_note": "printed 'PT Cruise GT' (sic — Chrysler's actual trim is PT Cruiser GT)",
       "displacement_l": 2.4,
       "induction": "TURBO",
       "cylinders": null
@@ -2351,8 +2351,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xB",
-      "trim_note": null,
+      "model": "Xb",
+      "trim_note": "printed 'Xb' (sic — Scion stylization is xB)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2364,8 +2364,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xB",
-      "trim_note": null,
+      "model": "Xb",
+      "trim_note": "printed 'Xb' (sic — Scion stylization is xB)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2377,8 +2377,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xB",
-      "trim_note": null,
+      "model": "Xb",
+      "trim_note": "printed 'Xb' (sic — Scion stylization is xB)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2390,8 +2390,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xB",
-      "trim_note": null,
+      "model": "Xb",
+      "trim_note": "printed 'Xb' (sic — Scion stylization is xB)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2403,8 +2403,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xA",
-      "trim_note": null,
+      "model": "Xa",
+      "trim_note": "printed 'Xa' (sic — Scion stylization is xA)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2416,8 +2416,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xA",
-      "trim_note": null,
+      "model": "Xa",
+      "trim_note": "printed 'Xa' (sic — Scion stylization is xA)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2429,8 +2429,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xA",
-      "trim_note": null,
+      "model": "Xa",
+      "trim_note": "printed 'Xa' (sic — Scion stylization is xA)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2442,8 +2442,8 @@
       "year_start": 2003,
       "year_end": 2005,
       "make": "Scion",
-      "model": "xA",
-      "trim_note": null,
+      "model": "Xa",
+      "trim_note": "printed 'Xa' (sic — Scion stylization is xA)",
       "displacement_l": 1.5,
       "induction": "NA",
       "cylinders": null
@@ -2764,5 +2764,5 @@
   "confidence": 0.85,
   "sections_confidence": {},
   "illegible_pages": [],
-  "notes": "Source PDF's embedded text layer is badly OCR-corrupted (scanned document); table transcribed instead from page images rendered locally via the Windows PDF API, and cross-checked against the visible handwritten execution date ('14th day of March 2005'). Two Part Number groups (69-8600 and 69-8601 families) are each shared across multiple vehicle listings (Pontiac Vibe/Toyota Corolla/Matrix XR share 69-8600TB/TP/TR/TS; Pontiac Vibe GT/Toyota Matrix XRS share 69-8601TB/TP/TR/TS) exactly as printed in the document - not a transcription error. S2000 entries (69-1040 and 69-1041 groups) list combined engine spec 'L4-2.0L, 2.2L' in the source; displacement_l left null since a single value could not be assigned without guessing. Two nominally identical rows (2001-2004 Honda Civic EX, L4-1.7L) appear under separate PN families 69-1007 and 69-1008 exactly as printed, with no distinguishing note in the source."
+  "notes": "Source PDF's embedded text layer is badly OCR-corrupted (scanned document); table transcribed instead from page images rendered locally via the Windows PDF API, and cross-checked against the visible handwritten execution date ('14th day of March 2005'). Four Part Number groups (69-0015, 69-1009, 69-8600, and 69-8601 families) are each shared across multiple vehicle listings (69-0015TB/TP/TR/TS shared by Acura RSX and Honda CR-V; 69-1009TB/TP/TR/TS shared by Acura RSX Type-S and Honda Civic Si; Pontiac Vibe/Toyota Corolla/Matrix XR share 69-8600TB/TP/TR/TS; Pontiac Vibe GT/Toyota Matrix XRS share 69-8601TB/TP/TR/TS) exactly as printed in the document - not a transcription error. S2000 entries (69-1040 and 69-1041 groups) list combined engine spec 'L4-2.0L, 2.2L' in the source; displacement_l left null since a single value could not be assigned without guessing. Two nominally identical rows (2001-2004 Honda Civic EX, L4-1.7L) appear under separate PN families 69-1007 and 69-1008 exactly as printed, with no distinguishing note in the source."
 }
